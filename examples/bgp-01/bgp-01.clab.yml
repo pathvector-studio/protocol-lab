@@ -1,0 +1,30 @@
+name: bgp-01
+
+topology:
+  nodes:
+    r1:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - ./r1/frr.conf:/etc/frr/frr.conf
+        - ./r1/vtysh.conf:/etc/frr/vtysh.conf
+        - ./r1/daemons:/etc/frr/daemons
+      exec:
+        - ip addr add 10.0.0.1/30 dev eth1
+        - ip link set eth1 up
+        - ip addr add 203.0.113.1/24 dev lo
+        - sysctl -w net.ipv4.ip_forward=1
+    r2:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - ./r2/frr.conf:/etc/frr/frr.conf
+        - ./r2/vtysh.conf:/etc/frr/vtysh.conf
+        - ./r2/daemons:/etc/frr/daemons
+      exec:
+        - ip addr add 10.0.0.2/30 dev eth1
+        - ip link set eth1 up
+        - sysctl -w net.ipv4.ip_forward=1
+
+  links:
+    - endpoints: ["r1:eth1", "r2:eth1"]
