@@ -77,9 +77,9 @@ r2 learns:
 
 ```mermaid
 flowchart LR
-  r1["r1\nAS65001\n10.0.0.1/30\noriginates 203.0.113.0/24"]
-  r2["r2\nAS65002\n10.0.0.2/30\nlearns 203.0.113.0/24"]
-  r1 -- "eBGP session\nTCP/179" --> r2
+  r1["r1<br/>AS65001<br/>10.0.0.1/30<br/>originates 203.0.113.0/24"]
+  r2["r2<br/>AS65002<br/>10.0.0.2/30<br/>learns 203.0.113.0/24"]
+  r1 -- "eBGP session<br/>TCP/179" --> r2
 ```
 
 この図で見てほしい点:
@@ -298,10 +298,10 @@ Network          Next Hop        Path
 ```mermaid
 flowchart TB
   route["BGP route on r2"]
-  nlri["NLRI / prefix\n203.0.113.0/24"]
-  nexthop["NEXT_HOP\n10.0.0.1"]
-  aspath["AS_PATH\n65001"]
-  origin["ORIGIN\nIGP"]
+  nlri["NLRI / prefix<br/>203.0.113.0/24"]
+  nexthop["NEXT_HOP<br/>10.0.0.1"]
+  aspath["AS_PATH<br/>65001"]
+  origin["ORIGIN<br/>IGP"]
 
   nlri --> route
   nexthop --> route
