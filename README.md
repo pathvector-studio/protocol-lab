@@ -1,0 +1,83 @@
+# Protocol Lab
+
+Protocol Lab is a free learning project for network protocols. Each lab starts from a small part of an RFC, turns it into a runnable experiment, and uses command output or packet captures to explain what happened.
+
+日本語: Protocol Lab は、RFCを読み、手を動かし、パケットやログを見ながらネットワークプロトコルを学ぶための無料教材です。小さな実験を通して、読んだ仕様と観察できる挙動を結びつけます。
+
+## Start Here
+
+The first track is BGP/RPKI. Start with:
+
+- [BGP Lab 01: One Prefix Announcement You Can Explain](labs/bgp-01-as-prefix-announcement.md)
+- [RFC 4271 Reading Guide for BGP Lab 01](rfc-notes/bgp-rfc4271.md)
+
+Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.
+
+最初のトラックは BGP/RPKI です。Lab 01 では、2台の仮想ルータで eBGP を動かし、1つの documentation prefix を広告します。最後に、その経路を NLRI、AS_PATH、NEXT_HOP、ORIGIN という RFC 4271 の言葉で説明できる状態を目指します。
+
+## What You Will Do
+
+- Read the RFC sections that matter for one small concept.
+- Run a minimal local experiment.
+- Inspect routing tables, logs, and packet captures.
+- Connect the observed output back to protocol terms.
+- Answer short review questions before moving to the next lab.
+
+日本語:
+
+- 1つの概念に必要なRFCの章を読む。
+- 小さなローカル実験を動かす。
+- routing table、ログ、pcapを観察する。
+- 観察結果をプロトコル用語に対応づける。
+- 確認問題で理解を固めてから次へ進む。
+
+## Requirements
+
+Most hands-on labs assume a Linux environment with:
+
+- Docker
+- containerlab
+- tcpdump
+- Wireshark or tshark
+
+macOS users should run the labs inside a Linux VM, WSL-style environment, or another Linux host where containerlab can create network namespaces.
+
+日本語: ハンズオンは Linux 環境を前提にしています。macOS の場合は、Linux VM や Linux ホスト上で実行してください。containerlab が network namespace を作れる環境が必要です。
+
+## Safety
+
+Labs use documentation address space such as `203.0.113.0/24` and private ASNs such as `65001`. These examples are for closed local labs only. Do not announce them to the public Internet.
+
+日本語: Labでは `203.0.113.0/24` のような documentation address と `65001` のような private ASN を使います。これは閉じたローカル実験用です。実インターネットへ広告しないでください。
+
+## Repository Guide
+
+| Path | What it contains |
+|---|---|
+| `labs/` | Hands-on labs with commands, expected observations, explanations, and review questions |
+| `rfc-notes/` | Reading guides that map RFC sections to each lab |
+| `examples/` | Minimal containerlab, FRRouting, and script examples used by the labs |
+| `scripts/` | Small helper scripts for running labs in a Linux environment |
+| `assets/` | Optional diagrams, screenshots, and small packet captures referenced by lessons |
+
+日本語:
+
+| パス | 内容 |
+|---|---|
+| `labs/` | コマンド、期待される観察結果、解説、確認問題を含むハンズオン |
+| `rfc-notes/` | Labと対応するRFC reading guide |
+| `examples/` | Labで使う containerlab / FRRouting / script の最小例 |
+| `scripts/` | Linux環境でLabを実行するための補助スクリプト |
+| `assets/` | 教材で参照する図、スクリーンショット、小さなpcap |
+
+## Learning Track
+
+| Lab | Topic |
+|---|---|
+| Lab 01 | ASNs, prefixes, route announcements, and why AS_PATH exists |
+| Lab 02 | UPDATE messages, NEXT_HOP, route withdrawal, and competing origins |
+| Lab 03 | ROAs, RPKI origin validation, and what valid, invalid, and unknown mean |
+
+Future tracks may cover DNS, TCP, TLS, HTTP, and QUIC with the same read-run-observe structure.
+
+日本語: まず BGP/RPKI から始めます。その後、DNS、TCP、TLS、HTTP、QUIC へ広げる予定です。どのLabも「読む、動かす、観察する」を基本にします。

@@ -1,0 +1,11 @@
+.DS_Store
+**/.DS_Store
+
+# Generated lab artifacts
+assets/**/runs/
+
+# containerlab generated directories
+examples/**/clab-*/
+
+# Local-only helper scripts
+scripts/private/
