@@ -10,10 +10,11 @@ The first track is BGP/RPKI. Start with:
 
 - [BGP Lab 01: One Prefix Announcement You Can Explain](labs/bgp-01-as-prefix-announcement.md)
 - [RFC 4271 Reading Guide for BGP Lab 01](rfc-notes/bgp-rfc4271.md)
+- [Full 12-lab learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.
 
-最初のトラックは BGP/RPKI です。Lab 01 では、2台の仮想ルータで eBGP を動かし、1つの documentation prefix を広告します。最後に、その経路を NLRI、AS_PATH、NEXT_HOP、ORIGIN という RFC 4271 の言葉で説明できる状態を目指します。
+最初のトラックは BGP/RPKI です。Lab 01 では、2台の仮想ルータで eBGP を動かし、1つの documentation prefix を広告します。最後に、その経路を NLRI、AS_PATH、NEXT_HOP、ORIGIN という RFC 4271 の言葉で説明できる状態を目指します。全体像は [12-lab learning roadmap](ROADMAP.md) を見てください。
 
 ## What You Will Do
 
@@ -72,12 +73,20 @@ Labs use documentation address space such as `203.0.113.0/24` and private ASNs s
 
 ## Learning Track
 
-| Lab | Topic |
-|---|---|
-| Lab 01 | ASNs, prefixes, route announcements, and why AS_PATH exists |
-| Lab 02 | UPDATE messages, NEXT_HOP, route withdrawal, and competing origins |
-| Lab 03 | ROAs, RPKI origin validation, and what valid, invalid, and unknown mean |
+Protocol Lab begins with BGP/RPKI and then expands toward the protocols that make up a web request. The full sequence is described in [ROADMAP.md](ROADMAP.md).
 
-Future tracks may cover DNS, TCP, TLS, HTTP, and QUIC with the same read-run-observe structure.
+| Track | Labs | Outcome |
+|---|---:|---|
+| BGP/RPKI | 01-04 | Explain route announcements, UPDATEs, competing origins, and origin validation |
+| DNS | 05-06 | Trace recursive resolution, caching, TTLs, and negative answers |
+| TCP | 07-08 | Read handshakes, teardown, retransmission, windowing, and loss recovery |
+| TLS / HTTP / QUIC | 09-12 | Follow an encrypted web request across transport and application layers |
 
-日本語: まず BGP/RPKI から始めます。その後、DNS、TCP、TLS、HTTP、QUIC へ広げる予定です。どのLabも「読む、動かす、観察する」を基本にします。
+日本語: Protocol Lab は BGP/RPKI から始まり、Web request を構成する DNS、TCP、TLS、HTTP、QUIC へ進みます。全12回の流れは [ROADMAP.md](ROADMAP.md) にあります。
+
+| トラック | Lab | 到達点 |
+|---|---:|---|
+| BGP/RPKI | 01-04 | 経路広告、UPDATE、competing origin、origin validation を説明する |
+| DNS | 05-06 | 再帰問い合わせ、cache、TTL、negative answer を追う |
+| TCP | 07-08 | handshake、切断、再送、windowing、loss recovery を packet trace から読む |
+| TLS / HTTP / QUIC | 09-12 | 暗号化された Web request を transport と application layer に分けて追う |

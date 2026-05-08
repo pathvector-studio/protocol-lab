@@ -75,6 +75,19 @@ r2 learns:
 
 `203.0.113.0/24` は RFC 5737 の documentation prefix。外部へ広告せず、Lab 内だけで使う。
 
+```mermaid
+flowchart LR
+  r1["r1<br/>AS65001<br/>10.0.0.1/30<br/>originates 203.0.113.0/24"]
+  r2["r2<br/>AS65002<br/>10.0.0.2/30<br/>learns 203.0.113.0/24"]
+  r1 -- "eBGP session<br/>TCP/179" --> r2
+```
+
+この図で見てほしい点:
+
+- `r1` と `r2` は別々の AS にいるので、この session は eBGP。
+- `r1` は `203.0.113.0/24` を originate する。
+- `r2` は UPDATE を受け取り、`203.0.113.0/24` への route を BGP table に入れる。
+
 ## 必要なもの
 
 推奨環境:
@@ -281,6 +294,22 @@ Network          Next Hop        Path
 | `10.0.0.1` | NEXT_HOP |
 | `65001` | AS_PATH |
 | `i` | ORIGIN = IGP |
+
+```mermaid
+flowchart TB
+  route["BGP route on r2"]
+  nlri["NLRI / prefix<br/>203.0.113.0/24"]
+  nexthop["NEXT_HOP<br/>10.0.0.1"]
+  aspath["AS_PATH<br/>65001"]
+  origin["ORIGIN<br/>IGP"]
+
+  nlri --> route
+  nexthop --> route
+  aspath --> route
+  origin --> route
+```
+
+日本語: `show bgp ipv4 unicast` の1行は、単なる表示ではなく、RFC 4271 の `route = prefix + path attributes` を小さく観察したものです。
 
 詳細表示も見る。
 
@@ -508,7 +537,14 @@ rm -f bgp-01-r2.pcap
 - RFC 4271 Section 5.1.3 NEXT_HOP
 - RFC 4271 Section 3.1 の withdraw の説明
 
-公開記事に展開するときのタイトル案:
+## References
 
-- BGPは何を交換しているのか: 説明できる1本の経路広告を作る
-- RFC 4271 を読みながら、BGP UPDATE の最初の1本を見る
+- RFC 4271, Section 1.1: Definition of common BGP terms
+- RFC 4271, Section 3: Summary of Operation
+- RFC 4271, Section 3.1: Routes, UPDATE messages, and withdrawn routes
+- RFC 4271, Section 4.2: OPEN Message Format
+- RFC 4271, Section 4.3: UPDATE Message Format
+- RFC 4271, Section 5.1.1: ORIGIN
+- RFC 4271, Section 5.1.2: AS_PATH
+- RFC 4271, Section 5.1.3: NEXT_HOP
+- RFC 5737, Section 3: Documentation address blocks, including `203.0.113.0/24`

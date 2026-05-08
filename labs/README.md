@@ -10,13 +10,15 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 
 Expected time: 45 to 60 minutes.
 
+For the full sequence, see the [Protocol Lab Roadmap](../ROADMAP.md).
+
 You will build a small eBGP topology and explain one route:
 
 ```text
 203.0.113.0/24 via 10.0.0.1, AS_PATH 65001, ORIGIN IGP
 ```
 
-日本語: まず BGP Lab 01 から始めてください。2台の仮想ルータで eBGP を動かし、1本の経路を RFC 4271 の用語で説明します。
+日本語: まず BGP Lab 01 から始めてください。2台の仮想ルータで eBGP を動かし、1本の経路を RFC 4271 の用語で説明します。全体像は [Protocol Lab Roadmap](../ROADMAP.md) を見てください。
 
 ## Lab Shape
 
