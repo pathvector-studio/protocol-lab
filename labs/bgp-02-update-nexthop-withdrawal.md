@@ -258,6 +258,8 @@ tcpdump を `Ctrl-C` で止める。`bgp-02-r2.pcap` が現在の作業ディレ
 
 Wireshark で `bgp-02-r2.pcap` を開く。
 
+この capture は `r2` 側インターフェースで取るため、`r1 -> r2` と `r2 -> r1` の両方向の UPDATE が見えることがある。最初は `10.0.0.1 -> 10.0.0.2` の UPDATE に注目する。
+
 見る場所:
 
 - announce UPDATE
