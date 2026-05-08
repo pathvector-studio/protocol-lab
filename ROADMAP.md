@@ -48,7 +48,7 @@ After completing the twelve labs, you should be able to:
 | Lab | Topic | You will learn | You will observe | Output |
 |---|---|---|---|---|
 | 01 | [BGP: ASNs, Prefixes, and Route Announcements](labs/bgp-01-as-prefix-announcement.md) | ASNs, prefixes, NLRI, AS_PATH, NEXT_HOP, ORIGIN | One route in FRRouting and a packet capture | Explain one prefix announcement from RFC terms |
-| 02 | BGP: UPDATE, NEXT_HOP, and Withdrawal | UPDATE message structure, path attributes, withdrawn routes | Announce and withdraw packets | Explain how a route appears and disappears |
+| 02 | [BGP: UPDATE, NEXT_HOP, and Withdrawal](labs/bgp-02-update-nexthop-withdrawal.md) | UPDATE message structure, path attributes, withdrawn routes | Announce and withdraw packets | Explain how a route appears and disappears |
 | 03 | BGP: Competing Origins and Route Leaks | Why the same prefix from different origins is risky | Two origins for one prefix and their paths | Compare paths and identify the risk |
 | 04 | RPKI: ROAs and Origin Validation | ROA, origin AS, max length, valid, invalid, not found | Origin validation results | Explain why a route is valid, invalid, or not found |
 | 05 | DNS: Recursive Resolution with `dig` | Stub resolver, recursive resolver, root, TLD, authoritative server | Iterative lookup flow | Draw the resolution path for one name |
@@ -65,7 +65,7 @@ After completing the twelve labs, you should be able to:
 | Lab | トピック | 学ぶこと | 観察するもの | 到達点 |
 |---|---|---|---|---|
 | 01 | [BGP: ASN、prefix、経路広告](labs/bgp-01-as-prefix-announcement.md) | ASN、prefix、NLRI、AS_PATH、NEXT_HOP、ORIGIN | FRRouting 上の1本の経路と packet capture | 1つの prefix announcement を RFC の言葉で説明する |
-| 02 | BGP: UPDATE、NEXT_HOP、withdrawal | UPDATE message の構造、path attribute、withdrawn route | 経路広告と取り下げのパケット | 経路が現れて消える仕組みを説明する |
+| 02 | [BGP: UPDATE、NEXT_HOP、withdrawal](labs/bgp-02-update-nexthop-withdrawal.md) | UPDATE message の構造、path attribute、withdrawn route | 経路広告と取り下げのパケット | 経路が現れて消える仕組みを説明する |
 | 03 | BGP: competing origin と route leak | 同じ prefix が異なる origin から見える危険性 | 1つの prefix に対する2つの origin と path | path を比較してリスクを説明する |
 | 04 | RPKI: ROA と origin validation | ROA、origin AS、max length、valid、invalid、not found | origin validation の結果 | 経路が valid / invalid / not found になる理由を説明する |
 | 05 | DNS: `dig` で見る再帰問い合わせ | stub resolver、recursive resolver、root、TLD、authoritative server | iterative lookup の流れ | 1つの名前解決経路を図にできる |

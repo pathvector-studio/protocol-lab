@@ -10,11 +10,13 @@ The first track is BGP/RPKI. Start with:
 
 - [BGP Lab 01: One Prefix Announcement You Can Explain](labs/bgp-01-as-prefix-announcement.md)
 - [RFC 4271 Reading Guide for BGP Lab 01](rfc-notes/bgp-rfc4271.md)
+- [BGP Lab 02: Watch a Route Appear, Disappear, and Come Back](labs/bgp-02-update-nexthop-withdrawal.md)
+- [RFC 4271 Reading Guide for BGP Lab 02](rfc-notes/bgp-rfc4271-lab02.md)
 - [Full 12-lab learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.
 
-最初のトラックは BGP/RPKI です。Lab 01 では、2台の仮想ルータで eBGP を動かし、1つの documentation prefix を広告します。最後に、その経路を NLRI、AS_PATH、NEXT_HOP、ORIGIN という RFC 4271 の言葉で説明できる状態を目指します。全体像は [12-lab learning roadmap](ROADMAP.md) を見てください。
+最初のトラックは BGP/RPKI です。Lab 01 では、2台の仮想ルータで eBGP を動かし、1つの documentation prefix を広告します。Lab 02 では、その route が現れ、withdraw で消え、再広告で戻るところを観察します。全体像は [12-lab learning roadmap](ROADMAP.md) を見てください。
 
 ## What You Will Do
 

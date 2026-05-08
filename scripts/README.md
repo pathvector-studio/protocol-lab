@@ -4,7 +4,7 @@ This directory contains small helpers for running Protocol Lab examples in a Lin
 
 日本語: このディレクトリには、Linux環境でProtocol Labのexampleを動かすための補助スクリプトがあります。
 
-## Run BGP Lab 01
+## Run BGP Labs
 
 Prerequisites:
 
@@ -17,11 +17,12 @@ Run the full lifecycle:
 
 ```bash
 ./scripts/labctl.sh run bgp-01
+./scripts/labctl.sh run bgp-02
 ```
 
-This deploys the topology, waits for the BGP route, checks the expected FRRouting output, captures BGP packets, and destroys the topology.
+This deploys the topology, checks the expected FRRouting output, captures BGP packets, and destroys the topology.
 
-日本語: `run bgp-01` は、topology の起動、BGP経路の確認、FRRouting出力の検査、BGP packet capture、後片付けまで実行します。
+日本語: `run bgp-01` と `run bgp-02` は、topology の起動、FRRouting出力の検査、BGP packet capture、後片付けまで実行します。
 
 ## Individual Steps
 
@@ -33,6 +34,8 @@ This deploys the topology, waits for the BGP route, checks the expected FRRoutin
 ./scripts/labctl.sh destroy bgp-01
 ```
 
-Generated logs and packet captures are written under `assets/bgp-01/runs/`. That directory is ignored by git.
+Replace `bgp-01` with `bgp-02` to run the same lifecycle for Lab 02.
 
-日本語: 生成されたログとpcapは `assets/bgp-01/runs/` に保存されます。このディレクトリはgitには含めません。
+Generated logs and packet captures are written under `assets/<lab-id>/runs/`. That directory is ignored by git.
+
+日本語: Lab 02 を実行する場合は `bgp-01` を `bgp-02` に置き換えます。生成されたログとpcapは `assets/<lab-id>/runs/` に保存されます。このディレクトリはgitには含めません。

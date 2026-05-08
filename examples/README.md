@@ -7,6 +7,7 @@ This directory contains runnable examples used by the labs. They are intentional
 ## Available Examples
 
 - [`bgp-01/`](bgp-01/): a two-router eBGP topology using FRRouting and containerlab.
+- [`bgp-02/`](bgp-02/): the same two-router eBGP shape, with route withdrawal and reannouncement.
 
 ## Safety
 

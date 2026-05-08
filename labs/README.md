@@ -7,8 +7,9 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 ## Start with BGP Lab 01
 
 - [BGP Lab 01: One Prefix Announcement You Can Explain](bgp-01-as-prefix-announcement.md)
+- [BGP Lab 02: Watch a Route Appear, Disappear, and Come Back](bgp-02-update-nexthop-withdrawal.md)
 
-Expected time: 45 to 60 minutes.
+Expected time: 45 to 60 minutes per lab.
 
 For the full sequence, see the [Protocol Lab Roadmap](../ROADMAP.md).
 
@@ -18,7 +19,7 @@ You will build a small eBGP topology and explain one route:
 203.0.113.0/24 via 10.0.0.1, AS_PATH 65001, ORIGIN IGP
 ```
 
-日本語: まず BGP Lab 01 から始めてください。2台の仮想ルータで eBGP を動かし、1本の経路を RFC 4271 の用語で説明します。全体像は [Protocol Lab Roadmap](../ROADMAP.md) を見てください。
+日本語: まず BGP Lab 01 から始めてください。2台の仮想ルータで eBGP を動かし、1本の経路を RFC 4271 の用語で説明します。次に Lab 02 で、その経路が現れ、withdraw で消え、再広告で戻るところを観察します。全体像は [Protocol Lab Roadmap](../ROADMAP.md) を見てください。
 
 ## Lab Shape
 
