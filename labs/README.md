@@ -9,6 +9,7 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 - [BGP Lab 01: One Prefix Announcement You Can Explain](bgp-01-as-prefix-announcement.md)
 - [BGP Lab 02: Watch a Route Appear, Disappear, and Come Back](bgp-02-update-nexthop-withdrawal.md)
 - [BGP Lab 03: Competing Origins and the First Route-Leak Question](bgp-03-competing-origins-route-leaks.md)
+- [RPKI Lab 04: ROAs and Origin Validation](rpki-04-roa-origin-validation.md)
 
 Expected time: 45 to 60 minutes per lab.
 
@@ -20,7 +21,7 @@ You will build a small eBGP topology and explain one route:
 203.0.113.0/24 via 10.0.0.1, AS_PATH 65001, ORIGIN IGP
 ```
 
-日本語: まず BGP Lab 01 から始めてください。2台の仮想ルータで eBGP を動かし、1本の経路を RFC 4271 の用語で説明します。次に Lab 02 で route の出現と取り下げを観察し、Lab 03 で同じ prefix が複数の origin AS から見える状態を作ります。全体像は [Protocol Lab Roadmap](../ROADMAP.md) を見てください。
+日本語: まず BGP Lab 01 から始めてください。2台の仮想ルータで eBGP を動かし、1本の経路を RFC 4271 の用語で説明します。次に Lab 02 で route の出現と取り下げを観察し、Lab 03 で同じ prefix が複数の origin AS から見える状態を作り、Lab 04 で RPKI origin validation を観察します。全体像は [Protocol Lab Roadmap](../ROADMAP.md) を見てください。
 
 ## Lab Shape
 
