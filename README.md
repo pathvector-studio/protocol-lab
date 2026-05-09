@@ -14,11 +14,13 @@ The first track is BGP/RPKI. Start with:
 - [RFC 4271 Reading Guide for BGP Lab 02](rfc-notes/bgp-rfc4271-lab02.md)
 - [BGP Lab 03: Competing Origins and the First Route-Leak Question](labs/bgp-03-competing-origins-route-leaks.md)
 - [RFC 4271 Reading Guide for BGP Lab 03](rfc-notes/bgp-rfc4271-lab03.md)
+- [RPKI Lab 04: ROAs and Origin Validation](labs/rpki-04-roa-origin-validation.md)
+- [RPKI Origin Validation Reading Guide for Lab 04](rfc-notes/rpki-origin-validation.md)
 - [Full 12-lab learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.
 
-最初のトラックは BGP/RPKI です。Lab 01 では、2台の仮想ルータで eBGP を動かし、1つの documentation prefix を広告します。Lab 02 では、その route が現れ、withdraw で消え、再広告で戻るところを観察します。Lab 03 では、同じ prefix が複数の origin AS から見える状態を作ります。全体像は [12-lab learning roadmap](ROADMAP.md) を見てください。
+最初のトラックは BGP/RPKI です。Lab 01 では、2台の仮想ルータで eBGP を動かし、1つの documentation prefix を広告します。Lab 02 では、その route が現れ、withdraw で消え、再広告で戻るところを観察します。Lab 03 では、同じ prefix が複数の origin AS から見える状態を作ります。Lab 04 では、ROA/VRP と origin validation の3状態を観察します。全体像は [12-lab learning roadmap](ROADMAP.md) を見てください。
 
 ## What You Will Do
 
