@@ -548,3 +548,111 @@ rm -f bgp-01-r2.pcap
 - RFC 4271, Section 5.1.2: AS_PATH
 - RFC 4271, Section 5.1.3: NEXT_HOP
 - RFC 5737, Section 3: Documentation address blocks, including `203.0.113.0/24`
+
+## 検証済み実行ログ (2026-05-10)
+
+このLabは実機で再現性を確認済みです。
+
+実行環境:
+
+- Ubuntu 24.04 (`nkchan-desktop-1`)
+- Docker 29.4.0
+- containerlab 0.75.0 (sudo不要、`docker` グループに所属していれば動作)
+- FRRouting (containerlab 既定の `frrouting/frr` イメージ)
+
+`examples/bgp-01/bgp-01.clab.yml` をそのまま `containerlab deploy` し、約30秒待った後の状態は以下の通り。
+
+### r1 から見た BGP セッション
+
+```text
+$ docker exec clab-bgp-01-r1 vtysh -c "show ip bgp summary"
+
+IPv4 Unicast Summary (VRF default):
+BGP router identifier 1.1.1.1, local AS number 65001 vrf-id 0
+BGP table version 1
+RIB entries 1, using 192 bytes of memory
+Peers 1, using 717 KiB of memory
+
+Neighbor        V         AS   MsgRcvd   MsgSent   TblVer  InQ OutQ  Up/Down State/PfxRcd   PfxSnt Desc
+10.0.0.2        4      65002         5         6        0    0    0 00:00:39            0        1 N/A
+
+Total number of neighbors 1
+```
+
+`PfxSnt 1` は r1 が AS65002 (r2) に対して 1 個の prefix (= 203.0.113.0/24) を広告していることを示す。
+
+### r2 から見た BGP セッション
+
+```text
+$ docker exec clab-bgp-01-r2 vtysh -c "show ip bgp summary"
+
+IPv4 Unicast Summary (VRF default):
+BGP router identifier 2.2.2.2, local AS number 65002 vrf-id 0
+BGP table version 1
+RIB entries 1, using 192 bytes of memory
+Peers 1, using 717 KiB of memory
+
+Neighbor        V         AS   MsgRcvd   MsgSent   TblVer  InQ OutQ  Up/Down State/PfxRcd   PfxSnt Desc
+10.0.0.1        4      65001         4         4        0    0    0 00:00:39            1        1 N/A
+
+Total number of neighbors 1
+```
+
+`PfxRcd 1` は r2 が AS65001 (r1) から 1 個の prefix を受信していることを示す。
+
+### r2 が受け取った route
+
+```text
+$ docker exec clab-bgp-01-r2 vtysh -c "show ip bgp"
+
+BGP table version is 1, local router ID is 2.2.2.2, vrf id 0
+Default local pref 100, local AS 65002
+Status codes:  s suppressed, d damped, h history, * valid, > best, = multipath,
+               i internal, r RIB-failure, S Stale, R Removed
+Nexthop codes: @NNN nexthop's vrf id, < announce-nh-self
+Origin codes:  i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+   Network          Next Hop            Metric LocPrf Weight Path
+*> 203.0.113.0/24   10.0.0.1                 0             0 65001 i
+
+Displayed  1 routes and 1 total paths
+```
+
+### 詳細表示
+
+```text
+$ docker exec clab-bgp-01-r2 vtysh -c "show ip bgp 203.0.113.0/24"
+
+BGP routing table entry for 203.0.113.0/24, version 1
+Paths: (1 available, best #1, table default)
+  Advertised to non peer-group peers:
+  10.0.0.1
+  65001
+    10.0.0.1 from 10.0.0.1 (1.1.1.1)
+      Origin IGP, metric 0, valid, external, best (First path received)
+      Last update: Sat May  9 20:49:23 2026
+```
+
+### RFC 4271 用語との対応
+
+このLabが冒頭で示したゴール:
+
+```text
+203.0.113.0/24 via 10.0.0.1, AS_PATH 65001, ORIGIN IGP
+```
+
+実機の出力との対応:
+
+| RFC 4271 用語 | 実機の表示 |
+|---|---|
+| NLRI (prefix) | `Network: 203.0.113.0/24` |
+| NEXT_HOP | `Next Hop: 10.0.0.1` |
+| AS_PATH | `Path: 65001` |
+| ORIGIN | `Origin IGP` (または route 行末の `i`) |
+
+### Cleanup
+
+```bash
+containerlab destroy -t bgp-01.clab.yml --cleanup
+```
