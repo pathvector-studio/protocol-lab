@@ -9,16 +9,22 @@ usage() {
 Usage:
   $0 run bgp-01
   $0 run bgp-02
+  $0 run bgp-03
   $0 deploy bgp-01
   $0 deploy bgp-02
+  $0 deploy bgp-03
   $0 verify bgp-01
   $0 verify bgp-02
+  $0 verify bgp-03
   $0 capture bgp-01
   $0 capture bgp-02
+  $0 capture bgp-03
   $0 destroy bgp-01
   $0 destroy bgp-02
+  $0 destroy bgp-03
   $0 doctor bgp-01
   $0 doctor bgp-02
+  $0 doctor bgp-03
 USAGE
 }
 
@@ -37,6 +43,10 @@ case "$LAB_ID" in
     ;;
   bgp-02)
     cd "$REPO_ROOT/examples/bgp-02"
+    ./run.sh "$ACTION"
+    ;;
+  bgp-03)
+    cd "$REPO_ROOT/examples/bgp-03"
     ./run.sh "$ACTION"
     ;;
   *)
