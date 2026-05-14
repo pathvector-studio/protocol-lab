@@ -432,3 +432,117 @@ rm -f bgp-02-r2.pcap
 - RFC 4271, Section 5.1.2: AS_PATH
 - RFC 4271, Section 5.1.3: NEXT_HOP
 - RFC 5737, Section 3: Documentation address blocks, including `203.0.113.0/24`
+
+## 検証済み実行ログ (2026-05-08 取得、`assets/bgp-02/runs/20260508T232252Z/run.log` ベース)
+
+このLabは実機で再現性を確認済みです。
+
+検証結果:
+
+- run id: `20260508T232252Z`
+- status: `verified`
+- 観測内容: `203.0.113.0/24` が `r2` に出現し、withdraw で消え、re-advertise で戻った。
+- capture: `assets/bgp-02/runs/20260508T232252Z/bgp-02-r2.pcap`
+
+`run.log` には `show bgp summary` の生出力は含まれていないため、ここでは同ログに残っている BGP table の観測と検証スクリプトの状態遷移ログを引用する。BGP session が落ちたことではなく、Established session 上で route だけが withdraw / re-advertise されたことを確認するのがこのLabの要点。
+
+### 検証サマリ
+
+```text
+[protocol-lab][bgp-02] waiting for BGP route on r2: before withdraw
+[protocol-lab][bgp-02] BGP route present after 3s: before withdraw
+...
+[protocol-lab][bgp-02] withdrawing 203.0.113.0/24 from r1
+[protocol-lab][bgp-02] waiting for BGP route withdrawal on r2: after withdraw
+[protocol-lab][bgp-02] BGP route absent after 2s: after withdraw
+...
+[protocol-lab][bgp-02] announcing 203.0.113.0/24 from r1
+[protocol-lab][bgp-02] waiting for BGP route on r2: after reannounce
+[protocol-lab][bgp-02] BGP route present after 1s: after reannounce
+...
+[protocol-lab][bgp-02] verification OK
+```
+
+この流れは、RFC 4271 Section 3.1 の「route は UPDATE で広告され、withdraw される」という説明に対応する。
+
+### withdraw 前: r2 が route を持っている
+
+```text
+BGP table version is 1, local router ID is 2.2.2.2, vrf id 0
+Default local pref 100, local AS 65002
+Status codes:  s suppressed, d damped, h history, * valid, > best, = multipath,
+               i internal, r RIB-failure, S Stale, R Removed
+Nexthop codes: @NNN nexthop's vrf id, < announce-nh-self
+Origin codes:  i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+   Network          Next Hop            Metric LocPrf Weight Path
+*> 203.0.113.0/24   10.0.0.1                 0             0 65001 i
+
+Displayed  1 routes and 1 total paths
+```
+
+読み方:
+
+- `Network 203.0.113.0/24` は UPDATE の NLRI として広告された prefix。
+- `Next Hop 10.0.0.1` は RFC 4271 Section 5.1.3 の NEXT_HOP。
+- `Path 65001` は RFC 4271 Section 5.1.2 の AS_PATH。
+- 行末の `i` は RFC 4271 Section 5.1.1 の ORIGIN = IGP。
+
+### withdraw 後: r2 から route が消える
+
+```text
+[protocol-lab][bgp-02] withdrawing 203.0.113.0/24 from r1
+[protocol-lab][bgp-02] waiting for BGP route withdrawal on r2: after withdraw
+[protocol-lab][bgp-02] BGP route absent after 2s: after withdraw
+No BGP prefixes displayed, 0 exist
+```
+
+withdrawal UPDATE では、取り下げる prefix が RFC 4271 Section 4.3 の `Withdrawn Routes` に入る。ここでは `203.0.113.0/24` が取り下げ対象であり、`r2` の BGP table から該当 route が消えた。
+
+重要なのは、withdraw は AS_PATH や NEXT_HOP を「到達不能な値」として再広告する message ではないこと。取り下げる prefix を `Withdrawn Routes` に載せることで、以前広告した reachability を無効化する。
+
+### re-advertise 後: r2 に route が戻る
+
+```text
+[protocol-lab][bgp-02] announcing 203.0.113.0/24 from r1
+[protocol-lab][bgp-02] waiting for BGP route on r2: after reannounce
+[protocol-lab][bgp-02] BGP route present after 1s: after reannounce
+BGP table version is 3, local router ID is 2.2.2.2, vrf id 0
+Default local pref 100, local AS 65002
+Status codes:  s suppressed, d damped, h history, * valid, > best, = multipath,
+               i internal, r RIB-failure, S Stale, R Removed
+Nexthop codes: @NNN nexthop's vrf id, < announce-nh-self
+Origin codes:  i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+   Network          Next Hop            Metric LocPrf Weight Path
+*> 203.0.113.0/24   10.0.0.1                 0             0 65001 i
+
+Displayed  1 routes and 1 total paths
+```
+
+re-advertise では、`203.0.113.0/24` が再び NLRI として広告され、ORIGIN、AS_PATH、NEXT_HOP などの path attributes と一緒に `r2` に届く。その結果、`r2` の BGP table に同じ route が戻る。
+
+### RFC 4271 用語との対応
+
+| 観測 | RFC 4271 用語 | このLabでの表示 |
+|---|---|---|
+| route announcement | UPDATE message with NLRI and Path Attributes | `203.0.113.0/24`, `10.0.0.1`, `65001 i` |
+| NLRI | Network Layer Reachability Information | `Network 203.0.113.0/24` |
+| NEXT_HOP | NEXT_HOP path attribute | `Next Hop 10.0.0.1` |
+| AS_PATH | AS_PATH path attribute | `Path 65001` |
+| ORIGIN | ORIGIN path attribute | `i` / IGP |
+| route withdrawal | UPDATE message with Withdrawn Routes | `BGP route absent`, `No BGP prefixes displayed, 0 exist` |
+| re-advertise | new UPDATE announcement after withdrawal | table version changes to `3`, route appears again |
+
+### Cleanup
+
+検証スクリプトは最後に topology を破棄している。
+
+```text
+[protocol-lab][bgp-02] destroying topology
+08:23:08 INFO Destroying lab name=bgp-02
+08:23:08 INFO Removed container name=clab-bgp-02-r1
+08:23:08 INFO Removed container name=clab-bgp-02-r2
+```
