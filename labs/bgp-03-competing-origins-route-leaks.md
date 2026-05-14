@@ -366,3 +366,62 @@ rm -f bgp-03-r2.pcap
 - RFC 4271, Section 9: UPDATE Message Handling
 - RFC 5737, Section 3: Documentation address blocks, including `203.0.113.0/24`
 - RFC 7908: Problem Definition and Classification of BGP Route Leaks
+
+## 検証済み実行ログ
+
+2026-05-09 取得。`assets/bgp-03/runs/20260509T060606Z/run.log` ベース。
+
+`verification.json` は次の状態だった。
+
+```json
+{
+  "lab": "bgp-03",
+  "run_id": "20260509T060606Z",
+  "status": "verified",
+  "message": "BGP route 203.0.113.0/24 is visible on r2 from origin AS65001 and AS65003."
+}
+```
+
+3 router topology の観察点である `r2` では、2つの eBGP neighbor がそれぞれ1 prefixを広告している。
+
+```text
+Neighbor        V         AS   MsgRcvd   MsgSent   TblVer  InQ OutQ  Up/Down State/PfxRcd   PfxSnt Desc
+10.0.12.1       4      65001         4         4        0    0    0 00:00:01            1        1 N/A
+10.0.23.2       4      65003         4         4        0    0    0 00:00:01            1        1 N/A
+```
+
+同じ `203.0.113.0/24` に対して、`r2` の BGP table には2つの path が見えている。
+
+```text
+   Network          Next Hop            Metric LocPrf Weight Path
+*> 203.0.113.0/24   10.0.12.1                0             0 65001 i
+*                   10.0.23.2                0             0 65003 i
+
+Displayed  1 routes and 2 total paths
+```
+
+両 origin の AS_PATH を比較すると、右端の origin AS は次のように違う。
+
+| Next hop | AS_PATH | Origin AS | BGP table status |
+|---|---:|---:|---|
+| `10.0.12.1` | `65001` | `65001` | valid, best |
+| `10.0.23.2` | `65003` | `65003` | valid |
+
+詳細表示では、FRRouting は `65001` 側を best path として選んだ。
+
+```text
+BGP routing table entry for 203.0.113.0/24, version 1
+Paths: (2 available, best #1, table default)
+  Advertised to non peer-group peers:
+  10.0.12.1 10.0.23.2
+  65001
+    10.0.12.1 from 10.0.12.1 (1.1.1.1)
+      Origin IGP, metric 0, valid, external, best (Router ID)
+      Last update: Sat May  9 06:06:09 2026
+  65003
+    10.0.23.2 from 10.0.23.2 (3.3.3.3)
+      Origin IGP, metric 0, valid, external
+      Last update: Sat May  9 06:06:09 2026
+```
+
+この実行では、`203.0.113.0/24` は `AS65001` と `AS65003` の両方から見えており、`r2` は `AS65001` 由来の path を best として選んだ。ただし、BGP table に見える best path は「許可された origin」の証明ではない。どちらの origin AS が正当かを判断するには、次のLabで扱う ROA / VRP と origin validation が必要になる。
