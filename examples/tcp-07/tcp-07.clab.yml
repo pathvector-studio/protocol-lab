@@ -1,0 +1,32 @@
+name: tcp-07
+
+# A two-node point-to-point link for watching one TCP connection's whole
+# lifecycle: the three-way handshake, one small data exchange, and the
+# four-way teardown.
+#
+#   client (10.0.0.1) ------ eth1/eth1 ------ server (10.0.0.2:8080)
+#
+# Both nodes use netshoot, which already ships ip, tcpdump, and ncat, so no
+# custom image is needed. The server listener and the packet capture are
+# started by run.sh (or by hand in the lab steps), not baked into the nodes.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+
+    server:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["client:eth1", "server:eth1"]
