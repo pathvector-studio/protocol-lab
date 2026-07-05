@@ -83,7 +83,7 @@ sequenceDiagram
   Note over C,S: slower, but the byte stream is still complete
 ```
 
-両ノードとも `nicolaka/netshoot`(`ip`、`tc`、`tcpdump`、`ss`、`ncat` 同梱)。追加イメージは不要。
+両ノードとも `nicolaka/netshoot`(`ip`、`tc`、`tcpdump`、`ss`、`nc`(OpenBSD)、`socat` 同梱)。追加イメージは不要。sink は `--exec`/`--keep-open` を持たない OpenBSD `nc` の代わりに `socat` で立てる。
 
 ## 必要なもの
 
@@ -116,7 +116,7 @@ cd protocol-lab/examples/tcp-08
 
 ```bash
 sudo containerlab deploy -t tcp-08.clab.yml
-docker exec -d clab-tcp-08-server sh -c "ncat --listen --keep-open 8080 > /dev/null"
+docker exec -d clab-tcp-08-server sh -c "socat -u TCP-LISTEN:8080,reuseaddr,fork OPEN:/dev/null"
 ```
 
 server は受け取ったバイトを捨てる sink。
@@ -127,7 +127,7 @@ client の TCP 統計を控えてから、3 MB 送る。
 
 ```bash
 docker exec clab-tcp-08-client sh -c "cat /proc/net/snmp | grep '^Tcp:'"
-time docker exec clab-tcp-08-client sh -c "head -c 3000000 /dev/zero | ncat -w15 10.0.0.2 8080"
+time docker exec clab-tcp-08-client sh -c "head -c 3000000 /dev/zero | nc -N -w15 10.0.0.2 8080"
 docker exec clab-tcp-08-client sh -c "cat /proc/net/snmp | grep '^Tcp:'"
 ```
 
@@ -160,7 +160,7 @@ docker exec -it clab-tcp-08-client sh -c "while true; do ss -tino dst 10.0.0.2; 
 
 ```bash
 docker exec clab-tcp-08-client sh -c "cat /proc/net/snmp | grep '^Tcp:'"
-time docker exec clab-tcp-08-client sh -c "head -c 3000000 /dev/zero | ncat -w15 10.0.0.2 8080"
+time docker exec clab-tcp-08-client sh -c "head -c 3000000 /dev/zero | nc -N -w15 10.0.0.2 8080"
 docker exec clab-tcp-08-client sh -c "cat /proc/net/snmp | grep '^Tcp:'"
 ```
 
@@ -246,3 +246,63 @@ sudo containerlab destroy -t tcp-08.clab.yml --cleanup
 - [RFC 5681: TCP Congestion Control](https://www.rfc-editor.org/rfc/rfc5681)
 - [RFC 5737: IPv4 Address Blocks Reserved for Documentation](https://www.rfc-editor.org/rfc/rfc5737)
 - [tc-netem manual page](https://man7.org/linux/man-pages/man8/tc-netem.8.html)
+
+## 検証済み実行ログ (2026-07-05)
+
+このLabは実機で再現性を確認済みです。
+
+実行環境:
+
+- Ubuntu 26.04 LTS (kernel 7.0.0-27-generic, x86_64)
+- Docker 29.1.3
+- containerlab 0.77.0
+- client / server: `nicolaka/netshoot:latest`
+- ホスト kernel の `sch_netem` は `tc qdisc add ... netem` 実行時に自動ロードされた（手動 `modprobe` は不要だった）
+
+`PATH="/tmp/pl-shim:$PATH" ./scripts/labctl.sh run tcp-08` で deploy → verify → destroy を実行し、`verification.json` は `"status": "verified"` を返した。
+
+### 環境ドリフトへの追随（この検証で必要になった修正）
+
+- **netshoot の netcat 入れ替わり**（Lab 07 と同じ）。sink を `socat -u TCP-LISTEN:8080,reuseaddr,fork OPEN:/dev/null` に、送信側を `nc -N -w15`（EOF で送信方向を shutdown）に変更した（`examples/tcp-08/run.sh` と本文の手順を更新）。
+
+### netem を適用した lossy リンク
+
+```text
+$ docker exec clab-tcp-08-client tc qdisc show dev eth1
+qdisc netem 8002: root refcnt 25 limit 1000 delay 25ms loss 15%
+```
+
+### クリーン vs lossy の再送数（/proc/net/snmp の TcpRetransSegs 増分）
+
+```text
+[protocol-lab][tcp-08] clean transfer: 0s, client retransmits=0
+[protocol-lab][tcp-08] lossy transfer: 5s, client retransmits=59
+[protocol-lab][tcp-08] summary: clean 0s/0 retrans vs lossy 5s/59 retrans
+```
+
+同じ 3 MB 転送が、クリーンなリンクでは再送 0・ほぼ一瞬。25ms 遅延 + 15% ロスを入れると 59 回再送し、所要も 5 秒に伸びた。それでも転送は最後まで完了している（TCP の信頼性）。
+
+### 転送中の socket 統計（`ss -tino`）— 輻輳制御が効いている様子
+
+```text
+# 立ち上がり（クリーン相当、cwnd が育つ）
+cubic rtt:25.244/0.431 mss:9448 cwnd:8  ssthresh:10 bytes_sent:404176  bytes_retrans:47240  ... retrans:1/6  lost:1 sacked:5
+
+# ロスで cwnd と ssthresh が落ちる
+cubic rtt:25.823/1.219 mss:9448 cwnd:2  ssthresh:2  bytes_sent:3210232 bytes_retrans:510192 ... retrans:2/55 lost:2 sacked:4
+cubic rtt:32.396/13.235 mss:9448 cwnd:1 ssthresh:2  bytes_sent:3295264 bytes_retrans:529088 ... retrans:1/57 lost:1
+```
+
+読み方:
+
+- `rtt:25.xxx` は netem の `delay 25ms` を反映した実測 RTT（`minrtt:25`）。
+- `cwnd`（輻輳ウィンドウ）が立ち上がりの `10 → 8` から、ロスを検知するたびに `3 → 2 → 1` へと絞られている。`ssthresh`（slow-start 閾値）も `10 → 2` へ低下。これが RFC 5681 の congestion avoidance / loss recovery。
+- `bytes_retrans` と `retrans:X/Y`、`lost`、`sacked` が、ロスした segment を SACK ベースで再送している証跡。
+- `cubic` は使用中の輻輳制御アルゴリズム。
+
+### Cleanup
+
+```bash
+docker exec clab-tcp-08-client tc qdisc del dev eth1 root
+containerlab destroy -t tcp-08.clab.yml --cleanup
+```
