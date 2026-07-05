@@ -11,6 +11,7 @@ RFC notes are reading guides for the labs. They do not replace the RFC. They hel
 - [RFC 4271 Reading Guide for BGP Lab 03](bgp-rfc4271-lab03.md)
 - [RPKI Origin Validation Reading Guide for Lab 04](rpki-origin-validation.md)
 - [DNS Recursive Resolution Reading Guide for Lab 05](dns-recursive-resolution.md)
+- [DNS Caching, TTL, and Negative Answers Reading Guide for Lab 06](dns-caching-ttl-negative.md)
 
 ## How to Use Them
 
