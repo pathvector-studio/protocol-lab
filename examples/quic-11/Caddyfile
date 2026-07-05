@@ -1,15 +1,22 @@
 # Caddy config for Protocol Lab #11.
 #
-# Listen on :443 (wildcard) so the bind does not depend on the lab IP being
-# assigned first. `tls internal` uses Caddy's own CA (no public CA, no
-# Internet). The response body echoes the protocol that served the request,
-# so a fetch over HTTP/2 vs HTTP/3 is self-labeling.
+# The site is named (www.example.lab) rather than a bare `:443` so Caddy's
+# internal CA has a subject to issue a leaf certificate for; a bare `:443`
+# site has no hostname, so `tls internal` produces no servable cert and every
+# handshake fails with an internal-error alert. The host part only controls
+# SNI/Host *matching* — Caddy still binds the wildcard `:443` on all
+# interfaces, so this does not depend on the lab IP being assigned first.
+# The client reaches it with `curl --resolve www.example.lab:443:10.0.0.2`.
+#
+# `tls internal` uses Caddy's own CA (no public CA, no Internet). The response
+# body echoes the protocol that served the request, so a fetch over HTTP/2 vs
+# HTTP/3 is self-labeling.
 {
 	auto_https disable_redirects
 	local_certs
 }
 
-:443 {
+www.example.lab:443 {
 	tls internal
 	respond "Hello over {http.request.proto} for {http.request.uri.path}\n" 200
 }

@@ -122,10 +122,12 @@ docker build -t protocol-lab/caddy:2 .
 sudo containerlab deploy -t quic-11.clab.yml
 ```
 
+Caddy の internal CA は名前付きサイト(`www.example.lab`)に対して証明書を発行する。そのため client は IP 直打ちではなく、`--resolve www.example.lab:443:10.0.0.2` で名前を IP に固定しつつ、その名前(SNI)で接続する。以下のコマンドはすべてこの `--resolve` を付ける。
+
 ### 3. HTTP/2 で1回 fetch する
 
 ```bash
-docker exec clab-quic-11-client curl -k --http2 -sv https://10.0.0.2/one
+docker exec clab-quic-11-client curl -k --resolve www.example.lab:443:10.0.0.2 --http2 -sv https://www.example.lab/one
 ```
 
 見るポイント:
@@ -143,14 +145,16 @@ Hello over HTTP/2.0 for /one
 
 ```bash
 docker exec clab-quic-11-client sh -c \
-  "curl -k --http2 -sv --parallel --parallel-immediate \
-     https://10.0.0.2/a https://10.0.0.2/b https://10.0.0.2/c 2>&1 | grep -Ei 'stream|reused|Connected|HTTP/2'"
+  "curl -k --resolve www.example.lab:443:10.0.0.2 --http2 -sv --parallel \
+     https://www.example.lab/a https://www.example.lab/b https://www.example.lab/c 2>&1 | grep -Ei 'multiplex|Connected|HTTP/2'"
 ```
+
+`--parallel` だけにする(`--parallel-immediate` を付けない)ことで、curl は最初の1本を張ってから残りを同じ接続に多重化する。`--parallel-immediate` を付けると接続を即座に別々に開いてしまい、多重化が見えない。
 
 見るポイント:
 
-- 3つのリクエストが別々の **stream**(stream 1, 3, 5 …)。
-- 接続は1本(`Re-using existing connection` / 同じ `Connected to`)。
+- 3つのリクエストが1本の接続に相乗り(`Multiplexed connection found`)。
+- 接続は1本(同じ `Connected to`)。
 
 capture で TCP 接続数を数えると、3リクエストでも SYN は1つ(=1接続に多重化)。
 
@@ -162,7 +166,7 @@ docker exec clab-quic-11-client sh -c \
 ### 5. HTTP/3 の広告を読む
 
 ```bash
-docker exec clab-quic-11-client sh -c "curl -k --http2 -sD - -o /dev/null https://10.0.0.2/"
+docker exec clab-quic-11-client sh -c "curl -k --resolve www.example.lab:443:10.0.0.2 --http2 -sD - -o /dev/null https://www.example.lab/"
 ```
 
 レスポンスヘッダに:
@@ -177,7 +181,7 @@ alt-svc: h3=":443"; ma=2592000
 
 ```bash
 docker exec clab-quic-11-client sh -c "curl -V | grep -i HTTP3"
-docker exec clab-quic-11-client curl -k --http3 -sv https://10.0.0.2/three
+docker exec clab-quic-11-client curl -k --resolve www.example.lab:443:10.0.0.2 --http3 -sv https://www.example.lab/three
 ```
 
 対応していれば本文は `Hello over HTTP/3.0 ...`。capture では TCP ではなく **UDP/443** のパケット(QUIC)になる。未対応なら、server 側の UDP リスナーで QUIC の待ち受けを確認する。
@@ -237,3 +241,84 @@ sudo containerlab destroy -t quic-11.clab.yml --cleanup
 - [RFC 7301: TLS Application-Layer Protocol Negotiation (ALPN)](https://www.rfc-editor.org/rfc/rfc7301)
 - [RFC 9110: HTTP Semantics (Alt-Svc)](https://www.rfc-editor.org/rfc/rfc9110)
 - [Caddy web server](https://caddyserver.com/docs/)
+
+## 検証済み実行ログ (2026-07-05)
+
+このLabは実機で再現性を確認済みです。
+
+実行環境:
+
+- Ubuntu 26.04 LTS (kernel 7.0.0-27-generic, x86_64)
+- Docker 29.1.3
+- containerlab 0.77.0
+- server: `caddy:2` に iproute2 を足した `protocol-lab/caddy:2`（h1/h2/h3 を :443 で提供、internal CA）
+- client: `nicolaka/netshoot:latest`（curl 8.21.0 / nghttp2 1.69.0、**HTTP/3 非対応ビルド**）
+
+`PATH="/tmp/pl-shim:$PATH" ./scripts/labctl.sh run quic-11` で deploy → verify → destroy を実行し、`verification.json` は `"status": "verified"` を返した。
+
+### 環境ドリフト / 設計上の修正（この検証で必要になった）
+
+- **bare `:443` サイトでは internal CA が証明書を発行できない**。Caddyfile のサイトを `:443` から `www.example.lab:443` に変更（サブジェクト名を与える）。ホスト部は SNI/Host のマッチングにだけ効き、bind は wildcard `:443` のままなので lab IP の割当順に依存しない。client は `curl --resolve www.example.lab:443:10.0.0.2` で名前接続する（`examples/quic-11/run.sh` と本文の手順を更新）。
+- **多重化の計測**。`--parallel-immediate` を外して素の `--parallel` にし、3リクエストが1本の TCP 接続に相乗りするようにした。さらに、多重化 fetch の直後で capture を止め、後続の fetch を数えないようにした。
+
+### 単一 HTTP/2 fetch（ALPN h2 over TLS）
+
+```text
+$ curl -k --resolve www.example.lab:443:10.0.0.2 --http2 -sv https://www.example.lab/one
+* ALPN: server accepted h2
+*   issuer: CN=Caddy Local Authority - ECC Intermediate
+* using HTTP/2
+< HTTP/2 200
+Hello over HTTP/2.0 for /one
+```
+
+本文が `Hello over HTTP/2.0` と、処理したプロトコルを自己申告している。証明書は Caddy internal CA 発行。
+
+### 3リクエストを1本の接続に多重化
+
+```text
+$ curl -k --resolve www.example.lab:443:10.0.0.2 --http2 -sv --parallel \
+    https://www.example.lab/a https://www.example.lab/b https://www.example.lab/c
+* Waiting on connection to negotiate possible multiplexing.
+* Multiplexed connection found
+< HTTP/2 200
+< HTTP/2 200
+< HTTP/2 200
+Hello over HTTP/2.0 for /a
+Hello over HTTP/2.0 for /b
+Hello over HTTP/2.0 for /c
+```
+
+capture 中の SYN(新規 TCP 接続)を数えると:
+
+```text
+[protocol-lab][quic-11] distinct TCP connections opened during the multiplexed fetch: 1 (1 = fully multiplexed)
+```
+
+3リクエストでも新規 TCP 接続は **1本**。HTTP/2 は1接続上の複数 stream に多重化する。
+
+### HTTP/3 の広告（Alt-Svc）と QUIC リスナー
+
+```text
+$ curl -k --resolve www.example.lab:443:10.0.0.2 --http2 -sD - -o /dev/null https://www.example.lab/
+HTTP/2 200
+alt-svc: h3=":443"; ma=2592000
+```
+
+`alt-svc: h3=":443"` は「同じサービスを h3(HTTP/3, UDP :443)でも受けられる」という広告。
+
+このホストの curl 8.21.0 は HTTP/3 非対応ビルド(`curl -V` に `HTTP3` が出ない)だったので、client からの h3 fetch は行わず、server 側で QUIC の待ち受けを確認した:
+
+```text
+$ docker exec clab-quic-11-server ss -uln
+State  Recv-Q Send-Q Local Address:Port  Peer Address:Port
+UNCONN 0      0                  *:443              *:*
+```
+
+server は UDP :443 で QUIC を待ち受けている(h3 エンドポイントは存在する)。client の curl が対応していれば `curl --http3` で `Hello over HTTP/3.0` を UDP/443 上に観測できる。
+
+### Cleanup
+
+```bash
+containerlab destroy -t quic-11.clab.yml --cleanup
+```
