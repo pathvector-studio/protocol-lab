@@ -17,6 +17,7 @@ Usage:
   $0 run tcp-08
   $0 run tls-09
   $0 run http-10
+  $0 run quic-11
   $0 deploy bgp-01
   $0 deploy bgp-02
   $0 deploy bgp-03
@@ -27,6 +28,7 @@ Usage:
   $0 deploy tcp-08
   $0 deploy tls-09
   $0 deploy http-10
+  $0 deploy quic-11
   $0 verify bgp-01
   $0 verify bgp-02
   $0 verify bgp-03
@@ -37,6 +39,7 @@ Usage:
   $0 verify tcp-08
   $0 verify tls-09
   $0 verify http-10
+  $0 verify quic-11
   $0 capture bgp-01
   $0 capture bgp-02
   $0 capture bgp-03
@@ -50,6 +53,7 @@ Usage:
   $0 destroy tcp-08
   $0 destroy tls-09
   $0 destroy http-10
+  $0 destroy quic-11
   $0 doctor bgp-01
   $0 doctor bgp-02
   $0 doctor bgp-03
@@ -60,6 +64,7 @@ Usage:
   $0 doctor tcp-08
   $0 doctor tls-09
   $0 doctor http-10
+  $0 doctor quic-11
 USAGE
 }
 
@@ -110,6 +115,10 @@ case "$LAB_ID" in
     ;;
   http-10)
     cd "$REPO_ROOT/examples/http-10"
+    ./run.sh "$ACTION"
+    ;;
+  quic-11)
+    cd "$REPO_ROOT/examples/quic-11"
     ./run.sh "$ACTION"
     ;;
   *)

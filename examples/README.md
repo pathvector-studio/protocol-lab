@@ -16,6 +16,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`tcp-08/`](tcp-08/): the same two-node link with `tc netem` loss and delay, for observing retransmission, RTT, and windowing.
 - [`tls-09/`](tls-09/): a two-node link running `openssl s_server`/`s_client` for capturing a TLS 1.3 handshake with SNI and ALPN.
 - [`http-10/`](http-10/): a two-node link with a small Python HTTP server for reading methods, status codes, headers, and cache behavior (ETag / 304).
+- [`quic-11/`](quic-11/): a two-node link with a Caddy server (HTTP/1.1, HTTP/2, HTTP/3) for comparing stream multiplexing over TCP vs QUIC.
 
 ## Safety
 

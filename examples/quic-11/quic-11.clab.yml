@@ -1,0 +1,32 @@
+name: quic-11
+
+# A two-node link for comparing HTTP/2 (streams over one TCP connection) with
+# HTTP/3 / QUIC (streams over UDP).
+#
+#   client (10.0.0.1) ------ eth1/eth1 ------ server (10.0.0.2:443 tcp+udp)
+#                                             Caddy: HTTP/1.1, HTTP/2, HTTP/3
+#
+# The server image is built from ./Dockerfile (Caddy + iproute2) by run.sh.
+# The client uses netshoot (curl with HTTP/2 support, tcpdump).
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+
+    server:
+      kind: linux
+      image: protocol-lab/caddy:2
+      binds:
+        - ./Caddyfile:/etc/caddy/Caddyfile
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["client:eth1", "server:eth1"]

@@ -28,6 +28,8 @@ The first track is BGP/RPKI. Start with:
 - [TLS Handshake and Certificates Reading Guide for Lab 09](rfc-notes/tls-handshake-certificates.md)
 - [HTTP Lab 10: One Exchange, Read in the Clear](labs/http-10-requests-responses-caching.md)
 - [HTTP Requests, Responses, and Caching Reading Guide for Lab 10](rfc-notes/http-requests-responses-caching.md)
+- [Lab 11: HTTP/2 Streams and the Jump to QUIC](labs/quic-11-http2-quic-streams.md)
+- [HTTP/2, HTTP/3, and QUIC Streams Reading Guide for Lab 11](rfc-notes/http2-quic-streams.md)
 - [Full 12-lab learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.
