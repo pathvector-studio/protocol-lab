@@ -231,3 +231,71 @@ sudo containerlab destroy -t e2e-12.clab.yml --cleanup
 - [RFC 8446: TLS 1.3](https://www.rfc-editor.org/rfc/rfc8446)
 - [RFC 9110 / 9113: HTTP Semantics and HTTP/2](https://www.rfc-editor.org/rfc/rfc9110)
 - [RFC 5737: IPv4 Address Blocks Reserved for Documentation](https://www.rfc-editor.org/rfc/rfc5737)
+
+## 検証済み実行ログ (2026-07-05)
+
+このLabは実機で再現性を確認済みです。
+
+実行環境:
+
+- Ubuntu 26.04 LTS (kernel 7.0.0-27-generic, x86_64)
+- Docker 29.1.3
+- containerlab 0.77.0
+- dns: `internetsystemsconsortium/bind9:9.20` (BIND 9.20.24) を薄くラップした `protocol-lab/bind9:9.20`
+- web: `caddy:2` に iproute2 を足した `protocol-lab/caddy:2`（internal CA）
+- client: `nicolaka/netshoot:latest`（curl 8.21.0）
+
+`PATH="/tmp/pl-shim:$PATH" ./scripts/labctl.sh run e2e-12` で deploy → verify → destroy を実行し、`verification.json` は `"status": "verified"` を返した。
+
+### 環境ドリフト / 設計上の修正（この検証で必要になった）
+
+- **BIND イメージが Alpine ベースに**。`examples/e2e-12/dns/Dockerfile` を `apk add iproute2` + `ENTRYPOINT []` + foreground `named -g` に更新（Lab 05 と同じ）。
+- **bare `:443` サイトでは internal CA が証明書を発行できない**。`examples/e2e-12/web/Caddyfile` のサイトを `www.example.lab:443` に変更（bind は wildcard :443 のまま）。client は DNS で解決した実名 `www.example.lab` で接続するので、SNI がこのサイトに一致する。
+- **ヘルスチェックを名前接続に**。`run.sh` の `wait_ready` が web を IP (`https://10.0.2.2/`) で叩いていたが、名前付きサイトは SNI 不一致だと証明書を出さない。`set_resolv` 済みなので `https://www.example.lab/` で叩くよう変更。
+
+### レイヤ1（DNS）: 名前を解決
+
+```text
+$ docker exec clab-e2e-12-client dig @10.0.1.2 www.example.lab A
+;; ANSWER SECTION:
+www.example.lab.	300	IN	A	10.0.2.2
+```
+
+client は resolv.conf を dns ノード（10.0.1.2）に向け、`www.example.lab` を web ノードのアドレス `10.0.2.2` に解決する。
+
+### レイヤ2-4（TCP + TLS + HTTP）: 1本のリクエスト
+
+```text
+$ docker exec clab-e2e-12-client curl -k --http2 -sv https://www.example.lab/
+*   Trying 10.0.2.2:443...
+* SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256 / X25519MLKEM768 / id-ecPublicKey
+* ALPN: server accepted h2
+*   issuer: CN=Caddy Local Authority - ECC Intermediate
+* using HTTP/2
+< HTTP/2 200
+Hello from example.lab, served over HTTP/2.0
+```
+
+DNS で得た `10.0.2.2` に TCP で繋ぎ、TLS 1.3 handshake（ALPN h2、Caddy internal CA の証明書）を経て、HTTP/2 で `200` と本文を得る。
+
+### 1枚の capture に全レイヤが順番に現れる
+
+client の eth1（DNS）と eth2（web）を同時に capture すると、DNS 応答の直後に TCP handshake が始まっているのがタイムスタンプで分かる:
+
+```text
+# eth1: DNS (udp/53)
+13:17:59.124646 IP 10.0.1.1.33829 > 10.0.1.2.53: A? www.example.lab. (56)
+13:17:59.125014 IP 10.0.1.2.53 > 10.0.1.1.33829: 1/0/1 A 10.0.2.2 (88)
+
+# eth2: TCP+TLS+HTTP (tcp/443) — DNS 応答の 0.1ms 後に SYN
+13:17:59.125132 IP 10.0.2.1.60632 > 10.0.2.2.443: Flags [S],  ...
+13:17:59.125155 IP 10.0.2.2.443 > 10.0.2.1.60632: Flags [S.], ...
+```
+
+`www.example.lab` の A レコードが返った瞬間（`...125014`）に、client がそのアドレス宛ての SYN（`...125132`）を出している。DNS →（TCP → TLS → HTTP）という、これまでの Lab 全部が1つの `curl` に畳み込まれている。
+
+### Cleanup
+
+```bash
+containerlab destroy -t e2e-12.clab.yml --cleanup
+```

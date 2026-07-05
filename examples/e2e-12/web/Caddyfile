@@ -1,12 +1,16 @@
 # Web server for the end-to-end lab (Lab 12).
-# Listens on :443 (wildcard) with an internal CA. The response body names the
-# protocol that served the request.
+# The site is named (www.example.lab) so Caddy's internal CA has a subject to
+# issue a leaf cert for; a bare `:443` site has no hostname and every TLS
+# handshake fails with an internal-error alert. The host part only controls
+# SNI/Host matching — Caddy still binds the wildcard `:443`, so it does not
+# depend on the lab IP being assigned first. The client reaches it by the real
+# name www.example.lab (resolved via the dns node), so SNI matches.
 {
 	auto_https disable_redirects
 	local_certs
 }
 
-:443 {
+www.example.lab:443 {
 	tls internal
 	respond "Hello from example.lab, served over {http.request.proto}\n" 200
 }
