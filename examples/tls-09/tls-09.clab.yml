@@ -1,0 +1,31 @@
+name: tls-09
+
+# A two-node link for watching the visible part of a TLS handshake.
+# The server runs `openssl s_server` with a self-signed cert and ALPN; the
+# client runs `openssl s_client` with SNI. run.sh generates the cert, starts
+# the server, and captures the handshake.
+#
+#   client (10.0.0.1) ------ eth1/eth1 ------ server (10.0.0.2:4433)
+#
+# Both nodes use netshoot, which ships ip, openssl, tcpdump, and tshark.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+
+    server:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["client:eth1", "server:eth1"]

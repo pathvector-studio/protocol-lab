@@ -14,6 +14,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`dns-06/`](dns-06/): the same DNS hierarchy, tuned for observing caching, TTL countdown, and NXDOMAIN negative caching.
 - [`tcp-07/`](tcp-07/): a two-node point-to-point link using netshoot and containerlab for capturing one TCP connection's handshake and teardown.
 - [`tcp-08/`](tcp-08/): the same two-node link with `tc netem` loss and delay, for observing retransmission, RTT, and windowing.
+- [`tls-09/`](tls-09/): a two-node link running `openssl s_server`/`s_client` for capturing a TLS 1.3 handshake with SNI and ALPN.
 
 ## Safety
 
