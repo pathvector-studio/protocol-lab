@@ -15,6 +15,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`tcp-07/`](tcp-07/): a two-node point-to-point link using netshoot and containerlab for capturing one TCP connection's handshake and teardown.
 - [`tcp-08/`](tcp-08/): the same two-node link with `tc netem` loss and delay, for observing retransmission, RTT, and windowing.
 - [`tls-09/`](tls-09/): a two-node link running `openssl s_server`/`s_client` for capturing a TLS 1.3 handshake with SNI and ALPN.
+- [`http-10/`](http-10/): a two-node link with a small Python HTTP server for reading methods, status codes, headers, and cache behavior (ETag / 304).
 
 ## Safety
 
