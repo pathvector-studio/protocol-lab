@@ -63,8 +63,11 @@ wait_ready() {
   for i in $(seq 1 45); do
     local a
     a="$(docker exec "$CLIENT" dig +short "@$DNS_IP" "$NAME" A 2>/dev/null || true)"
+    # Probe the web server by name (not by IP): the named Caddy site only
+    # presents its cert when the SNI matches, and set_resolv already pointed
+    # the client's resolver at the dns node.
     if grep -q "$WEB_IP" <<<"$a" \
-       && docker exec "$CLIENT" curl -k -s -o /dev/null "https://$WEB_IP/" 2>/dev/null; then
+       && docker exec "$CLIENT" curl -k -s -o /dev/null "https://$NAME/" 2>/dev/null; then
       log "DNS and web ready after ${i}s"; return 0
     fi
     sleep 1
