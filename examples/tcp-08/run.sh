@@ -53,17 +53,20 @@ client_retrans() {
               else { print $c } }' /proc/net/snmp
 }
 
+# netshoot ships OpenBSD netcat (no --exec/--keep-open) and socat; use socat
+# for the discard sink (fork keeps accepting; -u streams socket -> /dev/null).
 start_sink() {
-  docker exec "$SERVER" pkill -f "ncat.*$PORT" >/dev/null 2>&1 || true
-  docker exec -d "$SERVER" sh -c "ncat --listen --keep-open $PORT > /dev/null 2>&1"
+  docker exec "$SERVER" pkill -f "socat.*$PORT" >/dev/null 2>&1 || true
+  docker exec -d "$SERVER" sh -c "socat -u TCP-LISTEN:$PORT,reuseaddr,fork OPEN:/dev/null > /dev/null 2>&1"
   sleep 1
 }
 
 # Push $BYTES from client to server; echoes the wall-clock seconds it took.
+# -N makes nc shutdown-on-EOF so the sink sees the stream end promptly.
 transfer() {
   local start=$SECONDS
   docker exec "$CLIENT" sh -c \
-    "timeout 90 sh -c 'head -c $BYTES /dev/zero | ncat -w15 $SERVER_IP $PORT'" \
+    "timeout 90 sh -c 'head -c $BYTES /dev/zero | nc -N -w15 $SERVER_IP $PORT'" \
     >/dev/null 2>&1 || true
   echo $(( SECONDS - start ))
 }
@@ -134,7 +137,7 @@ verify() {
   docker cp "$CLIENT:/tmp/ss.log" "$RUN_DIR/ss-samples.txt" >/dev/null 2>&1 || true
 
   clear_netem
-  docker exec "$SERVER" pkill -f "ncat.*$PORT" >/dev/null 2>&1 || true
+  docker exec "$SERVER" pkill -f "socat.*$PORT" >/dev/null 2>&1 || true
 
   log "lossy transfer: ${loss_secs}s, client retransmits=${loss_retrans}"
   log "summary: clean ${clean_secs}s/${clean_retrans} retrans vs lossy ${loss_secs}s/${loss_retrans} retrans"
