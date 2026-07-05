@@ -239,3 +239,57 @@ sudo containerlab destroy -t tls-09.clab.yml --cleanup
 - [RFC 7301: TLS Application-Layer Protocol Negotiation (ALPN)](https://www.rfc-editor.org/rfc/rfc7301)
 - [RFC 5737: IPv4 Address Blocks Reserved for Documentation](https://www.rfc-editor.org/rfc/rfc5737)
 - [openssl s_client manual page](https://docs.openssl.org/master/man1/openssl-s_client/)
+
+## 検証済み実行ログ (2026-07-05)
+
+このLabは実機で再現性を確認済みです。
+
+実行環境:
+
+- Ubuntu 26.04 LTS (kernel 7.0.0-27-generic, x86_64)
+- Docker 29.1.3
+- containerlab 0.77.0
+- client / server: `nicolaka/netshoot:latest`（`openssl` / `tshark` 同梱）
+
+`PATH="/tmp/pl-shim:$PATH" ./scripts/labctl.sh run tls-09` で deploy → verify → destroy を実行し、`verification.json` は `"status": "verified"` を返した。イメージ・トポロジの修正は不要だった。
+
+### `openssl s_client` から見た handshake 結果
+
+```text
+$ echo Q | openssl s_client -connect 10.0.0.2:4433 -servername www.example.lab \
+    -alpn h2,http/1.1 -tls1_3
+
+Server certificate
+subject=CN=www.example.lab
+issuer=CN=www.example.lab
+Verification error: self-signed certificate
+New, TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+Protocol: TLSv1.3
+ALPN protocol: h2
+```
+
+読み方:
+
+- **SNI で選ばれた証明書**: `subject=CN=www.example.lab`。client が `-servername www.example.lab`（SNI）で要求した名前の証明書を server が提示している。
+- **自己署名**: `issuer` が `subject` と同じで、`Verification error: self-signed certificate`。lab の CA を信頼していないので検証は失敗するのが正常（本番なら CA チェーンで検証が通る）。
+- **TLS 1.3**: `Protocol: TLSv1.3`、cipher は `TLS_AES_256_GCM_SHA384`。
+- **ALPN**: `ALPN protocol: h2`。client が `h2,http/1.1` を提示し、server が `h2` を選んだ。
+
+### ClientHello を wire 上で確認（tshark）
+
+capture から ClientHello（`tls.handshake.type==1`）の SNI と ALPN を取り出すと:
+
+```text
+$ tshark -r tls-09.pcap -Y "tls.handshake.type==1" \
+    -T fields -e tls.handshake.extensions_server_name -e tls.handshake.extensions_alpn_str
+
+www.example.lab	h2,http/1.1
+```
+
+TLS 1.3 でも **ClientHello は平文**なので、SNI（接続先ホスト名）と ALPN の提示リスト（`h2,http/1.1`）はネットワーク上から見える。server が選んだ ALPN（`h2`）は暗号化された EncryptedExtensions に入るため、上の `s_client` 出力側で確認する。
+
+### Cleanup
+
+```bash
+containerlab destroy -t tls-09.clab.yml --cleanup
+```
