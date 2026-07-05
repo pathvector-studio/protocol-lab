@@ -10,6 +10,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`bgp-02/`](bgp-02/): the same two-router eBGP shape, with route withdrawal and reannouncement.
 - [`bgp-03/`](bgp-03/): a three-router eBGP topology with two origins for the same prefix.
 - [`rpki-04/`](rpki-04/): a local RPKI origin validation lab using FRRouting, StayRTR, and containerlab.
+- [`dns-05/`](dns-05/): a five-node DNS hierarchy (client, recursive resolver, root, TLD, authoritative) using BIND9, netshoot, and containerlab.
 
 ## Safety
 
