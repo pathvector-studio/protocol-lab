@@ -232,3 +232,68 @@ sudo containerlab destroy -t http-10.clab.yml --cleanup
 - [RFC 9112: HTTP/1.1](https://www.rfc-editor.org/rfc/rfc9112)
 - [RFC 5737: IPv4 Address Blocks Reserved for Documentation](https://www.rfc-editor.org/rfc/rfc5737)
 - [curl manual page](https://curl.se/docs/manpage.html)
+
+## 検証済み実行ログ (2026-07-05)
+
+このLabは実機で再現性を確認済みです。
+
+実行環境:
+
+- Ubuntu 26.04 LTS (kernel 7.0.0-27-generic, x86_64)
+- Docker 29.1.3
+- containerlab 0.77.0
+- client / server: `nicolaka/netshoot:latest`（`curl` / `python3` 同梱、server は `server/app.py` を実行）
+
+`PATH="/tmp/pl-shim:$PATH" ./scripts/labctl.sh run http-10` で deploy → verify → destroy を実行し、`verification.json` は `"status": "verified"` を返した。イメージ・トポロジの修正は不要だった。
+
+### GET /（200 OK + キャッシュヘッダ）
+
+```text
+$ curl -sv http://10.0.0.2:8080/
+< HTTP/1.1 200 OK
+< Server: protocol-lab/1.0 Python/3.14.5
+< Content-Type: text/plain; charset=utf-8
+< Content-Length: 41
+< Cache-Control: max-age=60
+< ETag: "v1-abc123"
+```
+
+`Cache-Control: max-age=60` は「60 秒間はそのまま再利用してよい」。`ETag` はこの表現のバージョン識別子で、後の条件付き GET に使う。
+
+### HEAD /（ヘッダのみ、本文なし）
+
+```text
+$ curl -sv -I http://10.0.0.2:8080/
+< HTTP/1.1 200 OK
+< Content-Length: 41
+< Cache-Control: max-age=60
+< ETag: "v1-abc123"
+```
+
+GET と同じヘッダ（`Content-Length: 41` も含む）が返るが、本文は転送されない。
+
+### 条件付き GET（If-None-Match → 304 Not Modified）
+
+```text
+$ curl -sv -H 'If-None-Match: "v1-abc123"' http://10.0.0.2:8080/
+> If-None-Match: "v1-abc123"
+< HTTP/1.1 304 Not Modified
+< ETag: "v1-abc123"
+```
+
+client が持っている ETag をそのまま `If-None-Match` で送ると、server は「変わっていない」= `304 Not Modified` を本文なしで返す。キャッシュ済みの表現を再利用してよい、という再検証（revalidation）。
+
+### GET /missing（404 Not Found）
+
+```text
+$ curl -sv http://10.0.0.2:8080/missing
+< HTTP/1.1 404 Not Found
+```
+
+存在しないパスは `404`。
+
+### Cleanup
+
+```bash
+containerlab destroy -t http-10.clab.yml --cleanup
+```
