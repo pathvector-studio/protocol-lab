@@ -51,7 +51,7 @@ After completing the twelve labs, you should be able to:
 | 02 | [BGP: UPDATE, NEXT_HOP, and Withdrawal](labs/bgp-02-update-nexthop-withdrawal.md) | UPDATE message structure, path attributes, withdrawn routes | Announce and withdraw packets | Explain how a route appears and disappears |
 | 03 | [BGP: Competing Origins and Route Leaks](labs/bgp-03-competing-origins-route-leaks.md) | Why the same prefix from different origins is risky | Two origins for one prefix and their paths | Compare paths and identify the risk |
 | 04 | [RPKI: ROAs and Origin Validation](labs/rpki-04-roa-origin-validation.md) | ROA, origin AS, max length, valid, invalid, not found | Origin validation results | Explain why a route is valid, invalid, or not found |
-| 05 | DNS: Recursive Resolution with `dig` | Stub resolver, recursive resolver, root, TLD, authoritative server | Iterative lookup flow | Draw the resolution path for one name |
+| 05 | [DNS: Recursive Resolution with `dig`](labs/dns-05-recursive-resolution.md) | Stub resolver, recursive resolver, root, TLD, authoritative server | Iterative lookup flow | Draw the resolution path for one name |
 | 06 | DNS: Caching, TTL, and Negative Answers | TTL, cache behavior, NXDOMAIN, SOA in negative caching | Repeated queries and cached responses | Explain why an answer changed or did not change |
 | 07 | TCP: Handshake, Sequence Numbers, and Teardown | SYN, SYN-ACK, ACK, sequence numbers, FIN, RST | tcpdump or Wireshark traces | Annotate one connection lifecycle |
 | 08 | TCP: Retransmission, Windowing, and Loss | Retransmission, RTT, receive window, simple packet loss | Timing, loss, and recovery | Explain how TCP recovers from loss |
@@ -68,7 +68,7 @@ After completing the twelve labs, you should be able to:
 | 02 | [BGP: UPDATE、NEXT_HOP、withdrawal](labs/bgp-02-update-nexthop-withdrawal.md) | UPDATE message の構造、path attribute、withdrawn route | 経路広告と取り下げのパケット | 経路が現れて消える仕組みを説明する |
 | 03 | [BGP: competing origin と route leak](labs/bgp-03-competing-origins-route-leaks.md) | 同じ prefix が異なる origin から見える危険性 | 1つの prefix に対する2つの origin と path | path を比較してリスクを説明する |
 | 04 | [RPKI: ROA と origin validation](labs/rpki-04-roa-origin-validation.md) | ROA、origin AS、max length、valid、invalid、not found | origin validation の結果 | 経路が valid / invalid / not found になる理由を説明する |
-| 05 | DNS: `dig` で見る再帰問い合わせ | stub resolver、recursive resolver、root、TLD、authoritative server | iterative lookup の流れ | 1つの名前解決経路を図にできる |
+| 05 | [DNS: `dig` で見る再帰問い合わせ](labs/dns-05-recursive-resolution.md) | stub resolver、recursive resolver、root、TLD、authoritative server | iterative lookup の流れ | 1つの名前解決経路を図にできる |
 | 06 | DNS: cache、TTL、negative answer | TTL、cache、NXDOMAIN、negative caching の SOA | 繰り返し query と cached response | answer が変わる理由、変わらない理由を説明する |
 | 07 | TCP: handshake、sequence number、teardown | SYN、SYN-ACK、ACK、sequence number、FIN、RST | tcpdump または Wireshark の trace | 1つの connection lifecycle を注釈できる |
 | 08 | TCP: retransmission、windowing、loss | 再送、RTT、receive window、単純な packet loss | timing、loss、recovery | TCP が loss から回復する流れを説明する |

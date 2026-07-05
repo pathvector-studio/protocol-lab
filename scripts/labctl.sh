@@ -11,14 +11,17 @@ Usage:
   $0 run bgp-02
   $0 run bgp-03
   $0 run rpki-04
+  $0 run dns-05
   $0 deploy bgp-01
   $0 deploy bgp-02
   $0 deploy bgp-03
   $0 deploy rpki-04
+  $0 deploy dns-05
   $0 verify bgp-01
   $0 verify bgp-02
   $0 verify bgp-03
   $0 verify rpki-04
+  $0 verify dns-05
   $0 capture bgp-01
   $0 capture bgp-02
   $0 capture bgp-03
@@ -26,10 +29,12 @@ Usage:
   $0 destroy bgp-02
   $0 destroy bgp-03
   $0 destroy rpki-04
+  $0 destroy dns-05
   $0 doctor bgp-01
   $0 doctor bgp-02
   $0 doctor bgp-03
   $0 doctor rpki-04
+  $0 doctor dns-05
 USAGE
 }
 
@@ -56,6 +61,10 @@ case "$LAB_ID" in
     ;;
   rpki-04)
     cd "$REPO_ROOT/examples/rpki-04"
+    ./run.sh "$ACTION"
+    ;;
+  dns-05)
+    cd "$REPO_ROOT/examples/dns-05"
     ./run.sh "$ACTION"
     ;;
   *)

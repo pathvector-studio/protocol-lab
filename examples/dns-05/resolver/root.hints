@@ -1,0 +1,6 @@
+; Root hints for the Protocol Lab recursive resolver (Lab 05).
+; These point at the LOCAL fake root node, not the real Internet root.
+; A real resolver ships named.root from IANA; here we override it so the
+; resolver starts iteration at our own a.root. server.
+.           3600000  IN  NS  a.root.
+a.root.     3600000  IN  A   10.0.1.2

@@ -10,6 +10,7 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 - [BGP Lab 02: Watch a Route Appear, Disappear, and Come Back](bgp-02-update-nexthop-withdrawal.md)
 - [BGP Lab 03: Competing Origins and the First Route-Leak Question](bgp-03-competing-origins-route-leaks.md)
 - [RPKI Lab 04: ROAs and Origin Validation](rpki-04-roa-origin-validation.md)
+- [DNS Lab 05: Recursive Resolution You Can Trace](dns-05-recursive-resolution.md)
 
 Expected time: 45 to 60 minutes per lab.
 

@@ -1,0 +1,16 @@
+; example.lab. authoritative zone for the Protocol Lab DNS hierarchy (Lab 05).
+; Served by the auth node. This is where the final answer lives.
+; www uses a short TTL so you can watch caching and TTL countdown.
+$TTL 3600
+example.lab.        IN  SOA ns.example.lab. admin.example.lab. (
+                        1          ; serial
+                        3600       ; refresh
+                        900        ; retry
+                        604800     ; expire
+                        300 )      ; negative cache TTL
+example.lab.        IN  NS  ns.example.lab.
+ns.example.lab.     IN  A   10.0.3.2
+
+; 203.0.113.0/24 is RFC 5737 documentation space. Lab use only.
+www.example.lab.    60  IN  A   203.0.113.10
+example.lab.        60  IN  A   203.0.113.10

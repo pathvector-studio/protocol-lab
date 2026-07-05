@@ -1,0 +1,15 @@
+; lab. TLD zone for the Protocol Lab DNS hierarchy (Lab 05).
+; Served by the tld node. Delegates example.lab. to the auth node.
+$TTL 3600
+lab.                IN  SOA ns.lab. admin.lab. (
+                        1          ; serial
+                        3600       ; refresh
+                        900        ; retry
+                        604800     ; expire
+                        3600 )     ; negative cache TTL
+lab.                IN  NS  ns.lab.
+ns.lab.             IN  A   10.0.2.2
+
+; Delegation of example.lab. to the auth node.
+example.lab.        IN  NS  ns.example.lab.
+ns.example.lab.     IN  A   10.0.3.2
