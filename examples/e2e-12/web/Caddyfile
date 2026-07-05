@@ -1,0 +1,12 @@
+# Web server for the end-to-end lab (Lab 12).
+# Listens on :443 (wildcard) with an internal CA. The response body names the
+# protocol that served the request.
+{
+	auto_https disable_redirects
+	local_certs
+}
+
+:443 {
+	tls internal
+	respond "Hello from example.lab, served over {http.request.proto}\n" 200
+}

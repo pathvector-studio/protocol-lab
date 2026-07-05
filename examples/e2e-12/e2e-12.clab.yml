@@ -1,0 +1,48 @@
+name: e2e-12
+
+# The capstone: one Web request that crosses every layer from earlier labs.
+#
+#   client ---- eth1 ---- dns   (resolver + authoritative for example.lab)
+#     |                    www.example.lab. A 10.0.2.2
+#     +------- eth2 ---- web   (Caddy, TLS + HTTP over TCP)
+#
+# `curl https://www.example.lab/` from the client triggers, in order:
+#   DNS (to dns) -> TCP + TLS + HTTP (to web).
+#
+# Images are built from ./dns/Dockerfile (BIND + iproute2) and
+# ./web/Dockerfile (Caddy + iproute2) by run.sh. Client uses netshoot.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.1.1/24 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.2.1/24 dev eth2
+        - ip link set eth2 up
+
+    dns:
+      kind: linux
+      image: protocol-lab/bind9:9.20
+      binds:
+        - ./dns/named.conf:/etc/bind/named.conf
+        - ./dns/db.example.lab:/etc/bind/db.example.lab
+      exec:
+        - ip addr add 10.0.1.2/24 dev eth1
+        - ip link set eth1 up
+
+    web:
+      kind: linux
+      image: protocol-lab/caddy:2
+      binds:
+        - ./web/Caddyfile:/etc/caddy/Caddyfile
+      exec:
+        - ip addr add 10.0.2.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["client:eth1", "dns:eth1"]
+    - endpoints: ["client:eth2", "web:eth1"]
