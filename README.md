@@ -22,6 +22,8 @@ The first track is BGP/RPKI. Start with:
 - [DNS Caching, TTL, and Negative Answers Reading Guide for Lab 06](rfc-notes/dns-caching-ttl-negative.md)
 - [TCP Lab 07: One Connection, From SYN to FIN](labs/tcp-07-handshake-teardown.md)
 - [TCP Handshake and Teardown Reading Guide for Lab 07](rfc-notes/tcp-handshake-teardown.md)
+- [TCP Lab 08: Loss, Retransmission, and the Window](labs/tcp-08-retransmission-windowing-loss.md)
+- [TCP Retransmission and Windowing Reading Guide for Lab 08](rfc-notes/tcp-retransmission-windowing.md)
 - [Full 12-lab learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.

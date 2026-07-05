@@ -1,0 +1,30 @@
+name: tcp-08
+
+# The same two-node link as Lab 07, reused to watch what TCP does when the
+# network is lossy. run.sh adds latency and packet loss with `tc netem` on
+# the client link, then pushes a few MB so retransmissions are forced.
+#
+#   client (10.0.0.1) ------ eth1/eth1 ------ server (10.0.0.2:8080)
+#
+# Both nodes use netshoot, which ships ip, tc, tcpdump, ss, and ncat.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+
+    server:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["client:eth1", "server:eth1"]
