@@ -94,7 +94,7 @@ sequenceDiagram
   C->>S: ACK
 ```
 
-両ノードとも `nicolaka/netshoot` を使う。netshoot には `ip`、`tcpdump`、`ncat` が入っているので追加イメージは不要。
+両ノードとも `nicolaka/netshoot` を使う。netshoot には `ip`、`tcpdump`、`nc`(OpenBSD netcat)、`socat` が入っているので追加イメージは不要。echo サーバは `--exec` を持つ `ncat` の代わりに `socat` で立てる。
 
 ## 必要なもの
 
@@ -141,7 +141,7 @@ docker ps --format "table {{.Names}}\t{{.Status}}"
 受け取ったバイトをそのまま返す小さな TCP サーバを、バックグラウンドで起動する。
 
 ```bash
-docker exec -d clab-tcp-07-server ncat --listen --keep-open 8080 --exec "/bin/cat"
+docker exec -d clab-tcp-07-server socat TCP-LISTEN:8080,reuseaddr,fork EXEC:/bin/cat
 ```
 
 ### 4. client で capture を仕込む
@@ -159,7 +159,7 @@ docker exec -it clab-tcp-07-client tcpdump -i eth1 -n "tcp port 8080"
 さらに別のシェルで、client から1行送って echo を受け取り、閉じる。
 
 ```bash
-docker exec -it clab-tcp-07-client sh -c "printf 'hello-tcp\n' | ncat -w2 10.0.0.2 8080"
+docker exec -it clab-tcp-07-client sh -c "printf 'hello-tcp\n' | nc -w2 10.0.0.2 8080"
 ```
 
 `hello-tcp` が echo で返ってくれば、接続が確立し、データが往復し、閉じられたということ。
@@ -241,3 +241,60 @@ sudo containerlab destroy -t tcp-07.clab.yml --cleanup
 - [RFC 5737: IPv4 Address Blocks Reserved for Documentation](https://www.rfc-editor.org/rfc/rfc5737)
 - [tcpdump manual page](https://www.tcpdump.org/manpages/tcpdump.1.html)
 - [netshoot: a Docker + Kubernetes network troubleshooting swiss-army container](https://github.com/nicolaka/netshoot)
+
+## 検証済み実行ログ (2026-07-05)
+
+このLabは実機で再現性を確認済みです。
+
+実行環境:
+
+- Ubuntu 26.04 LTS (kernel 7.0.0-27-generic, x86_64)
+- Docker 29.1.3
+- containerlab 0.77.0
+- client / server: `nicolaka/netshoot:latest`
+
+`PATH="/tmp/pl-shim:$PATH" ./scripts/labctl.sh run tcp-07` で deploy → verify → destroy を実行し、`verification.json` は `"status": "verified"` を返した。
+
+### 環境ドリフトへの追随（この検証で必要になった修正）
+
+- **netshoot の netcat が入れ替わっていた**。現在の `nicolaka/netshoot` は nmap の `ncat`（`--exec` 付き）を積んでおらず、OpenBSD netcat (`nc`) と `socat` を積む。OpenBSD `nc` には `--exec/-e` が無いため、echo サーバは `socat TCP-LISTEN:8080,reuseaddr,fork EXEC:/bin/cat` で立て、client 送信は `nc -w2` に変更した（`examples/tcp-07/run.sh` と本文の手順を更新）。
+
+### 1接続のライフサイクル全体（tcpdump）
+
+`client (10.0.0.1)` から `server (10.0.0.2:8080)` へ1行送って echo を受け取り、閉じる。その間の全パケット:
+
+```text
+$ docker exec clab-tcp-07-client tcpdump -tttt -n -r /tmp/tcp-07.pcap
+
+12:57:10.386664 IP 10.0.0.1.59614 > 10.0.0.2.8080: Flags [S],  seq 65907414, win 56760, options [mss 9460,sackOK,TS ...,nop,wscale 10], length 0
+12:57:10.386683 IP 10.0.0.2.8080 > 10.0.0.1.59614: Flags [S.], seq 2744956622, ack 65907415, win 56688, options [mss 9460,sackOK,...], length 0
+12:57:10.386691 IP 10.0.0.1.59614 > 10.0.0.2.8080: Flags [.],  ack 1, win 56, length 0
+12:57:10.386714 IP 10.0.0.1.59614 > 10.0.0.2.8080: Flags [P.], seq 1:11, ack 1, win 56, length 10   # "hello-tcp\n" 送信
+12:57:10.386716 IP 10.0.0.2.8080 > 10.0.0.1.59614: Flags [.],  ack 11, win 56, length 0
+12:57:10.387210 IP 10.0.0.2.8080 > 10.0.0.1.59614: Flags [P.], seq 1:11, ack 11, win 56, length 10  # echo 返送
+12:57:10.387214 IP 10.0.0.1.59614 > 10.0.0.2.8080: Flags [.],  ack 11, win 56, length 0
+12:57:12.388376 IP 10.0.0.1.59614 > 10.0.0.2.8080: Flags [F.], seq 11, ack 11, win 56, length 0     # client FIN
+12:57:12.388472 IP 10.0.0.2.8080 > 10.0.0.1.59614: Flags [F.], seq 11, ack 12, win 56, length 0     # server FIN
+12:57:12.388477 IP 10.0.0.1.59614 > 10.0.0.2.8080: Flags [.],  ack 12, win 56, length 0             # 最後の ACK
+```
+
+読み方:
+
+- **3-way handshake**: `[S]`（SYN）→ `[S.]`（SYN-ACK）→ `[.]`（ACK）。冒頭3行。相対 seq/ack でいうと SYN の seq が `ack 1` として返り、以後 `ack 1` は「SYN 1バイト分を確認した」という意味。
+- **データ往復**: client の `[P.] length 10` が `hello-tcp\n`、server の `[P.] length 10` がその echo。互いに ACK している。
+- **4-way teardown**: `[F.]`（FIN,ACK）を client → server の順で送り合い、最後に client が `[.]`（ACK）で締める。ここでは両者ほぼ同時に FIN するので3パケットに畳まれている。`nc -w2` の idle タイムアウト（送信の約2秒後）で close が起きているのが、7行目と8行目の時刻差（`...10.387` → `...12.388`）に表れている。
+
+client 側で受け取った echo:
+
+```text
+$ printf 'hello-tcp\n' | nc -w2 10.0.0.2 8080
+hello-tcp
+```
+
+（`length 10` のパケットに tcpdump が `HTTP` と付けることがあるが、これはポート 8080 からの推測ラベルで、実際のペイロードは `hello-tcp` の平文。）
+
+### Cleanup
+
+```bash
+containerlab destroy -t tcp-07.clab.yml --cleanup
+```
