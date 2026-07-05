@@ -6,7 +6,11 @@ TOPOLOGY="quic-11.clab.yml"
 CLIENT="clab-quic-11-client"
 SERVER="clab-quic-11-server"
 SERVER_IP="10.0.0.2"
-BASE="https://10.0.0.2"
+# Caddy's internal CA issues a leaf cert for the named site (www.example.lab),
+# so the client connects by name (via --resolve) to send a matching SNI.
+SNI_HOST="www.example.lab"
+BASE="https://$SNI_HOST"
+RESOLVE="--resolve $SNI_HOST:443:$SERVER_IP"
 CADDY_IMAGE="protocol-lab/caddy:2"
 PCAP_IN="/tmp/quic-11.pcap"
 RUN_ID="${RUN_ID:-$(date -u +%Y%m%dT%H%M%SZ)}"
@@ -51,7 +55,7 @@ wait_https() {
   log "waiting for the Caddy server on $BASE"
   local i
   for i in $(seq 1 40); do
-    if docker exec "$CLIENT" curl -k -s -o /dev/null "$BASE/" 2>/dev/null; then
+    if docker exec "$CLIENT" curl -k $RESOLVE -s -o /dev/null "$BASE/" 2>/dev/null; then
       log "server answered after ${i}s"; return 0
     fi
     sleep 1
@@ -66,7 +70,7 @@ verify() {
   docker exec "$CLIENT" curl -V | tee "$RUN_DIR/curl-version.txt" | tee -a "$LOG_FILE" >/dev/null
 
   log "single HTTP/2 fetch (ALPN h2 over TLS)"
-  docker exec "$CLIENT" sh -c "curl -k --http2 -sv $BASE/one 2>&1" \
+  docker exec "$CLIENT" sh -c "curl -k $RESOLVE --http2 -sv $BASE/one 2>&1" \
     | tee "$RUN_DIR/h2-single.txt" | tee -a "$LOG_FILE" >/dev/null
 
   log "multiplexed HTTP/2 fetch: 3 requests over one connection"
@@ -74,25 +78,11 @@ verify() {
   docker exec -d "$CLIENT" tcpdump -i eth1 -U -w "$PCAP_IN" "tcp port 443 or udp port 443"
   sleep 1
   docker exec "$CLIENT" sh -c \
-    "curl -k --http2 -sv --parallel --parallel-immediate \
+    "curl -k $RESOLVE --http2 -sv --parallel \
        $BASE/a $BASE/b $BASE/c 2>&1" \
     | tee "$RUN_DIR/h2-multiplex.txt" | tee -a "$LOG_FILE" >/dev/null
-
-  log "response headers (look for Alt-Svc advertising h3)"
-  docker exec "$CLIENT" sh -c "curl -k --http2 -sD - -o /dev/null $BASE/ 2>&1" \
-    | tee "$RUN_DIR/headers.txt" | tee -a "$LOG_FILE" >/dev/null
-
-  # Best-effort HTTP/3 if this curl was built with HTTP3 support.
-  if docker exec "$CLIENT" sh -c "curl -V | grep -qi HTTP3"; then
-    log "client curl supports HTTP/3; trying an HTTP/3 fetch"
-    docker exec "$CLIENT" sh -c "curl -k --http3 -sv $BASE/three 2>&1" \
-      | tee "$RUN_DIR/h3-fetch.txt" | tee -a "$LOG_FILE" >/dev/null || true
-  else
-    log "client curl has no HTTP/3 support; showing the QUIC listener instead"
-    docker exec "$SERVER" sh -c "ss -uln 2>/dev/null || netstat -uln 2>/dev/null" \
-      | tee "$RUN_DIR/server-udp-listeners.txt" | tee -a "$LOG_FILE" >/dev/null || true
-  fi
-
+  # Stop the capture right after the multiplexed fetch so the connection count
+  # reflects only those 3 requests (later fetches would open their own conns).
   sleep 1
   docker exec "$CLIENT" pkill -INT tcpdump >/dev/null 2>&1 || true
   sleep 1
@@ -102,6 +92,21 @@ verify() {
   local conns
   conns="$(docker exec "$CLIENT" tcpdump -n -r "$PCAP_IN" "tcp[tcpflags] & tcp-syn != 0 and tcp[tcpflags] & tcp-ack == 0" 2>/dev/null | wc -l | tr -d ' ')"
   log "distinct TCP connections opened during the multiplexed fetch: $conns (1 = fully multiplexed)"
+
+  log "response headers (look for Alt-Svc advertising h3)"
+  docker exec "$CLIENT" sh -c "curl -k $RESOLVE --http2 -sD - -o /dev/null $BASE/ 2>&1" \
+    | tee "$RUN_DIR/headers.txt" | tee -a "$LOG_FILE" >/dev/null
+
+  # Best-effort HTTP/3 if this curl was built with HTTP3 support.
+  if docker exec "$CLIENT" sh -c "curl -V | grep -qi HTTP3"; then
+    log "client curl supports HTTP/3; trying an HTTP/3 fetch"
+    docker exec "$CLIENT" sh -c "curl -k $RESOLVE --http3 -sv $BASE/three 2>&1" \
+      | tee "$RUN_DIR/h3-fetch.txt" | tee -a "$LOG_FILE" >/dev/null || true
+  else
+    log "client curl has no HTTP/3 support; showing the QUIC listener instead"
+    docker exec "$SERVER" sh -c "ss -uln 2>/dev/null || netstat -uln 2>/dev/null" \
+      | tee "$RUN_DIR/server-udp-listeners.txt" | tee -a "$LOG_FILE" >/dev/null || true
+  fi
 
   log "checking HTTP/2 negotiation and h3 advertisement"
   # HTTP/2 was negotiated (curl says so, and the body echoes the protocol).
