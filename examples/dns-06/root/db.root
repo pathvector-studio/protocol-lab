@@ -1,0 +1,16 @@
+; Root zone for the Protocol Lab DNS hierarchy (Lab 05).
+; This is a LOCAL, fake root. It is not the real DNS root.
+; It knows itself and delegates the "lab." TLD to the tld node.
+$TTL 3600
+.           IN  SOA a.root. admin.root. (
+                    1          ; serial
+                    3600       ; refresh
+                    900        ; retry
+                    604800     ; expire
+                    3600 )     ; negative cache TTL
+.           IN  NS  a.root.
+a.root.     IN  A   10.0.1.2
+
+; Delegation of the lab. TLD to the tld node.
+lab.        IN  NS  ns.lab.
+ns.lab.     IN  A   10.0.2.2

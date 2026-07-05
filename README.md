@@ -18,6 +18,8 @@ The first track is BGP/RPKI. Start with:
 - [RPKI Origin Validation Reading Guide for Lab 04](rfc-notes/rpki-origin-validation.md)
 - [DNS Lab 05: Recursive Resolution You Can Trace](labs/dns-05-recursive-resolution.md)
 - [DNS Recursive Resolution Reading Guide for Lab 05](rfc-notes/dns-recursive-resolution.md)
+- [DNS Lab 06: Caching, TTL, and the Answer That Wasn't There](labs/dns-06-caching-ttl-negative.md)
+- [DNS Caching, TTL, and Negative Answers Reading Guide for Lab 06](rfc-notes/dns-caching-ttl-negative.md)
 - [Full 12-lab learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.
