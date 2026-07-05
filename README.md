@@ -63,9 +63,17 @@ Most hands-on labs assume a Linux environment with:
 - tcpdump
 - Wireshark or tshark
 
+On Ubuntu/Debian you can install all of these at once:
+
+```bash
+sudo bash scripts/install-lab-tools.sh --pull
+```
+
+Then log out and back in (or run `newgrp docker`) so the `docker` group applies, and check with `./scripts/labctl.sh doctor tcp-07`.
+
 macOS users should run the labs inside a Linux VM, WSL-style environment, or another Linux host where containerlab can create network namespaces.
 
-日本語: ハンズオンは Linux 環境を前提にしています。macOS の場合は、Linux VM や Linux ホスト上で実行してください。containerlab が network namespace を作れる環境が必要です。
+日本語: ハンズオンは Linux 環境を前提にしています。Ubuntu/Debian なら `sudo bash scripts/install-lab-tools.sh --pull` で必要なツール(Docker、containerlab、tshark など)を一括で導入できます。実行後は再ログイン(または `newgrp docker`)で `docker` グループを反映し、`./scripts/labctl.sh doctor tcp-07` で確認します。macOS の場合は、Linux VM や Linux ホスト上で実行してください。containerlab が network namespace を作れる環境が必要です。
 
 ## Safety
 

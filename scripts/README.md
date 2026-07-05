@@ -4,6 +4,16 @@ This directory contains small helpers for running Protocol Lab examples in a Lin
 
 日本語: このディレクトリには、Linux環境でProtocol Labのexampleを動かすための補助スクリプトがあります。
 
+## Install the Tooling (Ubuntu/Debian)
+
+```bash
+sudo bash scripts/install-lab-tools.sh --pull
+```
+
+This installs Docker, containerlab, tshark, tcpdump, jq, and curl, enables the Docker service, and adds you to the `docker` group. Log out and back in (or run `newgrp docker`) afterward, then check with `./scripts/labctl.sh doctor tcp-07`. Omit `--pull` to skip pre-downloading the lab base images.
+
+日本語: `install-lab-tools.sh` は Docker、containerlab、tshark などをまとめて導入し、Docker サービスを有効化して、あなたを `docker` グループに追加します。実行後は再ログイン(または `newgrp docker`)し、`./scripts/labctl.sh doctor tcp-07` で確認します。`--pull` を外すとイメージの先読みを省けます。
+
 ## Run BGP Labs
 
 Prerequisites:
@@ -36,7 +46,7 @@ For BGP labs, this deploys the topology, checks the expected FRRouting output, c
 ./scripts/labctl.sh destroy bgp-01
 ```
 
-Replace `bgp-01` with `bgp-02`, `bgp-03`, or `rpki-04` to run the same lifecycle for later labs. The `capture` action is available for BGP labs.
+Replace `bgp-01` with any lab id to run the same lifecycle: `bgp-02`, `bgp-03`, `rpki-04`, `dns-05`, `dns-06`, `tcp-07`, `tcp-08`, `tls-09`, `http-10`, `quic-11`, `e2e-12`. The `capture` action is available for BGP labs.
 
 Generated logs and packet captures are written under `assets/<lab-id>/runs/`. That directory is ignored by git.
 
