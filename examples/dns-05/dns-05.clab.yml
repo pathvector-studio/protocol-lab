@@ -68,10 +68,26 @@ topology:
       kind: linux
       image: nicolaka/netshoot:latest
       cmd: "sleep infinity"
+      # Point the stub resolver at our recursive resolver. dig +trace primes
+      # off the root NS answer and then has to resolve the nameserver *names*
+      # (a.root, ns.lab, ...) to addresses; without glue it falls back to
+      # /etc/resolv.conf, which by default is docker's embedded DNS and knows
+      # nothing of our fake hierarchy. Pointing it at 10.0.0.1 lets that
+      # fallback succeed so the trace walks the full delegation chain.
+      dns:
+        servers:
+          - 10.0.0.1
       exec:
         - ip addr add 10.0.0.2/24 dev eth1
         - ip link set eth1 up
-        - ip route add default via 10.0.0.1
+        # Reach the fake DNS hierarchy (root/tld/auth) through the resolver,
+        # which forwards (ip_forward=1). dig +trace queries each level's server
+        # directly by IP, so the client needs routes into those subnets. The
+        # management network already owns the default route, so add explicit
+        # per-subnet routes instead of trying to replace default.
+        - ip route add 10.0.1.0/24 via 10.0.0.1
+        - ip route add 10.0.2.0/24 via 10.0.0.1
+        - ip route add 10.0.3.0/24 via 10.0.0.1
 
   links:
     - endpoints: ["client:eth1", "resolver:eth1"]

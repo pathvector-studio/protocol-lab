@@ -346,3 +346,111 @@ sudo containerlab destroy -t dns-05.clab.yml --cleanup
 - [RFC 5737: IPv4 Address Blocks Reserved for Documentation](https://www.rfc-editor.org/rfc/rfc5737)
 - [BIND 9 Administrator Reference Manual](https://bind9.readthedocs.io/en/latest/)
 - [netshoot: a Docker + Kubernetes network troubleshooting swiss-army container](https://github.com/nicolaka/netshoot)
+
+## 検証済み実行ログ (2026-07-05)
+
+このLabは実機で再現性を確認済みです。
+
+実行環境:
+
+- Ubuntu 26.04 LTS (kernel 7.0.0-27-generic, x86_64)
+- Docker 29.1.3
+- containerlab 0.77.0
+- resolver/root/tld/auth: `internetsystemsconsortium/bind9:9.20` (BIND 9.20.24) を薄くラップした `protocol-lab/bind9:9.20`
+- client: `nicolaka/netshoot:latest` (dig 9.20.23)
+
+`PATH="/tmp/pl-shim:$PATH" ./scripts/labctl.sh run dns-05` で deploy → verify → destroy を実行し、`verification.json` は `"status": "verified"` を返した。
+
+### 環境ドリフトへの追随（この検証で必要になった修正）
+
+authoring 時から upstream イメージと containerlab が変化していたため、以下を修正した:
+
+- **BIND イメージが Alpine ベースに変わっていた**。`internetsystemsconsortium/bind9:9.20` は今や `FROM alpine` で、`apt-get` は無く、`ip` は busybox 版。加えて `ENTRYPOINT ["/usr/sbin/named","-u","bind"]` が設定された。`examples/dns-05/Dockerfile` を `apk add iproute2` + `ENTRYPOINT []` に更新し、foreground の `named -g` を CMD で直接起動するようにした。
+- **client のデフォルト経路は管理ネットワークが先に握る**。containerlab が eth0（管理網）に default route を張るため、`ip route add default via 10.0.0.1` は `File exists` で失敗していた。`dig +trace` は各段のサーバ (`10.0.1.2` / `10.0.2.2` / `10.0.3.2`) に直接問い合わせるので、client に階層各サブネットへの明示ルートを resolver 経由で追加した。
+- **`dig +trace` の NS 名前解決の受け皿**。`+trace` は root の NS 応答を prime した後、NS 名 (`a.root`, `ns.lab`, …) を自分でアドレス解決する。glue が無いと `/etc/resolv.conf`（既定では Docker 組み込み DNS）に fallback して失敗するため、client の `dns.servers` を `10.0.0.1` に向けた。
+
+### `dig +trace`: 委任の連鎖を root から歩く
+
+```text
+$ docker exec clab-dns-05-client dig +trace @10.0.0.1 www.example.lab A
+
+; <<>> DiG 9.20.23 <<>> +trace @10.0.0.1 www.example.lab A
+; (1 server found)
+;; global options: +cmd
+.			3600	IN	NS	a.root.
+;; Received 75 bytes from 10.0.0.1#53(10.0.0.1) in 0 ms
+
+lab.			3600	IN	NS	ns.lab.
+;; Received 105 bytes from 10.0.1.2#53(a.root) in 1 ms
+
+example.lab.		3600	IN	NS	ns.example.lab.
+;; Received 105 bytes from 10.0.2.2#53(ns.lab) in 0 ms
+
+www.example.lab.	60	IN	A	203.0.113.10
+example.lab.		3600	IN	NS	ns.example.lab.
+;; Received 121 bytes from 10.0.3.2#53(ns.example.lab) in 1 ms
+```
+
+`;; Received ... from <IP>(<name>)` の行が、root (`10.0.1.2` a.root) → tld (`10.0.2.2` ns.lab) → auth (`10.0.3.2` ns.example.lab) と各段に直接問い合わせている様子を示す。最後に auth が `203.0.113.10` を返す。
+
+### 1回目の recursive query（resolver が木を歩く）
+
+```text
+$ docker exec clab-dns-05-client dig @10.0.0.1 www.example.lab A
+
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 63934
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; ANSWER SECTION:
+www.example.lab.	60	IN	A	203.0.113.10
+```
+
+`rd`（recursion desired）を送り、resolver が代わりに反復解決して答えだけを返す。
+
+### 2回目の query はキャッシュから即答
+
+```text
+$ docker exec clab-dns-05-client dig @10.0.0.1 www.example.lab A
+;; ANSWER SECTION:
+www.example.lab.	60	IN	A	203.0.113.10
+;; Query time: 0 msec
+```
+
+### `+norecurse`: 再帰なしでもキャッシュされた答えは返る
+
+```text
+$ docker exec clab-dns-05-client dig +norecurse @10.0.0.1 www.example.lab A
+
+;; flags: qr ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 2
+
+;; ANSWER SECTION:
+www.example.lab.	60	IN	A	203.0.113.10
+
+;; AUTHORITY SECTION:
+example.lab.		3600	IN	NS	ns.example.lab.
+
+;; ADDITIONAL SECTION:
+ns.example.lab.		3600	IN	A	10.0.3.2
+```
+
+`rd` フラグが無い（`+norecurse`）のに答えが返るのは、直前の query で resolver がすでにキャッシュしているから。
+
+### resolver の query ログ（client から見た反復解決）
+
+```text
+$ docker logs clab-dns-05-resolver
+... (www.example.lab): query: www.example.lab IN A +E(0)K (10.0.0.1)
+... (.): query: . IN NS +E(0)DK (10.0.0.1)
+... (a.root): query: a.root IN A + (10.0.0.1)
+... (ns.lab): query: ns.lab IN A + (10.0.0.1)
+... (ns.example.lab): query: ns.example.lab IN A + (10.0.0.1)
+... (www.example.lab): query: www.example.lab IN A +E(0)K (10.0.0.1)
+```
+
+`+trace` 実行中、client が NS 名 (`a.root` / `ns.lab` / `ns.example.lab`) のアドレスを resolver に問い合わせている行が見える。これが上の「環境ドリフト」で `dns.servers` を向けた効果。
+
+### Cleanup
+
+```bash
+containerlab destroy -t dns-05.clab.yml --cleanup
+```
