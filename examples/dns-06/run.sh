@@ -5,6 +5,7 @@ LAB_ID="dns-06"
 TOPOLOGY="dns-06.clab.yml"
 CLIENT="clab-dns-06-client"
 RESOLVER="clab-dns-06-resolver"
+BIND_IMAGE="protocol-lab/bind9:9.20"
 QNAME="www.example.lab"
 STABLE="stable.example.lab"
 MISSING="missing.example.lab"
@@ -55,7 +56,15 @@ answer_ttl() {
     | awk 'NR==1 {print $2}'
 }
 
+build_image() {
+  # The BIND nodes need iproute2 (for the exec IP setup) and a foreground
+  # named; the upstream ISC image lacks both. Build the thin wrapper first.
+  log "building $BIND_IMAGE"
+  run_cmd docker build -t "$BIND_IMAGE" "$LAB_DIR"
+}
+
 deploy() {
+  build_image
   log "deploying topology"
   sudo_cmd containerlab destroy -t "$TOPOLOGY" --cleanup >/dev/null 2>&1 || true
   run_cmd sudo_cmd containerlab deploy -t "$TOPOLOGY"

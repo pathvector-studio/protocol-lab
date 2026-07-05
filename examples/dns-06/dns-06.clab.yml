@@ -18,8 +18,7 @@ topology:
   nodes:
     root:
       kind: linux
-      image: internetsystemsconsortium/bind9:9.20
-      cmd: "-4 -g -c /etc/bind/named.conf"
+      image: protocol-lab/bind9:9.20
       binds:
         - ./root/named.conf:/etc/bind/named.conf
         - ./root/db.root:/etc/bind/db.root
@@ -30,8 +29,7 @@ topology:
 
     tld:
       kind: linux
-      image: internetsystemsconsortium/bind9:9.20
-      cmd: "-4 -g -c /etc/bind/named.conf"
+      image: protocol-lab/bind9:9.20
       binds:
         - ./tld/named.conf:/etc/bind/named.conf
         - ./tld/db.lab:/etc/bind/db.lab
@@ -42,8 +40,7 @@ topology:
 
     auth:
       kind: linux
-      image: internetsystemsconsortium/bind9:9.20
-      cmd: "-4 -g -c /etc/bind/named.conf"
+      image: protocol-lab/bind9:9.20
       binds:
         - ./auth/named.conf:/etc/bind/named.conf
         - ./auth/db.example.lab:/etc/bind/db.example.lab
@@ -54,8 +51,7 @@ topology:
 
     resolver:
       kind: linux
-      image: internetsystemsconsortium/bind9:9.20
-      cmd: "-4 -g -c /etc/bind/named.conf"
+      image: protocol-lab/bind9:9.20
       binds:
         - ./resolver/named.conf:/etc/bind/named.conf
         - ./resolver/root.hints:/etc/bind/root.hints

@@ -109,8 +109,10 @@ sequenceDiagram
 
 使用イメージ:
 
-- `internetsystemsconsortium/bind9:9.20`
+- `protocol-lab/bind9:9.20`(`examples/dns-06/Dockerfile` からローカルビルド。`internetsystemsconsortium/bind9:9.20` に `iproute2` を足し、named を foreground で動かすだけの薄いラッパー)
 - `nicolaka/netshoot:latest`
+
+上流の ISC BIND イメージには `ip` コマンドが入っておらず、containerlab が `exec` で使う `ip addr add` が通らない。そのため `iproute2` を足したイメージをローカルにビルドしてから使う。`run.sh` は deploy の前に自動でビルドする。Lab 05 を先に実行済みなら、同じ `protocol-lab/bind9:9.20` イメージが再利用される。
 
 ## 実行手順
 
@@ -147,7 +149,10 @@ cat auth/db.example.lab
 
 ### 3. 起動する
 
+まず BIND イメージ(iproute2 入り)をビルドしてから deploy する。
+
 ```bash
+docker build -t protocol-lab/bind9:9.20 .
 sudo containerlab deploy -t dns-06.clab.yml
 docker ps --format "table {{.Names}}\t{{.Status}}"
 ```
