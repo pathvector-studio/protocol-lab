@@ -13,6 +13,7 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 - [DNS Lab 05: Recursive Resolution You Can Trace](dns-05-recursive-resolution.md)
 - [DNS Lab 06: Caching, TTL, and the Answer That Wasn't There](dns-06-caching-ttl-negative.md)
 - [TCP Lab 07: One Connection, From SYN to FIN](tcp-07-handshake-teardown.md)
+- [TCP Lab 08: Loss, Retransmission, and the Window](tcp-08-retransmission-windowing-loss.md)
 
 Expected time: 45 to 60 minutes per lab.
 
