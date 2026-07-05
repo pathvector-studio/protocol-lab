@@ -71,8 +71,10 @@ verify() {
   wait_link
 
   log "starting an echo listener on the server (:$PORT)"
-  docker exec "$SERVER" pkill -f "ncat.*$PORT" >/dev/null 2>&1 || true
-  docker exec -d "$SERVER" ncat --listen --keep-open "$PORT" --exec "/bin/cat"
+  # netshoot ships OpenBSD netcat (no --exec) plus socat; use socat for the
+  # echo server. fork keeps it accepting after the client closes.
+  docker exec "$SERVER" pkill -f "socat.*$PORT" >/dev/null 2>&1 || true
+  docker exec -d "$SERVER" socat "TCP-LISTEN:$PORT,reuseaddr,fork" EXEC:/bin/cat
   sleep 1
 
   log "starting tcpdump on the client link"
@@ -81,8 +83,8 @@ verify() {
   sleep 1
 
   log "opening one connection: send a line, read the echo, then close"
-  docker exec "$CLIENT" sh -c "printf 'hello-tcp\n' | ncat -w2 $SERVER_IP $PORT" \
-    | tee "$RUN_DIR/ncat-client.txt" | tee -a "$LOG_FILE" >/dev/null
+  docker exec "$CLIENT" sh -c "printf 'hello-tcp\n' | nc -w2 $SERVER_IP $PORT" \
+    | tee "$RUN_DIR/nc-client.txt" | tee -a "$LOG_FILE" >/dev/null
   sleep 1
 
   log "stopping capture and collecting output"
@@ -93,7 +95,7 @@ verify() {
   docker exec "$CLIENT" tcpdump -tttt -n -r "$PCAP_IN" \
     | tee "$RUN_DIR/tcpdump-tcp-07.txt" | tee -a "$LOG_FILE" >/dev/null
 
-  docker exec "$SERVER" pkill -f "ncat.*$PORT" >/dev/null 2>&1 || true
+  docker exec "$SERVER" pkill -f "socat.*$PORT" >/dev/null 2>&1 || true
 
   log "checking the handshake and teardown are visible"
   local cap="$RUN_DIR/tcpdump-tcp-07.txt"
