@@ -298,3 +298,68 @@ sudo containerlab destroy -t dns-06.clab.yml --cleanup
 - [RFC 8499: DNS Terminology](https://www.rfc-editor.org/rfc/rfc8499)
 - [RFC 5737: IPv4 Address Blocks Reserved for Documentation](https://www.rfc-editor.org/rfc/rfc5737)
 - [BIND 9 Administrator Reference Manual](https://bind9.readthedocs.io/en/latest/)
+
+## 検証済み実行ログ (2026-07-05)
+
+このLabは実機で再現性を確認済みです。
+
+実行環境:
+
+- Ubuntu 26.04 LTS (kernel 7.0.0-27-generic, x86_64)
+- Docker 29.1.3
+- containerlab 0.77.0
+- resolver/root/tld/auth: `internetsystemsconsortium/bind9:9.20` (BIND 9.20.24) を薄くラップした `protocol-lab/bind9:9.20`
+- client: `nicolaka/netshoot:latest` (dig 9.20.23)
+
+`PATH="/tmp/pl-shim:$PATH" ./scripts/labctl.sh run dns-06` で deploy → verify → destroy を実行し、`verification.json` は `"status": "verified"` を返した。
+
+### 環境ドリフトへの追随（この検証で必要になった修正）
+
+- **BIND イメージが Alpine ベースに変わっていた**。`examples/dns-06/Dockerfile` を Lab 05 と同様に `apk add iproute2` + `ENTRYPOINT []` + foreground `named -g` CMD に更新（詳細は Lab 05 の検証ログ参照）。
+- **client のデフォルト経路**。この Lab の client は resolver (`10.0.0.1`, 同一 eth1 サブネット) としか通信しないため、`ip route add default via 10.0.0.1`（管理網の default と衝突して `File exists` になる）は不要。ノイズを消すため削除した。
+
+### TTL のカウントダウン（キャッシュされている間だけ減る）
+
+```text
+$ docker exec clab-dns-06-client dig @10.0.0.1 www.example.lab A
+;; ANSWER SECTION:
+www.example.lab.	60	IN	A	203.0.113.10
+
+# 数秒後にもう一度
+$ docker exec clab-dns-06-client dig @10.0.0.1 www.example.lab A
+;; ANSWER SECTION:
+www.example.lab.	57	IN	A	203.0.113.10
+;; Query time: 0 msec
+```
+
+同じ名前の TTL が `60 → 57` と減っている。resolver が cache に入れてから経過した秒数だけ残り TTL が小さくなる。`Query time: 0 msec` はキャッシュヒットを示す。
+
+### 長い TTL の名前との対比
+
+```text
+$ docker exec clab-dns-06-client dig @10.0.0.1 stable.example.lab A
+;; ANSWER SECTION:
+stable.example.lab.	3600	IN	A	203.0.113.20
+```
+
+`stable` は権威ゾーンで TTL 3600 なので、しばらく再問い合わせが起きない。TTL は「答えをどれだけ信じてよいか」を秒で表す。
+
+### 存在しない名前 → NXDOMAIN + SOA（ネガティブキャッシュ）
+
+```text
+$ docker exec clab-dns-06-client dig @10.0.0.1 missing.example.lab A
+
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 29784
+;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
+
+;; AUTHORITY SECTION:
+example.lab.		300	IN	SOA	ns.example.lab. admin.example.lab. 1 3600 900 604800 300
+```
+
+`status: NXDOMAIN` は「その名前は存在しない」という否定応答。AUTHORITY セクションに `example.lab.` の SOA が付き、SOA の最後のフィールド（`300`）が **negative TTL** = この「無い」という事実を resolver が何秒キャッシュしてよいか。2回目の同じ問い合わせは negative cache から即答される（RFC 2308）。
+
+### Cleanup
+
+```bash
+containerlab destroy -t dns-06.clab.yml --cleanup
+```

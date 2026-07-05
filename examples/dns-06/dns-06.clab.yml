@@ -73,7 +73,9 @@ topology:
       exec:
         - ip addr add 10.0.0.2/24 dev eth1
         - ip link set eth1 up
-        - ip route add default via 10.0.0.1
+        # The client only ever talks to the resolver (10.0.0.1) on its own
+        # eth1 subnet, so no extra route is needed. (containerlab already owns
+        # the default route via the management network.)
 
   links:
     - endpoints: ["client:eth1", "resolver:eth1"]
