@@ -12,6 +12,7 @@ RFC notes are reading guides for the labs. They do not replace the RFC. They hel
 - [RPKI Origin Validation Reading Guide for Lab 04](rpki-origin-validation.md)
 - [DNS Recursive Resolution Reading Guide for Lab 05](dns-recursive-resolution.md)
 - [DNS Caching, TTL, and Negative Answers Reading Guide for Lab 06](dns-caching-ttl-negative.md)
+- [TCP Handshake and Teardown Reading Guide for Lab 07](tcp-handshake-teardown.md)
 
 ## How to Use Them
 
