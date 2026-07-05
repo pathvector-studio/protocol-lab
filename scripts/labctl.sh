@@ -15,6 +15,7 @@ Usage:
   $0 run dns-06
   $0 run tcp-07
   $0 run tcp-08
+  $0 run tls-09
   $0 deploy bgp-01
   $0 deploy bgp-02
   $0 deploy bgp-03
@@ -23,6 +24,7 @@ Usage:
   $0 deploy dns-06
   $0 deploy tcp-07
   $0 deploy tcp-08
+  $0 deploy tls-09
   $0 verify bgp-01
   $0 verify bgp-02
   $0 verify bgp-03
@@ -31,6 +33,7 @@ Usage:
   $0 verify dns-06
   $0 verify tcp-07
   $0 verify tcp-08
+  $0 verify tls-09
   $0 capture bgp-01
   $0 capture bgp-02
   $0 capture bgp-03
@@ -42,6 +45,7 @@ Usage:
   $0 destroy dns-06
   $0 destroy tcp-07
   $0 destroy tcp-08
+  $0 destroy tls-09
   $0 doctor bgp-01
   $0 doctor bgp-02
   $0 doctor bgp-03
@@ -50,6 +54,7 @@ Usage:
   $0 doctor dns-06
   $0 doctor tcp-07
   $0 doctor tcp-08
+  $0 doctor tls-09
 USAGE
 }
 
@@ -92,6 +97,10 @@ case "$LAB_ID" in
     ;;
   tcp-08)
     cd "$REPO_ROOT/examples/tcp-08"
+    ./run.sh "$ACTION"
+    ;;
+  tls-09)
+    cd "$REPO_ROOT/examples/tls-09"
     ./run.sh "$ACTION"
     ;;
   *)

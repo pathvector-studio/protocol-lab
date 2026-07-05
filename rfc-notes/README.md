@@ -14,6 +14,7 @@ RFC notes are reading guides for the labs. They do not replace the RFC. They hel
 - [DNS Caching, TTL, and Negative Answers Reading Guide for Lab 06](dns-caching-ttl-negative.md)
 - [TCP Handshake and Teardown Reading Guide for Lab 07](tcp-handshake-teardown.md)
 - [TCP Retransmission and Windowing Reading Guide for Lab 08](tcp-retransmission-windowing.md)
+- [TLS Handshake and Certificates Reading Guide for Lab 09](tls-handshake-certificates.md)
 
 ## How to Use Them
 
