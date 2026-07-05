@@ -1,0 +1,33 @@
+name: http-10
+
+# A two-node link for reading one HTTP/1.1 exchange in cleartext: methods,
+# status codes, headers, and cache behavior (ETag / Cache-Control / 304).
+#
+#   client (10.0.0.1) ------ eth1/eth1 ------ server (10.0.0.2:8080)
+#
+# The server runs a small Python http.server (bind-mounted app.py). Plain HTTP
+# (no TLS) on purpose, so curl -v and tcpdump show the request and response.
+# Both nodes use netshoot, which ships ip, curl, python3, and tcpdump.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+
+    server:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      binds:
+        - ./server/app.py:/app/app.py
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["client:eth1", "server:eth1"]
