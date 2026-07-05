@@ -57,7 +57,7 @@ After completing the twelve labs, you should be able to:
 | 08 | [TCP: Retransmission, Windowing, and Loss](labs/tcp-08-retransmission-windowing-loss.md) | Retransmission, RTT, receive window, simple packet loss | Timing, loss, and recovery | Explain how TCP recovers from loss |
 | 09 | [TLS: Handshake, Certificates, and Keys](labs/tls-09-handshake-certificates.md) | ClientHello, ServerHello, certificate chain, SNI, ALPN | TLS handshake metadata | Identify what is visible before encryption takes over |
 | 10 | [HTTP: Requests, Responses, and Caching](labs/http-10-requests-responses-caching.md) | Methods, headers, status codes, cache headers | `curl -v`, logs, and packet output | Explain one HTTP exchange |
-| 11 | HTTP/2 and QUIC: Streams and Multiplexing | Frames, streams, multiplexing, HTTP/2 vs QUIC transport differences | Negotiated protocol and stream behavior | Compare stream behavior across transports |
+| 11 | [HTTP/2 and QUIC: Streams and Multiplexing](labs/quic-11-http2-quic-streams.md) | Frames, streams, multiplexing, HTTP/2 vs QUIC transport differences | Negotiated protocol and stream behavior | Compare stream behavior across transports |
 | 12 | End-to-End: From Domain Name to Encrypted Web Request | DNS, TCP or QUIC, TLS, and HTTP together | One complete request path | Explain each layer in order |
 
 日本語:
@@ -74,7 +74,7 @@ After completing the twelve labs, you should be able to:
 | 08 | [TCP: retransmission、windowing、loss](labs/tcp-08-retransmission-windowing-loss.md) | 再送、RTT、receive window、単純な packet loss | timing、loss、recovery | TCP が loss から回復する流れを説明する |
 | 09 | [TLS: handshake、certificate、key](labs/tls-09-handshake-certificates.md) | ClientHello、ServerHello、certificate chain、SNI、ALPN | TLS handshake metadata | 暗号化前に見える情報を識別する |
 | 10 | [HTTP: request、response、cache](labs/http-10-requests-responses-caching.md) | method、header、status code、cache header | `curl -v`、ログ、packet output | 1つの HTTP exchange を説明する |
-| 11 | HTTP/2 and QUIC: stream と multiplexing | frame、stream、multiplexing、HTTP/2 と QUIC transport の違い | negotiated protocol と stream behavior | transport ごとの stream behavior を比較する |
+| 11 | [HTTP/2 and QUIC: stream と multiplexing](labs/quic-11-http2-quic-streams.md) | frame、stream、multiplexing、HTTP/2 と QUIC transport の違い | negotiated protocol と stream behavior | transport ごとの stream behavior を比較する |
 | 12 | End-to-End: domain name から encrypted web request まで | DNS、TCP または QUIC、TLS、HTTP のつながり | 1つの complete request path | 各 layer の役割を順に説明する |
 
 ## Current Entry Point

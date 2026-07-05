@@ -1,0 +1,15 @@
+# Caddy config for Protocol Lab #11.
+#
+# Listen on :443 (wildcard) so the bind does not depend on the lab IP being
+# assigned first. `tls internal` uses Caddy's own CA (no public CA, no
+# Internet). The response body echoes the protocol that served the request,
+# so a fetch over HTTP/2 vs HTTP/3 is self-labeling.
+{
+	auto_https disable_redirects
+	local_certs
+}
+
+:443 {
+	tls internal
+	respond "Hello over {http.request.proto} for {http.request.uri.path}\n" 200
+}
