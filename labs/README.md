@@ -18,6 +18,7 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 - [HTTP Lab 10: One Exchange, Read in the Clear](http-10-requests-responses-caching.md)
 - [Lab 11: HTTP/2 Streams and the Jump to QUIC](quic-11-http2-quic-streams.md)
 - [Lab 12: One Web Request, End to End](e2e-12-end-to-end.md)
+- [DNS Lab 13: DNSSEC — Signatures, Trust Anchors, and the AD Flag](dns-13-dnssec-validation.md)
 
 Expected time: 45 to 60 minutes per lab.
 

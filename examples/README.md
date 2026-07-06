@@ -18,6 +18,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`http-10/`](http-10/): a two-node link with a small Python HTTP server for reading methods, status codes, headers, and cache behavior (ETag / 304).
 - [`quic-11/`](quic-11/): a two-node link with a Caddy server (HTTP/1.1, HTTP/2, HTTP/3) for comparing stream multiplexing over TCP vs QUIC.
 - [`e2e-12/`](e2e-12/): a client, a DNS resolver, and a web server, so one `curl https://www.example.lab/` crosses DNS, TCP, TLS, and HTTP in order.
+- [`dns-13/`](dns-13/): a client, a validating resolver, and an authoritative server holding a DNSSEC-signed `example.lab`, for watching a validated answer (AD flag) and a tampered one rejected with SERVFAIL.
 
 ## Safety
 

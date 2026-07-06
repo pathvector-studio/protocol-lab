@@ -9,3 +9,4 @@
 - [x] Lab 10: HTTP: Requests, Responses, and Caching (HTTPメソッド、ヘッダー、ステータスコード、キャッシュ検証ラボの実装)
 - [x] Lab 11: HTTP/2 and QUIC: Streams and Multiplexing (HTTP/2とQUICのストリーム多重化およびトランスポート層の違い検証ラボの実装)
 - [x] Lab 12: End-to-End: From Domain Name to Encrypted Web Request (DNSからTCP/QUIC、TLS、HTTPまでを繋ぐエンドツーエンド検証ラボの実装)
+- [x] Lab 13: DNSSEC: Signatures, Trust Anchors, and the AD Flag (署名済みゾーンの検証、RRSIG/DNSKEY/AD フラグ、改ざん検出=SERVFAIL 検証ラボの実装)

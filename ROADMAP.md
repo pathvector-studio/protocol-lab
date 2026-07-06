@@ -1,10 +1,10 @@
 # Protocol Lab Roadmap
 
-This roadmap shows the first twelve labs in Protocol Lab. The sequence starts with BGP and RPKI, then expands into DNS, TCP, TLS, HTTP, and QUIC.
+This roadmap shows the labs in Protocol Lab. The sequence starts with BGP and RPKI, then expands into DNS, TCP, TLS, HTTP, QUIC, and DNSSEC.
 
 By the end of the sequence, you should be able to read a focused part of an RFC, run a small experiment, inspect logs or packets, and explain what happened using protocol terms.
 
-日本語: このロードマップは、Protocol Lab の最初の12回の流れを示します。BGP/RPKI から始めて、DNS、TCP、TLS、HTTP、QUIC へ進みます。最後には、RFC の必要な部分を読み、小さな実験を動かし、ログやパケットを見て、起きたことをプロトコル用語で説明できる状態を目指します。
+日本語: このロードマップは、Protocol Lab の流れを示します。BGP/RPKI から始めて、DNS、TCP、TLS、HTTP、QUIC、DNSSEC へ進みます。最後には、RFC の必要な部分を読み、小さな実験を動かし、ログやパケットを見て、起きたことをプロトコル用語で説明できる状態を目指します。
 
 ## How To Use This Roadmap
 
@@ -19,7 +19,7 @@ Each lab follows the same basic rhythm:
 
 ## Learning Outcomes
 
-After completing the twelve labs, you should be able to:
+After completing the labs, you should be able to:
 
 - Explain a BGP route announcement from ASNs, prefixes, NLRI, AS_PATH, NEXT_HOP, and ORIGIN.
 - Recognize how UPDATE messages announce and withdraw routes.
@@ -30,6 +30,7 @@ After completing the twelve labs, you should be able to:
 - Identify the visible parts of TLS handshakes, certificates, SNI, and ALPN.
 - Follow an HTTP request across DNS, transport, TLS, and application layers.
 - Compare HTTP/2 streams with QUIC-based transport behavior at a high level.
+- Explain how DNSSEC proves a DNS answer is genuine, and why a tampered answer is rejected.
 
 日本語:
 
@@ -42,8 +43,9 @@ After completing the twelve labs, you should be able to:
 - TLS handshake、certificate、SNI、ALPN の観察できる部分を見分けられる。
 - DNS、transport、TLS、HTTP をまたいで1つのWeb requestを追える。
 - HTTP/2 の stream と QUIC transport の違いを大まかに説明できる。
+- DNSSEC が DNS の答えの真正性をどう証明するか、改ざんがなぜ拒否されるかを説明できる。
 
-## Twelve-Lab Sequence
+## Lab Sequence
 
 | Lab | Topic | You will learn | You will observe | Output |
 |---|---|---|---|---|
@@ -59,6 +61,7 @@ After completing the twelve labs, you should be able to:
 | 10 | [HTTP: Requests, Responses, and Caching](labs/http-10-requests-responses-caching.md) | Methods, headers, status codes, cache headers | `curl -v`, logs, and packet output | Explain one HTTP exchange |
 | 11 | [HTTP/2 and QUIC: Streams and Multiplexing](labs/quic-11-http2-quic-streams.md) | Frames, streams, multiplexing, HTTP/2 vs QUIC transport differences | Negotiated protocol and stream behavior | Compare stream behavior across transports |
 | 12 | [End-to-End: From Domain Name to Encrypted Web Request](labs/e2e-12-end-to-end.md) | DNS, TCP or QUIC, TLS, and HTTP together | One complete request path | Explain each layer in order |
+| 13 | [DNSSEC: Signatures, Trust Anchors, and the AD Flag](labs/dns-13-dnssec-validation.md) | RRSIG, DNSKEY (KSK/ZSK), trust anchor, AD and CD flags | A validated answer and a rejected (tampered) one | Explain how a resolver proves an answer is genuine |
 
 日本語:
 
@@ -76,6 +79,7 @@ After completing the twelve labs, you should be able to:
 | 10 | [HTTP: request、response、cache](labs/http-10-requests-responses-caching.md) | method、header、status code、cache header | `curl -v`、ログ、packet output | 1つの HTTP exchange を説明する |
 | 11 | [HTTP/2 and QUIC: stream と multiplexing](labs/quic-11-http2-quic-streams.md) | frame、stream、multiplexing、HTTP/2 と QUIC transport の違い | negotiated protocol と stream behavior | transport ごとの stream behavior を比較する |
 | 12 | [End-to-End: domain name から encrypted web request まで](labs/e2e-12-end-to-end.md) | DNS、TCP または QUIC、TLS、HTTP のつながり | 1つの complete request path | 各 layer の役割を順に説明する |
+| 13 | [DNSSEC: 署名、trust anchor、AD フラグ](labs/dns-13-dnssec-validation.md) | RRSIG、DNSKEY(KSK/ZSK)、trust anchor、AD と CD フラグ | 検証済みの答えと、拒否された改ざん答え | resolver が答えの真正性をどう証明するか説明する |
 
 ## Current Entry Point
 
