@@ -32,6 +32,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`arp-24/`](arp-24/): two IPv4 nodes, for watching ARP (broadcast request, unicast reply) resolve a neighbor MAC — the IPv4 original that NDP replaced.
 - [`mtu-25/`](mtu-25/): a client, a router with a smaller-MTU link, and a server, for watching an oversized DF packet draw an ICMP fragmentation-needed reply and the client learn the path MTU.
 - [`vlan-26/`](vlan-26/): two nodes with 802.1Q VLAN subinterfaces on one link, for watching tagged frames (vlan 100 / vlan 200) keep two virtual LANs isolated on one wire.
+- [`http-27/`](http-27/): a client and a small HTTP app, for watching a 302 redirect (Location) and a Set-Cookie / Cookie round-trip.
 
 ## Safety
 

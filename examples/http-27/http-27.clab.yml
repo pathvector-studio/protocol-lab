@@ -1,0 +1,37 @@
+name: http-27
+
+# HTTP redirects and cookies: how a server steers the client (3xx + Location)
+# and remembers it across requests (Set-Cookie / Cookie).
+#
+#   client (10.0.0.1) ==== eth1/eth1 ==== server (10.0.0.2:8080)
+#                                          python app.py:
+#                                            /old    -> 302 Location: /new
+#                                            /new    -> 200 Set-Cookie: session=...
+#                                            /whoami -> echoes the Cookie header
+#
+# run.sh starts the app and drives curl to follow the redirect and to store and
+# resend the cookie. Both nodes use netshoot (curl, python3). 10.0.0.0/24 is
+# lab-only.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+
+    server:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      binds:
+        - ./server/app.py:/app/app.py
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["client:eth1", "server:eth1"]

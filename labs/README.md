@@ -32,6 +32,7 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 - [Lab 24: ARP — the IPv4 Original](arp-24-address-resolution.md)
 - [Lab 25: MTU and Path MTU Discovery](mtu-25-path-mtu-discovery.md)
 - [Lab 26: VLANs — Two Networks on One Wire](vlan-26-8021q.md)
+- [Lab 27: HTTP Redirects and Cookies](http-27-redirects-cookies.md)
 
 Expected time: 45 to 60 minutes per lab.
 
