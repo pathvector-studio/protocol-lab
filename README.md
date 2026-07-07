@@ -36,6 +36,8 @@ The first track is BGP/RPKI. Start with:
 - [DNSSEC Validation Reading Guide for Lab 13](rfc-notes/dns-dnssec-validation.md)
 - [DNS Lab 14: Encrypted DNS — DoT and DoH](labs/dns-14-encrypted-dns-dot-doh.md)
 - [Encrypted DNS Reading Guide for Lab 14](rfc-notes/dns-encrypted-dot-doh.md)
+- [TLS Lab 15: Mutual TLS — Proving the Client Too](labs/tls-15-mutual-tls.md)
+- [Mutual TLS Reading Guide for Lab 15](rfc-notes/tls-mutual-tls.md)
 - [Full learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.

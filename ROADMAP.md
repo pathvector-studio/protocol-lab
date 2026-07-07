@@ -63,6 +63,7 @@ After completing the labs, you should be able to:
 | 12 | [End-to-End: From Domain Name to Encrypted Web Request](labs/e2e-12-end-to-end.md) | DNS, TCP or QUIC, TLS, and HTTP together | One complete request path | Explain each layer in order |
 | 13 | [DNSSEC: Signatures, Trust Anchors, and the AD Flag](labs/dns-13-dnssec-validation.md) | RRSIG, DNSKEY (KSK/ZSK), trust anchor, AD and CD flags | A validated answer and a rejected (tampered) one | Explain how a resolver proves an answer is genuine |
 | 14 | [Encrypted DNS: DoT and DoH](labs/dns-14-encrypted-dns-dot-doh.md) | Do53 vs DoT (853) vs DoH (443), what an on-path observer can read | The query name in cleartext vs inside TLS | Explain what encrypted DNS hides and what it does not |
+| 15 | [Mutual TLS: Proving the Client Too](labs/tls-15-mutual-tls.md) | Client certificates, CertificateRequest, a private CA, -Verify | An authenticated handshake vs a certless client rejected | Explain how both ends prove identity in mTLS |
 
 日本語:
 
@@ -82,6 +83,7 @@ After completing the labs, you should be able to:
 | 12 | [End-to-End: domain name から encrypted web request まで](labs/e2e-12-end-to-end.md) | DNS、TCP または QUIC、TLS、HTTP のつながり | 1つの complete request path | 各 layer の役割を順に説明する |
 | 13 | [DNSSEC: 署名、trust anchor、AD フラグ](labs/dns-13-dnssec-validation.md) | RRSIG、DNSKEY(KSK/ZSK)、trust anchor、AD と CD フラグ | 検証済みの答えと、拒否された改ざん答え | resolver が答えの真正性をどう証明するか説明する |
 | 14 | [暗号化DNS: DoT と DoH](labs/dns-14-encrypted-dns-dot-doh.md) | Do53 vs DoT (853) vs DoH (443)、経路上の観測者に何が見えるか | query 名が平文 vs TLS の中 | 暗号化DNS が何を隠し何を隠さないかを説明する |
+| 15 | [Mutual TLS: client も証明する](labs/tls-15-mutual-tls.md) | client 証明書、CertificateRequest、専用CA、-Verify | 認証済み handshake vs 証明書なし client の拒否 | mTLS で両端がどう身元を証明するか説明する |
 
 ## Current Entry Point
 
