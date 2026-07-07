@@ -39,6 +39,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`anycast-31/`](anycast-31/): a client, a router, and two FRR servers that both announce one VIP (10.0.0.100/32) via BGP, for watching routing pick the nearer instance and fail over to the other when it withdraws.
 - [`ecmp-32/`](ecmp-32/): two FRR routers joined by two parallel links (BGP maximum-paths), for watching many TCP flows hash across both equal-cost links — and pile onto one when L4 hashing is off.
 - [`lb-33/`](lb-33/): a client, an IPVS load balancer with one VIP, and three backends, for watching round-robin (NAT mode) spread connections evenly across the pool while the client only ever sees the VIP.
+- [`ospf-34/`](ospf-34/): three FRR routers in an OSPF area-0 triangle with a target network behind r3, for watching adjacencies reach Full, SPF pick the lowest-cost path, and the route reconverge when the direct link fails.
 
 ## Safety
 
