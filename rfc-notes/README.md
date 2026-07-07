@@ -31,6 +31,7 @@ RFC notes are reading guides for the labs. They do not replace the RFC. They hel
 - [IPv6 Neighbor Discovery Reading Guide for Lab 23](ndp-neighbor-discovery.md)
 - [ARP Reading Guide for Lab 24](arp-address-resolution.md)
 - [Path MTU Discovery Reading Guide for Lab 25](mtu-path-mtu-discovery.md)
+- [802.1Q VLAN Reading Guide for Lab 26](vlan-8021q.md)
 
 ## How to Use Them
 

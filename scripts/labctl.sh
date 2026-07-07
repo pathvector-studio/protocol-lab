@@ -32,6 +32,7 @@ Usage:
   $0 run ndp-23
   $0 run arp-24
   $0 run mtu-25
+  $0 run vlan-26
   $0 deploy bgp-01
   $0 deploy bgp-02
   $0 deploy bgp-03
@@ -57,6 +58,7 @@ Usage:
   $0 deploy ndp-23
   $0 deploy arp-24
   $0 deploy mtu-25
+  $0 deploy vlan-26
   $0 verify bgp-01
   $0 verify bgp-02
   $0 verify bgp-03
@@ -82,6 +84,7 @@ Usage:
   $0 verify ndp-23
   $0 verify arp-24
   $0 verify mtu-25
+  $0 verify vlan-26
   $0 capture bgp-01
   $0 capture bgp-02
   $0 capture bgp-03
@@ -110,6 +113,7 @@ Usage:
   $0 destroy ndp-23
   $0 destroy arp-24
   $0 destroy mtu-25
+  $0 destroy vlan-26
   $0 doctor bgp-01
   $0 doctor bgp-02
   $0 doctor bgp-03
@@ -135,6 +139,7 @@ Usage:
   $0 doctor ndp-23
   $0 doctor arp-24
   $0 doctor mtu-25
+  $0 doctor vlan-26
 USAGE
 }
 
@@ -245,6 +250,10 @@ case "$LAB_ID" in
     ;;
   mtu-25)
     cd "$REPO_ROOT/examples/mtu-25"
+    ./run.sh "$ACTION"
+    ;;
+  vlan-26)
+    cd "$REPO_ROOT/examples/vlan-26"
     ./run.sh "$ACTION"
     ;;
   *)

@@ -74,6 +74,7 @@ After completing the labs, you should be able to:
 | 23 | [IPv6 Neighbor Discovery: ARP's Successor](labs/ndp-23-neighbor-discovery.md) | ICMPv6 NS/NA, solicited-node multicast, the neighbor cache | A Neighbor Solicitation and Advertisement resolving a neighbor | Explain how IPv6 finds a neighbor MAC without broadcast |
 | 24 | [ARP: The IPv4 Original](labs/arp-24-address-resolution.md) | ARP request/reply, broadcast resolution, the ARP cache | A broadcast ARP request and unicast reply resolving a MAC | Contrast ARP (broadcast) with NDP (multicast) |
 | 25 | [MTU and Path MTU Discovery](labs/mtu-25-path-mtu-discovery.md) | MTU, the DF bit, ICMP fragmentation-needed, cached path MTU | An oversized DF packet rejected with the next-hop MTU | Explain how a sender learns the largest packet a path allows |
+| 26 | [VLANs: Two Networks on One Wire](labs/vlan-26-8021q.md) | 802.1Q tags, VLAN IDs, trunk links, broadcast-domain isolation | Tagged frames (vlan 100 / 200) sharing one link yet kept apart | Explain how one physical link carries isolated virtual LANs |
 
 日本語:
 
@@ -104,6 +105,7 @@ After completing the labs, you should be able to:
 | 23 | [IPv6 近隣探索: ARP の後継](labs/ndp-23-neighbor-discovery.md) | ICMPv6 NS/NA、solicited-node multicast、neighbor cache | 近隣を解決する Neighbor Solicitation と Advertisement | IPv6 が broadcast なしで近隣の MAC を見つける仕組みを説明する |
 | 24 | [ARP: IPv4 の原型](labs/arp-24-address-resolution.md) | ARP request/reply、broadcast による解決、ARP cache | MAC を解決する broadcast ARP request と unicast reply | ARP(broadcast)と NDP(multicast)を対比する |
 | 25 | [MTU と Path MTU Discovery](labs/mtu-25-path-mtu-discovery.md) | MTU、DF ビット、ICMP fragmentation-needed、cache された path MTU | DF 付きの大きすぎるパケットが next-hop MTU 付きで拒否される様子 | 経路が許す最大パケットサイズを送信側がどう学ぶか説明する |
+| 26 | [VLAN: 1本の線に2つのネットワーク](labs/vlan-26-8021q.md) | 802.1Q tag、VLAN ID、trunk、broadcast domain の分離 | 1本のリンクを共有しつつ分離される tagged frame(vlan 100/200) | 1本の物理リンクが分離された仮想 LAN をどう運ぶか説明する |
 
 ## Current Entry Point
 

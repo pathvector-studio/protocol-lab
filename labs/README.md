@@ -31,6 +31,7 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 - [Lab 23: IPv6 Neighbor Discovery — ARP's Successor](ndp-23-neighbor-discovery.md)
 - [Lab 24: ARP — the IPv4 Original](arp-24-address-resolution.md)
 - [Lab 25: MTU and Path MTU Discovery](mtu-25-path-mtu-discovery.md)
+- [Lab 26: VLANs — Two Networks on One Wire](vlan-26-8021q.md)
 
 Expected time: 45 to 60 minutes per lab.
 
