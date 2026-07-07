@@ -1,0 +1,99 @@
+name: lb-33
+
+# L4 load balancing: one virtual IP, several backends, IPVS spreads connections.
+#
+#   client ---- lb (VIP 10.0.9.100) ==== backend1 (10.0.10.11)
+#   10.0.9.2      IPVS round-robin    ==== backend2 (10.0.10.12)
+#                 (NAT mode)          ==== backend3 (10.0.10.13)
+#
+# The client connects to the VIP. The load balancer (Linux IPVS) picks a real
+# backend per connection (round-robin), NATs the connection to it, and NATs the
+# reply back — so the client only ever sees the VIP. Each backend runs a tiny
+# HTTP responder that returns its own name, so repeated requests visibly cycle
+# through backend1, backend2, backend3. Backends default-route via the lb so the
+# return traffic passes back through the director (required for IPVS NAT mode).
+#
+# Contrast with anycast (Lab 31: routing picks one instance) and ECMP (Lab 32:
+# routing spreads flows across links): here one node actively distributes
+# connections to a pool. 10.0.0.0/8 addressing is lab-only.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.9.2/24 dev eth1
+        - ip link set eth1 up
+
+    lb:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.9.1/24 dev eth1
+        - ip link set eth1 up
+        # The virtual IP the client targets (lives on the director).
+        - ip addr add 10.0.9.100/32 dev eth1
+        - ip addr add 10.0.10.1/24 dev eth2
+        - ip link set eth2 up
+        - sysctl -w net.ipv4.ip_forward=1
+
+    backend1:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      binds:
+        - ./backend/responder.py:/responder.py
+      exec:
+        - ip addr add 10.0.10.11/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.0.10.1
+
+    backend2:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      binds:
+        - ./backend/responder.py:/responder.py
+      exec:
+        - ip addr add 10.0.10.12/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.0.10.1
+
+    backend3:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      binds:
+        - ./backend/responder.py:/responder.py
+      exec:
+        - ip addr add 10.0.10.13/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.0.10.1
+
+    # A plain Linux-bridge switch putting lb + all backends on one L2 segment
+    # (the 10.0.10.0/24 backend network).
+    sw:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip link add name br0 type bridge
+        - ip link set eth1 master br0
+        - ip link set eth2 master br0
+        - ip link set eth3 master br0
+        - ip link set eth4 master br0
+        - ip link set eth1 up
+        - ip link set eth2 up
+        - ip link set eth3 up
+        - ip link set eth4 up
+        - ip link set br0 up
+
+  links:
+    - endpoints: ["client:eth1", "lb:eth1"]
+    - endpoints: ["lb:eth2", "sw:eth1"]
+    - endpoints: ["backend1:eth1", "sw:eth2"]
+    - endpoints: ["backend2:eth1", "sw:eth3"]
+    - endpoints: ["backend3:eth1", "sw:eth4"]
