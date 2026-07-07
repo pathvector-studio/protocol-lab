@@ -322,6 +322,10 @@ case "$LAB_ID" in
     cd "$REPO_ROOT/examples/dnat-40"
     ./run.sh "$ACTION"
     ;;
+  dnsrr-41)
+    cd "$REPO_ROOT/examples/dnsrr-41"
+    ./run.sh "$ACTION"
+    ;;
   *)
     echo "[protocol-lab] ERROR: unsupported lab id: $LAB_ID" >&2
     exit 1

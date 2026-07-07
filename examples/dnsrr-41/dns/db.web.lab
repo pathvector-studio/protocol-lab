@@ -1,0 +1,20 @@
+; web.lab. authoritative zone for Lab 41 (DNS round-robin).
+; The single name web.lab. resolves to three A records; with `rrset-order
+; cyclic` the server rotates their order every response, so successive clients
+; get a different address first — a simple, resolver-side load spread.
+;
+; 203.0.113.0/24 is RFC 5737 documentation space. Lab use only.
+$TTL 3600
+web.lab.        IN  SOA ns.web.lab. admin.web.lab. (
+                    1          ; serial
+                    3600       ; refresh
+                    900        ; retry
+                    604800     ; expire
+                    300 )      ; negative cache TTL
+web.lab.        IN  NS  ns.web.lab.
+ns.web.lab.     IN  A   10.0.0.2
+
+; One name, three backends. Short TTL so clients re-query and re-spread.
+web.lab.        30  IN  A   203.0.113.11
+web.lab.        30  IN  A   203.0.113.12
+web.lab.        30  IN  A   203.0.113.13

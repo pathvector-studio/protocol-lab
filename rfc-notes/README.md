@@ -46,6 +46,7 @@ RFC notes are reading guides for the labs. They do not replace the RFC. They hel
 - [Policy Routing Reading Guide for Lab 38](policy-routing.md)
 - [Reverse Path Filtering Reading Guide for Lab 39](reverse-path-filtering.md)
 - [DNAT / Port Forwarding Reading Guide for Lab 40](dnat-port-forwarding.md)
+- [DNS Round-Robin Reading Guide for Lab 41](dns-round-robin.md)
 
 ## How to Use Them
 

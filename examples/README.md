@@ -46,6 +46,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`pbr-38/`](pbr-38/): two source hosts behind a router with two uplinks that share one service address, for watching a source-based `ip rule` send the same destination over different uplinks per source.
 - [`rpf-39/`](rpf-39/): a target, a router, and an attacker on separate networks, for watching strict reverse path filtering drop a spoofed source at ingress while letting the attacker's real source through.
 - [`dnat-40/`](dnat-40/): an external client, a gateway with a public address, and a private internal server, for watching a DNAT rule publish the internal service at a public address:port (port forwarding).
+- [`dnsrr-41/`](dnsrr-41/): a client and a BIND authoritative server whose one name has three A records, for watching `rrset-order cyclic` rotate the returned order so successive lookups spread across the addresses.
 
 ## Safety
 
