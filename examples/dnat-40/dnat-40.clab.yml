@@ -1,0 +1,55 @@
+name: dnat-40
+
+# DNAT / port forwarding: publish an internal service at a public address:port.
+#
+#   client ---- gw (public 203.0.113.1) ---- server (internal 10.0.0.2, private)
+#   203.0.113.2   eth1 public   eth2 10.0.0.1        runs HTTP on :80
+#
+# The server sits on a private network the client cannot address directly. The
+# gateway owns a public address (203.0.113.1). A DNAT rule on the gateway maps
+# connections to 203.0.113.1:8080 onto the internal server 10.0.0.2:80, so an
+# external client reaches the service through the public address:port without
+# ever knowing the internal IP. The reply is un-NATed back by conntrack, so the
+# client sees answers coming from 203.0.113.1:8080.
+#
+# This is the inbound complement to the source NAT (masquerade) of Lab 20: SNAT
+# lets the inside reach out, DNAT lets the outside reach a chosen inside service.
+# 203.0.113.0/24 (RFC 5737) is documentation space used as the "public" side;
+# 10.0.0.0/24 is the private inside. Lab-only.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 203.0.113.2/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 203.0.113.1
+
+    gw:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 203.0.113.1/24 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.0.1/24 dev eth2
+        - ip link set eth2 up
+        - sysctl -w net.ipv4.ip_forward=1
+
+    server:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      binds:
+        - ./server/responder.py:/responder.py
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.0.0.1
+
+  links:
+    - endpoints: ["client:eth1", "gw:eth1"]
+    - endpoints: ["gw:eth2", "server:eth1"]

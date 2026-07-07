@@ -86,6 +86,8 @@ The first track is BGP/RPKI. Start with:
 - [Policy Routing Reading Guide for Lab 38](rfc-notes/policy-routing.md)
 - [Lab 39: Reverse Path Filtering — Dropping Spoofed Sources at Ingress](labs/rpf-39-reverse-path-filtering.md)
 - [Reverse Path Filtering Reading Guide for Lab 39](rfc-notes/reverse-path-filtering.md)
+- [Lab 40: DNAT — Publishing an Internal Service with Port Forwarding](labs/dnat-40-port-forwarding.md)
+- [DNAT / Port Forwarding Reading Guide for Lab 40](rfc-notes/dnat-port-forwarding.md)
 - [Full learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.
