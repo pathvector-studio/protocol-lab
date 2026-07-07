@@ -45,6 +45,7 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 - [Lab 37: TCP MSS Clamping — Fitting Segments to the Narrowest Link](mss-37-clamping.md)
 - [Lab 38: Policy Routing — Choosing the Path by Source, Not Just Destination](pbr-38-policy-routing.md)
 - [Lab 39: Reverse Path Filtering — Dropping Spoofed Sources at Ingress](rpf-39-reverse-path-filtering.md)
+- [Lab 40: DNAT — Publishing an Internal Service with Port Forwarding](dnat-40-port-forwarding.md)
 
 Expected time: 45 to 60 minutes per lab.
 

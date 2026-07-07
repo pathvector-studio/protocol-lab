@@ -88,6 +88,7 @@ After completing the labs, you should be able to:
 | 37 | [TCP MSS Clamping: Fitting Segments to the Narrowest Link](labs/mss-37-clamping.md) | TCP MSS option, MTU vs MSS, PMTUD blackhole, TCPMSS --clamp-mss-to-pmtu | A router rewriting the SYN's MSS from 1460 to 1360 to fit a 1400-MTU link | Explain how a router clamps the SYN MSS so segments fit the path's smallest link |
 | 38 | [Policy Routing: Choosing the Path by Source](labs/pbr-38-policy-routing.md) | Multiple routing tables, ip rule, source-based selection, multi-homing | The same destination routed over different uplinks depending on the source host | Explain how a rule database selects a routing table by source, not just destination |
 | 39 | [Reverse Path Filtering: Dropping Spoofed Sources](labs/rpf-39-reverse-path-filtering.md) | Ingress filtering (BCP 38), rp_filter strict/loose, reverse route lookup, anti-spoofing | A spoofed source dropped at ingress while the real source still passes | Explain how reverse path filtering validates a packet's source against its arrival interface |
+| 40 | [DNAT: Publishing a Service with Port Forwarding](labs/dnat-40-port-forwarding.md) | Destination NAT, PREROUTING, port forwarding, conntrack un-NAT, SNAT contrast | An external client reaching a private internal server through a public address:port | Explain how DNAT publishes an inside service and how it complements source NAT |
 
 日本語:
 
@@ -132,6 +133,7 @@ After completing the labs, you should be able to:
 | 37 | [TCP MSS clamping: segment を最小リンクに合わせる](labs/mss-37-clamping.md) | TCP MSS option、MTU と MSS、PMTUD blackhole、TCPMSS --clamp-mss-to-pmtu | ルータが SYN の MSS を 1460→1360 に書き換え 1400-MTU リンクに合わせる様子 | ルータが SYN の MSS を clamp し segment を path 最小リンクに収める仕組みを説明する |
 | 38 | [ポリシールーティング: 送信元で経路を選ぶ](labs/pbr-38-policy-routing.md) | 複数ルーティングテーブル、ip rule、source ベース選択、マルチホーミング | 同じ宛先が送信元ホストによって別のアップリンクを通る様子 | rule データベースが送信元でテーブルを選ぶ(宛先だけでない)仕組みを説明する |
 | 39 | [Reverse path filtering: 詐称された送信元を落とす](labs/rpf-39-reverse-path-filtering.md) | ingress filtering (BCP 38)、rp_filter strict/loose、送信元逆引き、anti-spoofing | 詐称された送信元は入口で落ち、本物の送信元は通る様子 | reverse path filtering が送信元を到着インターフェースと照合して検証する仕組みを説明する |
+| 40 | [DNAT: ポートフォワードでサービスを公開する](labs/dnat-40-port-forwarding.md) | destination NAT、PREROUTING、ポートフォワード、conntrack un-NAT、SNAT との対比 | 外部クライアントが公開アドレス:ポート経由で内部の private サーバに届く様子 | DNAT が内側サービスを公開し source NAT と対をなす仕組みを説明する |
 
 ## Current Entry Point
 
