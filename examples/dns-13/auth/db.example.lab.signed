@@ -1,0 +1,65 @@
+; File written on Sun Jul  5 21:22:37 2026
+; dnssec-signzone version 9.20.24
+example.lab.		300	IN SOA	ns.example.lab. admin.example.lab. (
+					2          ; serial
+					3600       ; refresh (1 hour)
+					900        ; retry (15 minutes)
+					604800     ; expire (1 week)
+					300        ; minimum (5 minutes)
+					)
+			300	RRSIG	SOA 13 2 300 (
+					20360702202237 20260705202237 11788 example.lab.
+					RZ4x9b6QD9luHHh/7axnJ2Pn1a2690RVjSem
+					8vV63Vzl7Lg6Dpmiyf1t9JZ4F9SB3Ko64LVW
+					/9NxiOAkqvO2yg== )
+			300	NS	ns.example.lab.
+			300	RRSIG	NS 13 2 300 (
+					20360702202237 20260705202237 11788 example.lab.
+					RUJzmMxob6CD/8JOQa/zpEuZJFCS5+mPpwXg
+					KrF1fNYRKk5PMfk1BKajWw374WUON8fat612
+					uFk2gZXBb+NYqg== )
+			300	NSEC	ns.example.lab. NS SOA RRSIG NSEC DNSKEY
+			300	RRSIG	NSEC 13 2 300 (
+					20360702202237 20260705202237 11788 example.lab.
+					1ccstiPJJM8mIbsBcAdIEAozKWV7PfBxbBY9
+					pn/lbKsxC5bmWmk5+MNxRmtGV8A0suJqwSb/
+					96HK9HZGlYcdTA== )
+			300	DNSKEY	256 3 13 (
+					6t/z+Qx3VQaFx3Jov3qfBYDF9q8cjsNqHIV4
+					3ZtlrZjoN7tY42n3jgly0+f5IsStLgMtQZUl
+					eUBTbG3jcS+nSg==
+					) ; ZSK; alg = ECDSAP256SHA256 ; key id = 11788
+			300	DNSKEY	257 3 13 (
+					R1bxO3VeNTtONHDDf4LU7t0vkyFsusjPKo17
+					XpJzQsmYPexmKGo2Br0xJBSOWRzRzK32vdLE
+					buoZbPMfolNB1w==
+					) ; KSK; alg = ECDSAP256SHA256 ; key id = 33022
+			300	RRSIG	DNSKEY 13 2 300 (
+					20360702202237 20260705202237 33022 example.lab.
+					dfG2est6nAz4qDshIGkrgI1JbQVhcxL5TFXz
+					wMC81QimCykogcVF9vCtm0L+OOjGmuFQHz+G
+					DQS5XGc1vC03PQ== )
+ns.example.lab.		300	IN A	10.0.1.2
+			300	RRSIG	A 13 3 300 (
+					20360702202237 20260705202237 11788 example.lab.
+					23uNA59sxHHWFeN/jv/o3/5nYzaKXsAuJ7Qp
+					tBnfvaLfqSwVF6RDjalZAmceEB8Z6RToOcvd
+					VuClNnMMp9G46A== )
+			300	NSEC	www.example.lab. A RRSIG NSEC
+			300	RRSIG	NSEC 13 3 300 (
+					20360702202237 20260705202237 11788 example.lab.
+					J8GYvUYL8h2E+QgncFALl7rhQwGdUZbQqtUd
+					hEBolcEW+HFHErtidMil1rlL0feiAa70XIKh
+					aTUTY7TQTOO6pw== )
+www.example.lab.	300	IN A	203.0.113.10
+			300	RRSIG	A 13 3 300 (
+					20360702202237 20260705202237 11788 example.lab.
+					vlD55Qq025WbrlJYwdCrzP0EszjfbGZUBl37
+					DPL9Bd0E43tHyLWwNq0zNwZCptsHI2FoCPkb
+					/o9P9qHDZc6+qQ== )
+			300	NSEC	example.lab. A RRSIG NSEC
+			300	RRSIG	NSEC 13 3 300 (
+					20360702202237 20260705202237 11788 example.lab.
+					fdrfZeeAgYB43CI6vX0uQ+Cx6VTx2Rtbc3vw
+					7Mj7uJbFfztAt3KNXhFiNIUvhYbl6roj+8Ka
+					pRyyxYcR43Ymig== )

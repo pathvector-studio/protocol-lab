@@ -1,0 +1,56 @@
+name: dns-13
+
+# DNSSEC validation on a small island of trust.
+#
+#   client ---- eth1 ---- resolver ---- eth2 ---- auth
+#            (dig +dnssec)  (validating)          (serves signed example.lab)
+#
+# The resolver has a static trust anchor for example.lab (its KSK), so every
+# answer it returns for example.lab must chain to that key. A correctly signed
+# answer gets the AD (Authenticated Data) flag; a tampered one is rejected with
+# SERVFAIL. run.sh drives both cases.
+#
+# Images: auth/resolver use the built protocol-lab/bind9:9.20 (BIND + iproute2);
+# client uses netshoot. 203.0.113.0/24 is RFC 5737 documentation space.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      # dig resolves via the resolver; run.sh writes resolv.conf at verify time.
+      dns:
+        servers:
+          - 10.0.0.1
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+
+    resolver:
+      kind: linux
+      image: protocol-lab/bind9:9.20
+      binds:
+        - ./resolver/named.conf:/etc/bind/named.conf
+        - ./resolver/rndc.key:/etc/bind/rndc.key
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.1.1/24 dev eth2
+        - ip link set eth2 up
+
+    auth:
+      kind: linux
+      image: protocol-lab/bind9:9.20
+      binds:
+        # Read-only source of the signed zone; run.sh delivers a writable copy
+        # into /var/cache/bind so the tamper step never touches this file.
+        - ./auth/db.example.lab.signed:/etc/bind/db.example.lab.signed
+        - ./auth/named.conf:/etc/bind/named.conf
+      exec:
+        - ip addr add 10.0.1.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["client:eth1", "resolver:eth1"]
+    - endpoints: ["resolver:eth2", "auth:eth1"]

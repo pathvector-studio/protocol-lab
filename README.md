@@ -32,7 +32,9 @@ The first track is BGP/RPKI. Start with:
 - [HTTP/2, HTTP/3, and QUIC Streams Reading Guide for Lab 11](rfc-notes/http2-quic-streams.md)
 - [Lab 12: One Web Request, End to End](labs/e2e-12-end-to-end.md)
 - [End-to-End Web Request Reading Guide for Lab 12](rfc-notes/e2e-web-request.md)
-- [Full 12-lab learning roadmap](ROADMAP.md)
+- [DNS Lab 13: DNSSEC — Signatures, Trust Anchors, and the AD Flag](labs/dns-13-dnssec-validation.md)
+- [DNSSEC Validation Reading Guide for Lab 13](rfc-notes/dns-dnssec-validation.md)
+- [Full learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.
 
