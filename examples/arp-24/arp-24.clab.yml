@@ -1,0 +1,34 @@
+name: arp-24
+
+# ARP: how IPv4 finds a neighbor's MAC on the same link — the classic that
+# IPv6 Neighbor Discovery (Lab 23) replaced.
+#
+#   node-a 10.0.0.1/24 ==== eth1/eth1 ==== node-b 10.0.0.2/24
+#
+# With the ARP cache cleared, a ping from a to b triggers an ARP request
+# ("who has 10.0.0.2? tell 10.0.0.1", broadcast to ff:ff:ff:ff:ff:ff) and an
+# ARP reply carrying b's MAC. run.sh captures both. Compare with Lab 23 (NDP):
+# same job, but ARP uses broadcast where NDP uses solicited-node multicast.
+#
+# Both use netshoot. 10.0.0.0/24 is lab-only.
+
+topology:
+  nodes:
+    node-a:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+
+    node-b:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["node-a:eth1", "node-b:eth1"]

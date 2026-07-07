@@ -72,6 +72,7 @@ After completing the labs, you should be able to:
 | 21 | [GRE: An Unencrypted Layer-3 Tunnel](labs/gre-21-l3-tunnel.md) | GRE encapsulation (IP proto 47), L3 tunnels, encapsulation vs encryption | A ping as GRE on the underlay with the inner IP in the clear | Place GRE among WireGuard and VXLAN on the encrypt/encapsulate axes |
 | 22 | [DHCP: Four Messages for an Address](labs/dhcp-22-dora.md) | DHCP DORA (Discover/Offer/Request/Ack), leases, broadcast | An address-less client obtaining a lease, captured on the wire | Explain how a host gets an address with no prior configuration |
 | 23 | [IPv6 Neighbor Discovery: ARP's Successor](labs/ndp-23-neighbor-discovery.md) | ICMPv6 NS/NA, solicited-node multicast, the neighbor cache | A Neighbor Solicitation and Advertisement resolving a neighbor | Explain how IPv6 finds a neighbor MAC without broadcast |
+| 24 | [ARP: The IPv4 Original](labs/arp-24-address-resolution.md) | ARP request/reply, broadcast resolution, the ARP cache | A broadcast ARP request and unicast reply resolving a MAC | Contrast ARP (broadcast) with NDP (multicast) |
 
 日本語:
 
@@ -100,6 +101,7 @@ After completing the labs, you should be able to:
 | 21 | [GRE: 暗号化しない L3 トンネル](labs/gre-21-l3-tunnel.md) | GRE encapsulation (IP proto 47)、L3 tunnel、encapsulation と encryption の別 | underlay で GRE として運ばれ、内側 IP が平文で見える ping | GRE を WireGuard・VXLAN と暗号化/カプセル化の軸で位置づける |
 | 22 | [DHCP: アドレスを得る4つのメッセージ](labs/dhcp-22-dora.md) | DHCP DORA (Discover/Offer/Request/Ack)、lease、broadcast | アドレスなしの client が lease を得る様子の capture | 設定なしでホストがアドレスを得る仕組みを説明する |
 | 23 | [IPv6 近隣探索: ARP の後継](labs/ndp-23-neighbor-discovery.md) | ICMPv6 NS/NA、solicited-node multicast、neighbor cache | 近隣を解決する Neighbor Solicitation と Advertisement | IPv6 が broadcast なしで近隣の MAC を見つける仕組みを説明する |
+| 24 | [ARP: IPv4 の原型](labs/arp-24-address-resolution.md) | ARP request/reply、broadcast による解決、ARP cache | MAC を解決する broadcast ARP request と unicast reply | ARP(broadcast)と NDP(multicast)を対比する |
 
 ## Current Entry Point
 
