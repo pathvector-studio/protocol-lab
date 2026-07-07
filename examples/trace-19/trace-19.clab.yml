@@ -1,0 +1,57 @@
+name: trace-19
+
+# A multi-hop path so traceroute has something to trace.
+#
+#   client --- 10.0.1.0/24 --- r1 --- 10.0.2.0/24 --- r2 --- 10.0.3.0/24 --- server
+#   10.0.1.1                10.0.1.2       10.0.2.2                        10.0.3.2
+#                           10.0.2.1       10.0.3.1
+#
+# r1 and r2 are plain Linux routers (ip_forward + static routes, set in run.sh).
+# traceroute from the client sends probes with increasing TTL; each router that
+# decrements the TTL to zero replies with ICMP time-exceeded, revealing the hop.
+#
+# Static routes and forwarding are configured by run.sh (they need every node),
+# not here. All nodes use netshoot. 10.0.0.0/8 subnets are lab-only.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.1.1/24 dev eth1
+        - ip link set eth1 up
+
+    r1:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.1.2/24 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.2.1/24 dev eth2
+        - ip link set eth2 up
+
+    r2:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.2.2/24 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.3.1/24 dev eth2
+        - ip link set eth2 up
+
+    server:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.3.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["client:eth1", "r1:eth1"]
+    - endpoints: ["r1:eth2", "r2:eth1"]
+    - endpoints: ["r2:eth2", "server:eth1"]
