@@ -68,6 +68,7 @@ After completing the labs, you should be able to:
 | 17 | [DANE: When DNS Vouches for the Certificate](labs/dane-17-dane-tlsa.md) | TLSA records, DANE-EE, DNSSEC-signed cert pinning, no CA needed | A signed TLSA matching a cert, and an impostor rejected | Explain how DNSSEC + TLSA can authenticate a cert without a CA |
 | 18 | [VXLAN: An Overlay You Can Read on the Wire](labs/vxlan-18-l2-overlay.md) | VXLAN encapsulation, VNI, UDP 4789, overlay vs underlay, L2-over-L3 | A ping as VXLAN over UDP with the inner frame in the clear | Contrast an unencrypted overlay with an encrypted tunnel |
 | 19 | [traceroute and TTL: Mapping a Path Hop by Hop](labs/trace-19-traceroute-ttl.md) | IP TTL, ICMP time-exceeded, how routers reveal a path | traceroute hops and the time-exceeded replies that build them | Explain how traceroute maps a network path |
+| 20 | [NAT: One Public Address for Many](labs/nat-20-source-translation.md) | Source NAT (masquerade), private vs public addresses, connection tracking | The server seeing the NAT public address, and the conntrack mapping | Explain how NAT hides private addresses behind one public IP |
 
 日本語:
 
@@ -92,6 +93,7 @@ After completing the labs, you should be able to:
 | 17 | [DANE: DNS が証明書を保証する](labs/dane-17-dane-tlsa.md) | TLSA レコード、DANE-EE、DNSSEC 署名による cert pin、CA 不要 | 署名済み TLSA と一致する cert、拒否される impostor | DNSSEC + TLSA で CA 無しに cert を認証する仕組みを説明する |
 | 18 | [VXLAN: 中身が見えるオーバーレイ](labs/vxlan-18-l2-overlay.md) | VXLAN encapsulation、VNI、UDP 4789、overlay と underlay、L2-over-L3 | VXLAN over UDP で運ばれ、内側フレームが平文で見える ping | 暗号化なしの overlay と暗号トンネルを対比する |
 | 19 | [traceroute と TTL: 経路を hop ごとに映す](labs/trace-19-traceroute-ttl.md) | IP TTL、ICMP time-exceeded、ルータが経路を明かす仕組み | traceroute の hop と、それを作る time-exceeded 応答 | traceroute が経路をどう地図化するか説明する |
+| 20 | [NAT: 多数を1つの public アドレスに](labs/nat-20-source-translation.md) | source NAT (masquerade)、private と public アドレス、connection tracking | server が見る NAT の public アドレスと、conntrack の変換 | NAT が private アドレスを1つの public IP の裏に隠す仕組みを説明する |
 
 ## Current Entry Point
 

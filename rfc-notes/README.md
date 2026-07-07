@@ -25,6 +25,7 @@ RFC notes are reading guides for the labs. They do not replace the RFC. They hel
 - [DANE / TLSA Reading Guide for Lab 17](dane-tlsa.md)
 - [VXLAN Overlay Reading Guide for Lab 18](vxlan-overlay.md)
 - [traceroute and TTL Reading Guide for Lab 19](traceroute-ttl.md)
+- [NAT Reading Guide for Lab 20](nat-source-translation.md)
 
 ## How to Use Them
 

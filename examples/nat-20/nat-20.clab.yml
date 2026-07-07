@@ -1,0 +1,47 @@
+name: nat-20
+
+# Source NAT (masquerade): a private client reaches a public server, which sees
+# the NAT's public address — not the client's private one.
+#
+#   client ---- 192.168.10.0/24 ---- nat ---- 203.0.113.0/24 ---- server
+#   192.168.10.1                 192.168.10.254                203.0.113.1
+#   (private, RFC 1918)          203.0.113.254 (public)        (public)
+#
+# The nat node forwards and rewrites the source address of outbound packets
+# (iptables MASQUERADE), so the server's view of the connection is 203.0.113.254.
+# run.sh sets forwarding, the NAT rule, and static routes, then proves the
+# translation from the server's side and from the NAT's conntrack table.
+#
+# 192.168.10.0/24 is RFC 1918 private space; 203.0.113.0/24 is RFC 5737 doc space.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 192.168.10.1/24 dev eth1
+        - ip link set eth1 up
+
+    nat:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 192.168.10.254/24 dev eth1
+        - ip link set eth1 up
+        - ip addr add 203.0.113.254/24 dev eth2
+        - ip link set eth2 up
+
+    server:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 203.0.113.1/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["client:eth1", "nat:eth1"]
+    - endpoints: ["nat:eth2", "server:eth1"]
