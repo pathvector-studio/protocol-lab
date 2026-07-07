@@ -44,6 +44,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`fw-36/`](fw-36/): a client, a stateful firewall router, and a server, for watching conntrack allow an outbound-initiated connection and its reply while dropping an unsolicited inbound one.
 - [`mss-37/`](mss-37/): a client, a router, and a server across a link with a smaller MTU, for watching the router clamp the TCP SYN's MSS (1460 → 1360) so segments fit the narrowest link.
 - [`pbr-38/`](pbr-38/): two source hosts behind a router with two uplinks that share one service address, for watching a source-based `ip rule` send the same destination over different uplinks per source.
+- [`rpf-39/`](rpf-39/): a target, a router, and an attacker on separate networks, for watching strict reverse path filtering drop a spoofed source at ingress while letting the attacker's real source through.
 
 ## Safety
 

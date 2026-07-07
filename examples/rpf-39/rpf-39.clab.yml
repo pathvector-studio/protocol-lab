@@ -1,0 +1,52 @@
+name: rpf-39
+
+# Reverse path filtering (rp_filter): drop a packet whose source address could
+# not legitimately have arrived on the interface it came in on — anti-spoofing.
+#
+#   target (10.0.1.20) --- eth1 [ r ] eth2 --- attacker (10.0.2.10)
+#      net A: 10.0.1.0/24                       net B: 10.0.2.0/24
+#
+# The attacker (on net B) sends a packet with a SPOOFED source address from net A
+# (10.0.1.10) toward the target. r's route back to 10.0.1.0/24 is via eth1, but
+# the packet arrived on eth2. Strict reverse path filtering
+# (rp_filter=1) drops it at ingress; with rp_filter=0 the router forwards the
+# spoofed packet to the target. We measure by capturing on the target: nothing
+# arrives while rp_filter is on, the spoofed pings arrive once it is off.
+#
+# rp_filter enforces the same source-reachability idea as ingress filtering
+# (RFC 3704). 10.0.0.0/8 addressing is lab-only.
+
+topology:
+  nodes:
+    target:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.1.20/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.0.1.1
+
+    r:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.1.1/24 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.2.1/24 dev eth2
+        - ip link set eth2 up
+        - sysctl -w net.ipv4.ip_forward=1
+
+    attacker:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.2.10/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.0.2.1
+
+  links:
+    - endpoints: ["target:eth1", "r:eth1"]
+    - endpoints: ["r:eth2", "attacker:eth1"]
