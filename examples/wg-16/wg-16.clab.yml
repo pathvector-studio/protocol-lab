@@ -1,0 +1,35 @@
+name: wg-16
+
+# A WireGuard tunnel between two nodes, and what it hides.
+#
+#   node-a (underlay 10.0.0.1) ==== eth1/eth1 ==== node-b (underlay 10.0.0.2)
+#            wg0 10.99.0.1                                  wg0 10.99.0.2
+#
+# The two nodes talk over the plain "underlay" link (eth1). On top of it they
+# build an encrypted WireGuard tunnel (wg0). A ping across the tunnel (10.99.0.x)
+# travels the underlay as encrypted UDP/51820; the inner ICMP is only visible
+# inside wg0. run.sh generates the keys, peers the two ends, and captures both.
+#
+# The keys and peering are set at run time (not in this file) because each end
+# needs the other's public key. Nodes use a netshoot + wireguard-tools image.
+
+topology:
+  nodes:
+    node-a:
+      kind: linux
+      image: protocol-lab/wireguard:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+
+    node-b:
+      kind: linux
+      image: protocol-lab/wireguard:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["node-a:eth1", "node-b:eth1"]

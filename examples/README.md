@@ -19,6 +19,10 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`quic-11/`](quic-11/): a two-node link with a Caddy server (HTTP/1.1, HTTP/2, HTTP/3) for comparing stream multiplexing over TCP vs QUIC.
 - [`e2e-12/`](e2e-12/): a client, a DNS resolver, and a web server, so one `curl https://www.example.lab/` crosses DNS, TCP, TLS, and HTTP in order.
 - [`dns-13/`](dns-13/): a client, a validating resolver, and an authoritative server holding a DNSSEC-signed `example.lab`, for watching a validated answer (AD flag) and a tampered one rejected with SERVFAIL.
+- [`dns-14/`](dns-14/): a client and a BIND server offering Do53, DoT (853), and DoH (443), for watching the same answer travel in cleartext vs inside TLS.
+- [`tls-15/`](tls-15/): a client and an openssl s_server that requires a client certificate (mTLS), for watching mutual authentication succeed and a certless client be rejected.
+- [`wg-16/`](wg-16/): two nodes joined by a WireGuard tunnel, for watching a ping cross it as encrypted UDP on the underlay while the inner ICMP is only visible inside wg0.
+- [`dane-17/`](dane-17/): a client, a DNSSEC-signed authoritative server with a TLSA record, and a TLS web server, for validating a certificate against DNS (DANE) and rejecting an impostor.
 
 ## Safety
 

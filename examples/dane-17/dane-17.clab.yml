@@ -1,0 +1,49 @@
+name: dane-17
+
+# DANE / TLSA: DNS (secured by DNSSEC) vouches for a TLS certificate.
+#
+#   auth (10.0.1.2) ---- eth1 ---- client ---- eth2 ---- web (10.0.2.2)
+#     BIND, signed              dig +dnssec TLSA        openssl s_server
+#     example.lab + TLSA        openssl s_client -dane  cert matches the TLSA
+#
+# The auth node serves a DNSSEC-signed example.lab whose TLSA record pins the
+# web server's certificate (a self-signed cert — DANE needs no CA). The client
+# fetches the TLSA (signed, so trustworthy) and checks the web server's cert
+# against it: the real cert matches; an impostor cert on a second port does not.
+#
+# run.sh generates the cert, computes + signs the TLSA, and drives both checks.
+# auth uses the built protocol-lab/bind9:9.20; client/web use netshoot.
+# 203.0.113.0/24 is RFC 5737 documentation space.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.1.1/24 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.2.1/24 dev eth2
+        - ip link set eth2 up
+
+    auth:
+      kind: linux
+      image: protocol-lab/bind9:9.20
+      binds:
+        - ./auth/named.conf:/etc/bind/named.conf
+      exec:
+        - ip addr add 10.0.1.2/24 dev eth1
+        - ip link set eth1 up
+
+    web:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.2.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["client:eth1", "auth:eth1"]
+    - endpoints: ["client:eth2", "web:eth1"]
