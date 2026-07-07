@@ -78,6 +78,7 @@ After completing the labs, you should be able to:
 | 27 | [HTTP Redirects and Cookies](labs/http-27-redirects-cookies.md) | 3xx redirects + Location, Set-Cookie / Cookie, statelessness | A 302 followed to a new URL, and a cookie stored and resent | Explain how HTTP steers a client and remembers it across requests |
 | 28 | [QoS: Shaping a Link with a Token Bucket](labs/qos-28-traffic-shaping.md) | Traffic shaping, tc, token bucket (tbf), rate limiting | iperf3 throughput dropping to the configured rate under a shaper | Explain how a token-bucket qdisc caps a link's throughput |
 | 29 | [Multicast and IGMP: One Sender, Many Receivers](labs/mcast-29-igmp.md) | IP multicast, group addresses, IGMP membership, multicast MAC, one copy per segment | Two receivers joining a group via IGMP and both getting one UDP stream | Explain how one send reaches many receivers without a per-receiver copy |
+| 30 | [TCP Congestion Control: CUBIC vs BBR](labs/cc-30-congestion-control.md) | Congestion window, loss-based (CUBIC) vs model-based (BBR), random loss, ss -ti | The same lossy path giving ~12 Mbit/s under CUBIC and ~88 Mbit/s under BBR | Explain why the congestion-control choice, not the link, sets throughput on a lossy path |
 
 日本語:
 
@@ -112,6 +113,7 @@ After completing the labs, you should be able to:
 | 27 | [HTTP redirect と cookie](labs/http-27-redirects-cookies.md) | 3xx redirect と Location、Set-Cookie / Cookie、statelessness | /new へ追従される 302 と、保存・再送される cookie | HTTP が client をどう誘導し、リクエストをまたいで覚えるか説明する |
 | 28 | [QoS: token bucket でリンクを絞る](labs/qos-28-traffic-shaping.md) | traffic shaping、tc、token bucket (tbf)、rate 制限 | shaper で iperf3 の throughput が設定 rate に落ちる様子 | token-bucket qdisc がリンクの throughput をどう制限するか説明する |
 | 29 | [Multicast と IGMP: 1つの送信を多数へ](labs/mcast-29-igmp.md) | IP multicast、group address、IGMP membership、multicast MAC、セグメントに1コピー | IGMP で group に join した2つの receiver が同じ1本の UDP stream を受け取る様子 | 1回の送信が receiver ごとのコピー無しに多数へ届く仕組みを説明する |
+| 30 | [TCP 輻輳制御: CUBIC vs BBR](labs/cc-30-congestion-control.md) | congestion window、loss-based (CUBIC) と model-based (BBR)、ランダム loss、ss -ti | 同じ lossy path で CUBIC は約12 Mbit/s、BBR は約88 Mbit/s になる様子 | lossy path では link ではなく輻輳制御の選択が throughput を決めることを説明する |
 
 ## Current Entry Point
 
