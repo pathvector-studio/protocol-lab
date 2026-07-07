@@ -1,0 +1,32 @@
+name: qos-28
+
+# Traffic shaping (QoS): cap a link's throughput with a token-bucket qdisc and
+# measure the effect.
+#
+#   client (10.0.0.1) ==== eth1/eth1 ==== server (10.0.0.2, iperf3 -s)
+#
+# First iperf3 runs at the veth's native (very high) speed. Then run.sh attaches
+# a `tc tbf` (Token Bucket Filter) shaper to the client's egress limiting it to
+# 10 Mbit/s, and iperf3 shows throughput drop to about that. Removing the qdisc
+# restores full speed. Both nodes use netshoot (tc, iperf3). 10.0.0.0/24 lab-only.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+
+    server:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["client:eth1", "server:eth1"]

@@ -34,6 +34,7 @@ Usage:
   $0 run mtu-25
   $0 run vlan-26
   $0 run http-27
+  $0 run qos-28
   $0 deploy bgp-01
   $0 deploy bgp-02
   $0 deploy bgp-03
@@ -61,6 +62,7 @@ Usage:
   $0 deploy mtu-25
   $0 deploy vlan-26
   $0 deploy http-27
+  $0 deploy qos-28
   $0 verify bgp-01
   $0 verify bgp-02
   $0 verify bgp-03
@@ -88,6 +90,7 @@ Usage:
   $0 verify mtu-25
   $0 verify vlan-26
   $0 verify http-27
+  $0 verify qos-28
   $0 capture bgp-01
   $0 capture bgp-02
   $0 capture bgp-03
@@ -118,6 +121,7 @@ Usage:
   $0 destroy mtu-25
   $0 destroy vlan-26
   $0 destroy http-27
+  $0 destroy qos-28
   $0 doctor bgp-01
   $0 doctor bgp-02
   $0 doctor bgp-03
@@ -145,6 +149,7 @@ Usage:
   $0 doctor mtu-25
   $0 doctor vlan-26
   $0 doctor http-27
+  $0 doctor qos-28
 USAGE
 }
 
@@ -263,6 +268,10 @@ case "$LAB_ID" in
     ;;
   http-27)
     cd "$REPO_ROOT/examples/http-27"
+    ./run.sh "$ACTION"
+    ;;
+  qos-28)
+    cd "$REPO_ROOT/examples/qos-28"
     ./run.sh "$ACTION"
     ;;
   *)

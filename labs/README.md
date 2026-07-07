@@ -33,6 +33,7 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 - [Lab 25: MTU and Path MTU Discovery](mtu-25-path-mtu-discovery.md)
 - [Lab 26: VLANs — Two Networks on One Wire](vlan-26-8021q.md)
 - [Lab 27: HTTP Redirects and Cookies](http-27-redirects-cookies.md)
+- [Lab 28: QoS — Shaping a Link with a Token Bucket](qos-28-traffic-shaping.md)
 
 Expected time: 45 to 60 minutes per lab.
 

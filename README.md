@@ -62,6 +62,8 @@ The first track is BGP/RPKI. Start with:
 - [802.1Q VLAN Reading Guide for Lab 26](rfc-notes/vlan-8021q.md)
 - [Lab 27: HTTP Redirects and Cookies](labs/http-27-redirects-cookies.md)
 - [HTTP Redirects and Cookies Reading Guide for Lab 27](rfc-notes/http-redirects-cookies.md)
+- [Lab 28: QoS — Shaping a Link with a Token Bucket](labs/qos-28-traffic-shaping.md)
+- [Traffic Shaping Reading Guide for Lab 28](rfc-notes/qos-traffic-shaping.md)
 - [Full learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.
