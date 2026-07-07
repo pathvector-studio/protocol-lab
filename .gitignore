@@ -9,3 +9,6 @@ examples/**/clab-*/
 
 # Local-only helper scripts
 scripts/private/
+
+# Lab 14 generates a throwaway DoT/DoH cert at run time
+examples/dns-14/server/tls/

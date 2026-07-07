@@ -1,0 +1,8 @@
+; example.lab zone for the encrypted-DNS lab (Lab 14).
+; The same records are served over Do53, DoT, and DoH.
+$TTL 300
+example.lab.        IN  SOA ns.example.lab. admin.example.lab. (
+                        1 3600 900 604800 300 )
+example.lab.        IN  NS  ns.example.lab.
+ns.example.lab.     IN  A   10.0.0.2
+www.example.lab.    IN  A   203.0.113.10
