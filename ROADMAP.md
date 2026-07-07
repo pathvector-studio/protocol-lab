@@ -64,6 +64,7 @@ After completing the labs, you should be able to:
 | 13 | [DNSSEC: Signatures, Trust Anchors, and the AD Flag](labs/dns-13-dnssec-validation.md) | RRSIG, DNSKEY (KSK/ZSK), trust anchor, AD and CD flags | A validated answer and a rejected (tampered) one | Explain how a resolver proves an answer is genuine |
 | 14 | [Encrypted DNS: DoT and DoH](labs/dns-14-encrypted-dns-dot-doh.md) | Do53 vs DoT (853) vs DoH (443), what an on-path observer can read | The query name in cleartext vs inside TLS | Explain what encrypted DNS hides and what it does not |
 | 15 | [Mutual TLS: Proving the Client Too](labs/tls-15-mutual-tls.md) | Client certificates, CertificateRequest, a private CA, -Verify | An authenticated handshake vs a certless client rejected | Explain how both ends prove identity in mTLS |
+| 16 | [WireGuard: An Encrypted Tunnel You Can See Into](labs/wg-16-wireguard-tunnel.md) | WireGuard keys/peers, the underlay vs the tunnel, UDP encapsulation | A ping as encrypted UDP on the underlay, cleartext ICMP inside wg0 | Explain what a tunnel encrypts and what stays visible |
 
 日本語:
 
@@ -84,6 +85,7 @@ After completing the labs, you should be able to:
 | 13 | [DNSSEC: 署名、trust anchor、AD フラグ](labs/dns-13-dnssec-validation.md) | RRSIG、DNSKEY(KSK/ZSK)、trust anchor、AD と CD フラグ | 検証済みの答えと、拒否された改ざん答え | resolver が答えの真正性をどう証明するか説明する |
 | 14 | [暗号化DNS: DoT と DoH](labs/dns-14-encrypted-dns-dot-doh.md) | Do53 vs DoT (853) vs DoH (443)、経路上の観測者に何が見えるか | query 名が平文 vs TLS の中 | 暗号化DNS が何を隠し何を隠さないかを説明する |
 | 15 | [Mutual TLS: client も証明する](labs/tls-15-mutual-tls.md) | client 証明書、CertificateRequest、専用CA、-Verify | 認証済み handshake vs 証明書なし client の拒否 | mTLS で両端がどう身元を証明するか説明する |
+| 16 | [WireGuard: 中が見える暗号トンネル](labs/wg-16-wireguard-tunnel.md) | WireGuard の鍵/peer、underlay と tunnel、UDP encapsulation | underlay では暗号化UDP、wg0 内では平文ICMP の ping | tunnel が何を暗号化し何が見えたままかを説明する |
 
 ## Current Entry Point
 

@@ -22,6 +22,7 @@ Usage:
   $0 run dns-13
   $0 run dns-14
   $0 run tls-15
+  $0 run wg-16
   $0 deploy bgp-01
   $0 deploy bgp-02
   $0 deploy bgp-03
@@ -37,6 +38,7 @@ Usage:
   $0 deploy dns-13
   $0 deploy dns-14
   $0 deploy tls-15
+  $0 deploy wg-16
   $0 verify bgp-01
   $0 verify bgp-02
   $0 verify bgp-03
@@ -52,6 +54,7 @@ Usage:
   $0 verify dns-13
   $0 verify dns-14
   $0 verify tls-15
+  $0 verify wg-16
   $0 capture bgp-01
   $0 capture bgp-02
   $0 capture bgp-03
@@ -70,6 +73,7 @@ Usage:
   $0 destroy dns-13
   $0 destroy dns-14
   $0 destroy tls-15
+  $0 destroy wg-16
   $0 doctor bgp-01
   $0 doctor bgp-02
   $0 doctor bgp-03
@@ -85,6 +89,7 @@ Usage:
   $0 doctor dns-13
   $0 doctor dns-14
   $0 doctor tls-15
+  $0 doctor wg-16
 USAGE
 }
 
@@ -155,6 +160,10 @@ case "$LAB_ID" in
     ;;
   tls-15)
     cd "$REPO_ROOT/examples/tls-15"
+    ./run.sh "$ACTION"
+    ;;
+  wg-16)
+    cd "$REPO_ROOT/examples/wg-16"
     ./run.sh "$ACTION"
     ;;
   *)

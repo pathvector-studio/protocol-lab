@@ -38,6 +38,8 @@ The first track is BGP/RPKI. Start with:
 - [Encrypted DNS Reading Guide for Lab 14](rfc-notes/dns-encrypted-dot-doh.md)
 - [TLS Lab 15: Mutual TLS — Proving the Client Too](labs/tls-15-mutual-tls.md)
 - [Mutual TLS Reading Guide for Lab 15](rfc-notes/tls-mutual-tls.md)
+- [Lab 16: WireGuard — an Encrypted Tunnel You Can See Into](labs/wg-16-wireguard-tunnel.md)
+- [WireGuard Reading Guide for Lab 16](rfc-notes/wg-wireguard-tunnel.md)
 - [Full learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.
