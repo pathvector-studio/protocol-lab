@@ -1,0 +1,52 @@
+name: dns-views-42
+
+# Split-horizon DNS: the same name answers differently by who is asking.
+#
+#   internal-client (10.0.1.10) --- eth1 [ dns ] eth2 --- external-client (203.0.113.10)
+#                              10.0.1.2  (views)  203.0.113.2
+#
+# The DNS server is authoritative for app.lab. through two VIEWS matched on the
+# client's source address: the "internal" view (source in 10.0.1.0/24) answers
+# app.lab. with the private address 10.0.0.5, while the "external" view (any
+# other source) answers with the public address 203.0.113.5. Two clients on
+# different networks query the SAME name and get DIFFERENT answers — the basis
+# of split-horizon / split-brain DNS used to hand internal users a private path
+# and outsiders a public one.
+#
+# 10.0.1.0/24 is the internal link, 203.0.113.0/24 (RFC 5737) the external one;
+# 10.0.0.5 / 203.0.113.5 are the two faces of the service. Lab-only.
+
+topology:
+  nodes:
+    dns:
+      kind: linux
+      image: protocol-lab/bind9:9.20
+      binds:
+        - ./dns/named.conf:/etc/bind/named.conf
+        - ./dns/db.internal:/etc/bind/db.internal
+        - ./dns/db.external:/etc/bind/db.external
+      exec:
+        - ip addr add 10.0.1.2/24 dev eth1
+        - ip link set eth1 up
+        - ip addr add 203.0.113.2/24 dev eth2
+        - ip link set eth2 up
+
+    internal-client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.1.10/24 dev eth1
+        - ip link set eth1 up
+
+    external-client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 203.0.113.10/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["internal-client:eth1", "dns:eth1"]
+    - endpoints: ["dns:eth2", "external-client:eth1"]
