@@ -46,6 +46,8 @@ The first track is BGP/RPKI. Start with:
 - [VXLAN Overlay Reading Guide for Lab 18](rfc-notes/vxlan-overlay.md)
 - [Lab 19: traceroute and TTL — Mapping a Path Hop by Hop](labs/trace-19-traceroute-ttl.md)
 - [traceroute and TTL Reading Guide for Lab 19](rfc-notes/traceroute-ttl.md)
+- [Lab 20: NAT — One Public Address for Many](labs/nat-20-source-translation.md)
+- [NAT Reading Guide for Lab 20](rfc-notes/nat-source-translation.md)
 - [Full learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.

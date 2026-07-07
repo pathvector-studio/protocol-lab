@@ -25,6 +25,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`dane-17/`](dane-17/): a client, a DNSSEC-signed authoritative server with a TLSA record, and a TLS web server, for validating a certificate against DNS (DANE) and rejecting an impostor.
 - [`vxlan-18/`](vxlan-18/): two nodes joined by a VXLAN Layer-2 overlay, for watching a ping travel as VXLAN over UDP with the inner frame visible in the clear (contrast with WireGuard).
 - [`trace-19/`](trace-19/): a client, two Linux routers, and a server, so traceroute maps the path hop by hop via TTL and ICMP time-exceeded.
+- [`nat-20/`](nat-20/): a private client, a masquerading NAT router, and a public server, so you can see the server observe the NAT public address (never the private client) and the NAT conntrack mapping.
 
 ## Safety
 
