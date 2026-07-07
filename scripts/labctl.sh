@@ -27,6 +27,7 @@ Usage:
   $0 run vxlan-18
   $0 run trace-19
   $0 run nat-20
+  $0 run gre-21
   $0 deploy bgp-01
   $0 deploy bgp-02
   $0 deploy bgp-03
@@ -47,6 +48,7 @@ Usage:
   $0 deploy vxlan-18
   $0 deploy trace-19
   $0 deploy nat-20
+  $0 deploy gre-21
   $0 verify bgp-01
   $0 verify bgp-02
   $0 verify bgp-03
@@ -67,6 +69,7 @@ Usage:
   $0 verify vxlan-18
   $0 verify trace-19
   $0 verify nat-20
+  $0 verify gre-21
   $0 capture bgp-01
   $0 capture bgp-02
   $0 capture bgp-03
@@ -90,6 +93,7 @@ Usage:
   $0 destroy vxlan-18
   $0 destroy trace-19
   $0 destroy nat-20
+  $0 destroy gre-21
   $0 doctor bgp-01
   $0 doctor bgp-02
   $0 doctor bgp-03
@@ -110,6 +114,7 @@ Usage:
   $0 doctor vxlan-18
   $0 doctor trace-19
   $0 doctor nat-20
+  $0 doctor gre-21
 USAGE
 }
 
@@ -200,6 +205,10 @@ case "$LAB_ID" in
     ;;
   nat-20)
     cd "$REPO_ROOT/examples/nat-20"
+    ./run.sh "$ACTION"
+    ;;
+  gre-21)
+    cd "$REPO_ROOT/examples/gre-21"
     ./run.sh "$ACTION"
     ;;
   *)
