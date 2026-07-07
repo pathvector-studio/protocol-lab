@@ -52,6 +52,8 @@ The first track is BGP/RPKI. Start with:
 - [GRE Tunnel Reading Guide for Lab 21](rfc-notes/gre-tunnel.md)
 - [Lab 22: DHCP — Four Messages for an Address](labs/dhcp-22-dora.md)
 - [DHCP Reading Guide for Lab 22](rfc-notes/dhcp-dora.md)
+- [Lab 23: IPv6 Neighbor Discovery — ARP's Successor](labs/ndp-23-neighbor-discovery.md)
+- [IPv6 Neighbor Discovery Reading Guide for Lab 23](rfc-notes/ndp-neighbor-discovery.md)
 - [Full learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.

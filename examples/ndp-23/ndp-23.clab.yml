@@ -1,0 +1,33 @@
+name: ndp-23
+
+# IPv6 Neighbor Discovery (NDP): how one host finds another's MAC on IPv6 —
+# the job ARP does on IPv4, but with ICMPv6 and multicast.
+#
+#   node-a 2001:db8:23::1/64 ==== eth1/eth1 ==== node-b 2001:db8:23::2/64
+#
+# A ping6 from a to b, with the neighbor cache cleared, triggers a Neighbor
+# Solicitation (ICMPv6 type 135, to the solicited-node multicast address) and a
+# Neighbor Advertisement (type 136) carrying b's MAC. run.sh captures both.
+#
+# 2001:db8::/32 is the RFC 3849 IPv6 documentation prefix. Both use netshoot.
+
+topology:
+  nodes:
+    node-a:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip link set eth1 up
+        - ip -6 addr add 2001:db8:23::1/64 dev eth1
+
+    node-b:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip link set eth1 up
+        - ip -6 addr add 2001:db8:23::2/64 dev eth1
+
+  links:
+    - endpoints: ["node-a:eth1", "node-b:eth1"]

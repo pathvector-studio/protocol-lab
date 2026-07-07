@@ -29,6 +29,7 @@ Usage:
   $0 run nat-20
   $0 run gre-21
   $0 run dhcp-22
+  $0 run ndp-23
   $0 deploy bgp-01
   $0 deploy bgp-02
   $0 deploy bgp-03
@@ -51,6 +52,7 @@ Usage:
   $0 deploy nat-20
   $0 deploy gre-21
   $0 deploy dhcp-22
+  $0 deploy ndp-23
   $0 verify bgp-01
   $0 verify bgp-02
   $0 verify bgp-03
@@ -73,6 +75,7 @@ Usage:
   $0 verify nat-20
   $0 verify gre-21
   $0 verify dhcp-22
+  $0 verify ndp-23
   $0 capture bgp-01
   $0 capture bgp-02
   $0 capture bgp-03
@@ -98,6 +101,7 @@ Usage:
   $0 destroy nat-20
   $0 destroy gre-21
   $0 destroy dhcp-22
+  $0 destroy ndp-23
   $0 doctor bgp-01
   $0 doctor bgp-02
   $0 doctor bgp-03
@@ -120,6 +124,7 @@ Usage:
   $0 doctor nat-20
   $0 doctor gre-21
   $0 doctor dhcp-22
+  $0 doctor ndp-23
 USAGE
 }
 
@@ -218,6 +223,10 @@ case "$LAB_ID" in
     ;;
   dhcp-22)
     cd "$REPO_ROOT/examples/dhcp-22"
+    ./run.sh "$ACTION"
+    ;;
+  ndp-23)
+    cd "$REPO_ROOT/examples/ndp-23"
     ./run.sh "$ACTION"
     ;;
   *)

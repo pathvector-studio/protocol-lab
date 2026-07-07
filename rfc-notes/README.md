@@ -28,6 +28,7 @@ RFC notes are reading guides for the labs. They do not replace the RFC. They hel
 - [NAT Reading Guide for Lab 20](nat-source-translation.md)
 - [GRE Tunnel Reading Guide for Lab 21](gre-tunnel.md)
 - [DHCP Reading Guide for Lab 22](dhcp-dora.md)
+- [IPv6 Neighbor Discovery Reading Guide for Lab 23](ndp-neighbor-discovery.md)
 
 ## How to Use Them
 
