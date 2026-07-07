@@ -60,6 +60,8 @@ The first track is BGP/RPKI. Start with:
 - [Path MTU Discovery Reading Guide for Lab 25](rfc-notes/mtu-path-mtu-discovery.md)
 - [Lab 26: VLANs — Two Networks on One Wire](labs/vlan-26-8021q.md)
 - [802.1Q VLAN Reading Guide for Lab 26](rfc-notes/vlan-8021q.md)
+- [Lab 27: HTTP Redirects and Cookies](labs/http-27-redirects-cookies.md)
+- [HTTP Redirects and Cookies Reading Guide for Lab 27](rfc-notes/http-redirects-cookies.md)
 - [Full learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.
