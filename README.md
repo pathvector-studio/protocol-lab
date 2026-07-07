@@ -42,6 +42,8 @@ The first track is BGP/RPKI. Start with:
 - [WireGuard Reading Guide for Lab 16](rfc-notes/wg-wireguard-tunnel.md)
 - [Lab 17: DANE — When DNS Vouches for the Certificate](labs/dane-17-dane-tlsa.md)
 - [DANE / TLSA Reading Guide for Lab 17](rfc-notes/dane-tlsa.md)
+- [Lab 18: VXLAN — an Overlay You Can Read on the Wire](labs/vxlan-18-l2-overlay.md)
+- [VXLAN Overlay Reading Guide for Lab 18](rfc-notes/vxlan-overlay.md)
 - [Full learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.
