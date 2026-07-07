@@ -1,0 +1,58 @@
+name: fw-36
+
+# Stateful firewall: allow outbound-initiated connections and their replies,
+# drop unsolicited inbound — using connection tracking (conntrack).
+#
+#   client (10.0.9.2) ---- fw (router) ---- server (10.0.8.2)
+#                    eth1 10.0.9.1  10.0.8.1 eth2
+#
+# fw forwards between the two sides but its FORWARD policy is DROP. It allows:
+#   - any packet that is part of an ESTABLISHED or RELATED flow (conntrack), and
+#   - NEW connections only when they come FROM the client side (eth1).
+# So the client can reach the server (the SYN is NEW-from-inside; the reply is
+# ESTABLISHED), but the server cannot start a connection to the client (its SYN
+# is NEW-from-outside and is dropped). Both hosts run a tiny HTTP responder so we
+# can test reachability in each direction.
+#
+# This is the firewall built on the same conntrack that NAT (Lab 20) uses, but
+# here the point is the *policy* (default-drop + state match), not translation.
+# 10.0.0.0/8 addressing is lab-only.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      binds:
+        - ./host/responder.py:/responder.py
+      exec:
+        - ip addr add 10.0.9.2/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.0.9.1
+
+    fw:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.9.1/24 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.8.1/24 dev eth2
+        - ip link set eth2 up
+        - sysctl -w net.ipv4.ip_forward=1
+
+    server:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      binds:
+        - ./host/responder.py:/responder.py
+      exec:
+        - ip addr add 10.0.8.2/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.0.8.1
+
+  links:
+    - endpoints: ["client:eth1", "fw:eth1"]
+    - endpoints: ["fw:eth2", "server:eth1"]

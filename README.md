@@ -78,6 +78,8 @@ The first track is BGP/RPKI. Start with:
 - [OSPF Reading Guide for Lab 34](rfc-notes/ospf.md)
 - [Lab 35: BFD — Catching a Silent Failure in Under a Second](labs/bfd-35-fast-failure-detection.md)
 - [BFD Reading Guide for Lab 35](rfc-notes/bfd.md)
+- [Lab 36: Stateful Firewall — Decide by the Connection, Not the Packet](labs/fw-36-stateful-firewall.md)
+- [Stateful Firewall Reading Guide for Lab 36](rfc-notes/stateful-firewall.md)
 - [Full learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.
