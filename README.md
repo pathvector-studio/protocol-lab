@@ -56,6 +56,8 @@ The first track is BGP/RPKI. Start with:
 - [IPv6 Neighbor Discovery Reading Guide for Lab 23](rfc-notes/ndp-neighbor-discovery.md)
 - [Lab 24: ARP — the IPv4 Original](labs/arp-24-address-resolution.md)
 - [ARP Reading Guide for Lab 24](rfc-notes/arp-address-resolution.md)
+- [Lab 25: MTU and Path MTU Discovery](labs/mtu-25-path-mtu-discovery.md)
+- [Path MTU Discovery Reading Guide for Lab 25](rfc-notes/mtu-path-mtu-discovery.md)
 - [Full learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.

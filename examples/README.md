@@ -30,6 +30,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`dhcp-22/`](dhcp-22/): a client with no address and a DHCP server (udhcpd), for watching the four-message DORA exchange assign a lease on the wire.
 - [`ndp-23/`](ndp-23/): two IPv6 nodes, for watching Neighbor Discovery (Neighbor Solicitation to a solicited-node multicast, Neighbor Advertisement with the MAC) resolve a neighbor â ARP's IPv6 successor.
 - [`arp-24/`](arp-24/): two IPv4 nodes, for watching ARP (broadcast request, unicast reply) resolve a neighbor MAC — the IPv4 original that NDP replaced.
+- [`mtu-25/`](mtu-25/): a client, a router with a smaller-MTU link, and a server, for watching an oversized DF packet draw an ICMP fragmentation-needed reply and the client learn the path MTU.
 
 ## Safety
 
