@@ -37,6 +37,7 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 - [Lab 29: Multicast and IGMP — One Sender, Many Receivers](mcast-29-igmp.md)
 - [Lab 30: TCP Congestion Control — CUBIC vs BBR on a Lossy Path](cc-30-congestion-control.md)
 - [Lab 31: Anycast — One Address, Many Servers, Routing Decides](anycast-31-bgp.md)
+- [Lab 32: ECMP — Two Equal Paths, and the Kernel Hashes Flows](ecmp-32-multipath.md)
 
 Expected time: 45 to 60 minutes per lab.
 

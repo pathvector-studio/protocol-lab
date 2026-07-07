@@ -80,6 +80,7 @@ After completing the labs, you should be able to:
 | 29 | [Multicast and IGMP: One Sender, Many Receivers](labs/mcast-29-igmp.md) | IP multicast, group addresses, IGMP membership, multicast MAC, one copy per segment | Two receivers joining a group via IGMP and both getting one UDP stream | Explain how one send reaches many receivers without a per-receiver copy |
 | 30 | [TCP Congestion Control: CUBIC vs BBR](labs/cc-30-congestion-control.md) | Congestion window, loss-based (CUBIC) vs model-based (BBR), random loss, ss -ti | The same lossy path giving ~12 Mbit/s under CUBIC and ~88 Mbit/s under BBR | Explain why the congestion-control choice, not the link, sets throughput on a lossy path |
 | 31 | [Anycast: One Address, Many Servers](labs/anycast-31-bgp.md) | Anycast, one prefix announced from many places, BGP best-path, failover | Two servers announcing one VIP; routing picks server-a, then fails over to server-b | Explain how one address is served by many instances and fails over via routing |
+| 32 | [ECMP: Two Equal Paths, Hashed per Flow](labs/ecmp-32-multipath.md) | Equal-cost multipath, BGP maximum-paths, per-flow hashing, L3 vs L4 hash policy | Parallel TCP flows splitting ~evenly across two links (and piling onto one under L3 hashing) | Explain how equal-cost paths share load per flow and why the hash policy matters |
 
 日本語:
 
@@ -116,6 +117,7 @@ After completing the labs, you should be able to:
 | 29 | [Multicast と IGMP: 1つの送信を多数へ](labs/mcast-29-igmp.md) | IP multicast、group address、IGMP membership、multicast MAC、セグメントに1コピー | IGMP で group に join した2つの receiver が同じ1本の UDP stream を受け取る様子 | 1回の送信が receiver ごとのコピー無しに多数へ届く仕組みを説明する |
 | 30 | [TCP 輻輳制御: CUBIC vs BBR](labs/cc-30-congestion-control.md) | congestion window、loss-based (CUBIC) と model-based (BBR)、ランダム loss、ss -ti | 同じ lossy path で CUBIC は約12 Mbit/s、BBR は約88 Mbit/s になる様子 | lossy path では link ではなく輻輳制御の選択が throughput を決めることを説明する |
 | 31 | [Anycast: 1つのアドレスを多数のサーバで](labs/anycast-31-bgp.md) | anycast、同一 prefix を複数から announce、BGP best-path、フェイルオーバー | 2台が同じ VIP を announce し、routing が server-a を選び、障害で server-b へ切り替わる様子 | 1つのアドレスが多数のインスタンスで提供され routing でフェイルオーバーする仕組みを説明する |
+| 32 | [ECMP: 2つの等コスト経路を flow ごとに hash](labs/ecmp-32-multipath.md) | equal-cost multipath、BGP maximum-paths、per-flow hashing、L3 vs L4 hash policy | 並行 TCP flow が2リンクにほぼ均等に分かれる様子(L3 hashing だと片方に集中) | 等コスト経路が flow 単位で負荷分散する仕組みと hash policy の重要性を説明する |
 
 ## Current Entry Point
 

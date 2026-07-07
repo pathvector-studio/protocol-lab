@@ -70,6 +70,8 @@ The first track is BGP/RPKI. Start with:
 - [TCP Congestion Control Reading Guide for Lab 30](rfc-notes/tcp-congestion-control.md)
 - [Lab 31: Anycast — One Address, Many Servers, Routing Decides](labs/anycast-31-bgp.md)
 - [Anycast Reading Guide for Lab 31](rfc-notes/anycast.md)
+- [Lab 32: ECMP — Two Equal Paths, and the Kernel Hashes Flows](labs/ecmp-32-multipath.md)
+- [ECMP Reading Guide for Lab 32](rfc-notes/ecmp.md)
 - [Full learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.
