@@ -35,6 +35,7 @@ RFC notes are reading guides for the labs. They do not replace the RFC. They hel
 - [HTTP Redirects and Cookies Reading Guide for Lab 27](http-redirects-cookies.md)
 - [Traffic Shaping Reading Guide for Lab 28](qos-traffic-shaping.md)
 - [Multicast and IGMP Reading Guide for Lab 29](multicast-igmp.md)
+- [TCP Congestion Control Reading Guide for Lab 30](tcp-congestion-control.md)
 
 ## How to Use Them
 

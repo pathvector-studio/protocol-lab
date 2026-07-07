@@ -1,0 +1,36 @@
+name: cc-30
+
+# TCP congestion control: CUBIC vs BBR on a lossy, long-RTT path.
+#
+#   client (10.0.0.1) ------ eth1/eth1 ------ server (10.0.0.2, iperf3 -s)
+#     netem: 50ms delay,                       netem: 50ms delay
+#            2% loss, 100mbit rate cap                (return path)
+#
+# run.sh puts a bottleneck on the path (100 ms RTT, 2% random loss, 100 Mbit/s
+# cap via tc netem) and runs iperf3 twice: once with CUBIC (loss-based) and once
+# with BBR (model-based). Under random loss, CUBIC reads every drop as
+# congestion and backs off — its throughput collapses far below the cap; BBR
+# models the bottleneck bandwidth and RTT and keeps the pipe near full.
+#
+# 10.0.0.0/24 is lab-only. Both nodes are netshoot (tc + iperf3 + ss included).
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+
+    server:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["client:eth1", "server:eth1"]
