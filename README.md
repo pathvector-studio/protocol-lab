@@ -80,6 +80,8 @@ The first track is BGP/RPKI. Start with:
 - [BFD Reading Guide for Lab 35](rfc-notes/bfd.md)
 - [Lab 36: Stateful Firewall — Decide by the Connection, Not the Packet](labs/fw-36-stateful-firewall.md)
 - [Stateful Firewall Reading Guide for Lab 36](rfc-notes/stateful-firewall.md)
+- [Lab 37: TCP MSS Clamping — Fitting Segments to the Narrowest Link](labs/mss-37-clamping.md)
+- [TCP MSS Clamping Reading Guide for Lab 37](rfc-notes/mss-clamping.md)
 - [Full learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.

@@ -1,0 +1,58 @@
+name: mss-37
+
+# TCP MSS clamping: a router rewrites the MSS in TCP SYNs so endpoints never
+# send segments too big for a smaller-MTU link on the path.
+#
+#   client ---- r ---- server
+#   MTU 1500   |  \    MTU 1400
+#              |   the r--server link is MTU 1400
+#
+# The client's interface is MTU 1500, so it advertises MSS 1460 (1500 - 40) in
+# its SYN. But the r--server link is only MTU 1400, so a full 1460-byte segment
+# would be too big — normally Path MTU Discovery (Lab 25) fixes this, but if the
+# ICMP "fragmentation needed" messages are filtered, the connection blackholes.
+#
+# MSS clamping avoids the problem at the source: r rewrites the MSS option in
+# passing SYNs down to fit the smallest link on the path (1400 - 40 = 1360), so
+# both endpoints agree to send segments that always fit. run.sh captures the
+# SYN's MSS at the server with and without clamping. 10.0.0.0/8 is lab-only.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.9.2/24 dev eth1
+        - ip link set eth1 mtu 1500
+        - ip link set eth1 up
+        - ip route replace default via 10.0.9.1
+
+    r:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.9.1/24 dev eth1
+        - ip link set eth1 mtu 1500
+        - ip link set eth1 up
+        - ip addr add 10.0.8.1/24 dev eth2
+        # The narrow link: MTU 1400 toward the server.
+        - ip link set eth2 mtu 1400
+        - ip link set eth2 up
+        - sysctl -w net.ipv4.ip_forward=1
+
+    server:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.8.2/24 dev eth1
+        - ip link set eth1 mtu 1400
+        - ip link set eth1 up
+        - ip route replace default via 10.0.8.1
+
+  links:
+    - endpoints: ["client:eth1", "r:eth1"]
+    - endpoints: ["r:eth2", "server:eth1"]
