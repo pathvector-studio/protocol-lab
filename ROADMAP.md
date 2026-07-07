@@ -86,6 +86,7 @@ After completing the labs, you should be able to:
 | 35 | [BFD: Catching a Silent Failure in Under a Second](labs/bfd-35-fast-failure-detection.md) | BFD, sub-second detection timers, silent (link-up) failure, OSPF integration | A silent forwarding failure caught in ~900 ms vs OSPF's 40 s dead timer | Explain how BFD detects forwarding failure fast and drives routing reconvergence |
 | 36 | [Stateful Firewall: Decide by the Connection](labs/fw-36-stateful-firewall.md) | conntrack, ctstate NEW/ESTABLISHED/RELATED, default-drop, allow-return-by-state | An outbound-initiated connection allowed but an unsolicited inbound one dropped | Explain how a stateful firewall permits replies by connection state, not per-packet rules |
 | 37 | [TCP MSS Clamping: Fitting Segments to the Narrowest Link](labs/mss-37-clamping.md) | TCP MSS option, MTU vs MSS, PMTUD blackhole, TCPMSS --clamp-mss-to-pmtu | A router rewriting the SYN's MSS from 1460 to 1360 to fit a 1400-MTU link | Explain how a router clamps the SYN MSS so segments fit the path's smallest link |
+| 38 | [Policy Routing: Choosing the Path by Source](labs/pbr-38-policy-routing.md) | Multiple routing tables, ip rule, source-based selection, multi-homing | The same destination routed over different uplinks depending on the source host | Explain how a rule database selects a routing table by source, not just destination |
 
 日本語:
 
@@ -128,6 +129,7 @@ After completing the labs, you should be able to:
 | 35 | [BFD: silent failure を1秒未満で検出](labs/bfd-35-fast-failure-detection.md) | BFD、サブ秒の検出タイマ、silent(リンク up)障害、OSPF との結合 | silent な転送障害を約900msで検出(OSPF 単独の40秒 dead に対し) | BFD が転送障害を高速検出し routing の再収束を駆動する仕組みを説明する |
 | 36 | [ステートフルファイアウォール: 接続で判断する](labs/fw-36-stateful-firewall.md) | conntrack、ctstate NEW/ESTABLISHED/RELATED、default-drop、戻りを状態で許可 | 内側発の接続は通り、外側発の勝手な新規は落ちる様子 | ステートフルファイアウォールが応答を接続状態で許可する仕組みを説明する |
 | 37 | [TCP MSS clamping: segment を最小リンクに合わせる](labs/mss-37-clamping.md) | TCP MSS option、MTU と MSS、PMTUD blackhole、TCPMSS --clamp-mss-to-pmtu | ルータが SYN の MSS を 1460→1360 に書き換え 1400-MTU リンクに合わせる様子 | ルータが SYN の MSS を clamp し segment を path 最小リンクに収める仕組みを説明する |
+| 38 | [ポリシールーティング: 送信元で経路を選ぶ](labs/pbr-38-policy-routing.md) | 複数ルーティングテーブル、ip rule、source ベース選択、マルチホーミング | 同じ宛先が送信元ホストによって別のアップリンクを通る様子 | rule データベースが送信元でテーブルを選ぶ(宛先だけでない)仕組みを説明する |
 
 ## Current Entry Point
 

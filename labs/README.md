@@ -43,6 +43,7 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 - [Lab 35: BFD — Catching a Silent Failure in Under a Second](bfd-35-fast-failure-detection.md)
 - [Lab 36: Stateful Firewall — Decide by the Connection, Not the Packet](fw-36-stateful-firewall.md)
 - [Lab 37: TCP MSS Clamping — Fitting Segments to the Narrowest Link](mss-37-clamping.md)
+- [Lab 38: Policy Routing — Choosing the Path by Source, Not Just Destination](pbr-38-policy-routing.md)
 
 Expected time: 45 to 60 minutes per lab.
 
