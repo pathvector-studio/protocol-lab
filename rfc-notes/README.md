@@ -42,6 +42,7 @@ RFC notes are reading guides for the labs. They do not replace the RFC. They hel
 - [OSPF Reading Guide for Lab 34](ospf.md)
 - [BFD Reading Guide for Lab 35](bfd.md)
 - [Stateful Firewall Reading Guide for Lab 36](stateful-firewall.md)
+- [TCP MSS Clamping Reading Guide for Lab 37](mss-clamping.md)
 
 ## How to Use Them
 

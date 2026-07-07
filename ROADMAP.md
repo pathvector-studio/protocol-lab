@@ -85,6 +85,7 @@ After completing the labs, you should be able to:
 | 34 | [OSPF: Flood the Map, Compute the Shortest Path](labs/ospf-34-link-state.md) | Link-state IGP, Hello/adjacency, LSA/LSDB, SPF (Dijkstra), cost, reconvergence | Full adjacencies, an SPF route by cost, and reconvergence when the direct link fails | Explain how a link-state IGP builds one map and computes shortest paths by cost |
 | 35 | [BFD: Catching a Silent Failure in Under a Second](labs/bfd-35-fast-failure-detection.md) | BFD, sub-second detection timers, silent (link-up) failure, OSPF integration | A silent forwarding failure caught in ~900 ms vs OSPF's 40 s dead timer | Explain how BFD detects forwarding failure fast and drives routing reconvergence |
 | 36 | [Stateful Firewall: Decide by the Connection](labs/fw-36-stateful-firewall.md) | conntrack, ctstate NEW/ESTABLISHED/RELATED, default-drop, allow-return-by-state | An outbound-initiated connection allowed but an unsolicited inbound one dropped | Explain how a stateful firewall permits replies by connection state, not per-packet rules |
+| 37 | [TCP MSS Clamping: Fitting Segments to the Narrowest Link](labs/mss-37-clamping.md) | TCP MSS option, MTU vs MSS, PMTUD blackhole, TCPMSS --clamp-mss-to-pmtu | A router rewriting the SYN's MSS from 1460 to 1360 to fit a 1400-MTU link | Explain how a router clamps the SYN MSS so segments fit the path's smallest link |
 
 日本語:
 
@@ -126,6 +127,7 @@ After completing the labs, you should be able to:
 | 34 | [OSPF: 地図を配って最短経路を計算する](labs/ospf-34-link-state.md) | link-state IGP、Hello/隣接、LSA/LSDB、SPF(Dijkstra)、cost、再収束 | Full 隣接、cost 最短の SPF 経路、直リンク障害での再収束 | link-state IGP が同一の地図を作り cost 最短経路を計算する仕組みを説明する |
 | 35 | [BFD: silent failure を1秒未満で検出](labs/bfd-35-fast-failure-detection.md) | BFD、サブ秒の検出タイマ、silent(リンク up)障害、OSPF との結合 | silent な転送障害を約900msで検出(OSPF 単独の40秒 dead に対し) | BFD が転送障害を高速検出し routing の再収束を駆動する仕組みを説明する |
 | 36 | [ステートフルファイアウォール: 接続で判断する](labs/fw-36-stateful-firewall.md) | conntrack、ctstate NEW/ESTABLISHED/RELATED、default-drop、戻りを状態で許可 | 内側発の接続は通り、外側発の勝手な新規は落ちる様子 | ステートフルファイアウォールが応答を接続状態で許可する仕組みを説明する |
+| 37 | [TCP MSS clamping: segment を最小リンクに合わせる](labs/mss-37-clamping.md) | TCP MSS option、MTU と MSS、PMTUD blackhole、TCPMSS --clamp-mss-to-pmtu | ルータが SYN の MSS を 1460→1360 に書き換え 1400-MTU リンクに合わせる様子 | ルータが SYN の MSS を clamp し segment を path 最小リンクに収める仕組みを説明する |
 
 ## Current Entry Point
 
