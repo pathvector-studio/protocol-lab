@@ -41,6 +41,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`lb-33/`](lb-33/): a client, an IPVS load balancer with one VIP, and three backends, for watching round-robin (NAT mode) spread connections evenly across the pool while the client only ever sees the VIP.
 - [`ospf-34/`](ospf-34/): three FRR routers in an OSPF area-0 triangle with a target network behind r3, for watching adjacencies reach Full, SPF pick the lowest-cost path, and the route reconverge when the direct link fails.
 - [`bfd-35/`](bfd-35/): the OSPF triangle plus BFD on every adjacency, for watching a silent forwarding failure (link up, packets dropped) get caught in ~900 ms instead of OSPF's 40 s dead timer.
+- [`fw-36/`](fw-36/): a client, a stateful firewall router, and a server, for watching conntrack allow an outbound-initiated connection and its reply while dropping an unsolicited inbound one.
 
 ## Safety
 
