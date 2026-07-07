@@ -2,7 +2,7 @@
 
 This directory contains runnable examples used by the labs. They are intentionally small so you can inspect every config file before starting a topology.
 
-日本語: このディレクトリには、Labで使う実行可能な最小例を入れています。topologyを起動する前に、設定ファイルを読み切れるサイズに保っています。
+æ¥æ¬èª: ãã®ãã£ã¬ã¯ããªã«ã¯ãLabã§ä½¿ãå®è¡å¯è½ãªæå°ä¾ãå¥ãã¦ãã¾ããtopologyãèµ·åããåã«ãè¨­å®ãã¡ã¤ã«ãèª­ã¿åãããµã¤ãºã«ä¿ã£ã¦ãã¾ãã
 
 ## Available Examples
 
@@ -26,11 +26,12 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`vxlan-18/`](vxlan-18/): two nodes joined by a VXLAN Layer-2 overlay, for watching a ping travel as VXLAN over UDP with the inner frame visible in the clear (contrast with WireGuard).
 - [`trace-19/`](trace-19/): a client, two Linux routers, and a server, so traceroute maps the path hop by hop via TTL and ICMP time-exceeded.
 - [`nat-20/`](nat-20/): a private client, a masquerading NAT router, and a public server, so you can see the server observe the NAT public address (never the private client) and the NAT conntrack mapping.
-- [`gre-21/`](gre-21/): two nodes joined by a GRE tunnel (IP proto 47), completing the tunnel trilogy — an unencrypted L3 tunnel whose inner IP is visible on the underlay.
+- [`gre-21/`](gre-21/): two nodes joined by a GRE tunnel (IP proto 47), completing the tunnel trilogy â an unencrypted L3 tunnel whose inner IP is visible on the underlay.
 - [`dhcp-22/`](dhcp-22/): a client with no address and a DHCP server (udhcpd), for watching the four-message DORA exchange assign a lease on the wire.
+- [`ndp-23/`](ndp-23/): two IPv6 nodes, for watching Neighbor Discovery (Neighbor Solicitation to a solicited-node multicast, Neighbor Advertisement with the MAC) resolve a neighbor — ARP's IPv6 successor.
 
 ## Safety
 
 Examples are designed for closed local environments. They use documentation prefixes and private ASNs. Do not connect these lab topologies to a production network or advertise their routes to the public Internet.
 
-日本語: Examplesは閉じたローカル環境で動かす前提です。documentation prefix と private ASN を使います。本番ネットワークへ接続したり、実インターネットへ経路広告したりしないでください。
+æ¥æ¬èª: Examplesã¯éããã­ã¼ã«ã«ç°å¢ã§åããåæã§ããdocumentation prefix ã¨ private ASN ãä½¿ãã¾ããæ¬çªãããã¯ã¼ã¯ã¸æ¥ç¶ããããå®ã¤ã³ã¿ã¼ãããã¸çµè·¯åºåãããããªãã§ãã ããã

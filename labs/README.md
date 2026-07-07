@@ -28,6 +28,7 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 - [Lab 20: NAT — One Public Address for Many](nat-20-source-translation.md)
 - [Lab 21: GRE — an Unencrypted Layer-3 Tunnel](gre-21-l3-tunnel.md)
 - [Lab 22: DHCP — Four Messages for an Address](dhcp-22-dora.md)
+- [Lab 23: IPv6 Neighbor Discovery — ARP's Successor](ndp-23-neighbor-discovery.md)
 
 Expected time: 45 to 60 minutes per lab.
 
