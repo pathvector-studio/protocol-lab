@@ -1,0 +1,36 @@
+name: dhcp-22
+
+# DHCP: a client with no address asks for one, and gets it in four messages.
+#
+#   client (no IP) ==== eth1/eth1 ==== server (10.0.0.1, runs udhcpd)
+#
+# The client starts with its link up but NO IP on eth1. run.sh runs a DHCP
+# client (udhcpc); the server (udhcpd) answers. The four-step DORA exchange
+# (Discover / Offer / Request / Ack) is captured on the wire.
+#
+# The server's IP and the DHCP daemon are set here / in run.sh; the client's
+# eth1 is deliberately left address-less so DHCP can assign it. Both use
+# netshoot. 10.0.0.0/24 is lab-only.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      # No IP on eth1 on purpose — DHCP will assign one.
+      exec:
+        - ip link set eth1 up
+
+    server:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      binds:
+        - ./udhcpd.conf:/etc/udhcpd.conf
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["client:eth1", "server:eth1"]
