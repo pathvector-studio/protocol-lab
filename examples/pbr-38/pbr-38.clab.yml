@@ -1,0 +1,88 @@
+name: pbr-38
+
+# Policy routing: choose the path by the SOURCE, not just the destination.
+#
+#   srcA (10.0.1.2) ─┐                ┌─ up1 (lo 10.0.100.1)  "up1"
+#                    ├─ r ────────────┤
+#   srcB (10.0.5.2) ─┘   two uplinks  └─ up2 (lo 10.0.100.1)  "up2"
+#
+# Both uplinks host the SAME service address (10.0.100.1) and each runs a tiny
+# HTTP responder that returns its own name. Ordinary routing is by destination:
+# with r's main table pointing 10.0.100.1 at up1, BOTH srcA and srcB reach up1.
+# Policy routing adds the source as a selector: an `ip rule` sends srcB's
+# traffic to a second routing table whose default goes via up2. Now the SAME
+# destination (10.0.100.1) is reached over different uplinks depending on who
+# sent the packet — srcA -> up1, srcB -> up2.
+#
+# This is the Linux mechanism behind multi-homing / multiple-uplink setups
+# ("traffic from this LAN uses ISP-A, that LAN uses ISP-B"). 10.0.0.0/8 is
+# lab-only; the policy tables are configured in run.sh.
+
+topology:
+  nodes:
+    srcA:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.1.2/30 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.0.1.1
+
+    srcB:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.5.2/30 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.0.5.1
+
+    r:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.1.1/30 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.5.1/30 dev eth2
+        - ip link set eth2 up
+        - ip addr add 10.0.2.1/30 dev eth3
+        - ip link set eth3 up
+        - ip addr add 10.0.3.1/30 dev eth4
+        - ip link set eth4 up
+        - sysctl -w net.ipv4.ip_forward=1
+        # Baseline (destination-based): the service is reached via up1.
+        - ip route replace default via 10.0.2.2
+
+    up1:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      binds:
+        - ./uplink/responder.py:/responder.py
+      exec:
+        - ip addr add 10.0.2.2/30 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.100.1/32 dev lo
+        - ip route replace 10.0.1.0/30 via 10.0.2.1
+        - ip route replace 10.0.5.0/30 via 10.0.2.1
+
+    up2:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      binds:
+        - ./uplink/responder.py:/responder.py
+      exec:
+        - ip addr add 10.0.3.2/30 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.100.1/32 dev lo
+        - ip route replace 10.0.1.0/30 via 10.0.3.1
+        - ip route replace 10.0.5.0/30 via 10.0.3.1
+
+  links:
+    - endpoints: ["srcA:eth1", "r:eth1"]
+    - endpoints: ["srcB:eth1", "r:eth2"]
+    - endpoints: ["r:eth3", "up1:eth1"]
+    - endpoints: ["r:eth4", "up2:eth1"]
