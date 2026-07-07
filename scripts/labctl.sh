@@ -20,6 +20,7 @@ Usage:
   $0 run quic-11
   $0 run e2e-12
   $0 run dns-13
+  $0 run dns-14
   $0 deploy bgp-01
   $0 deploy bgp-02
   $0 deploy bgp-03
@@ -33,6 +34,7 @@ Usage:
   $0 deploy quic-11
   $0 deploy e2e-12
   $0 deploy dns-13
+  $0 deploy dns-14
   $0 verify bgp-01
   $0 verify bgp-02
   $0 verify bgp-03
@@ -46,6 +48,7 @@ Usage:
   $0 verify quic-11
   $0 verify e2e-12
   $0 verify dns-13
+  $0 verify dns-14
   $0 capture bgp-01
   $0 capture bgp-02
   $0 capture bgp-03
@@ -62,6 +65,7 @@ Usage:
   $0 destroy quic-11
   $0 destroy e2e-12
   $0 destroy dns-13
+  $0 destroy dns-14
   $0 doctor bgp-01
   $0 doctor bgp-02
   $0 doctor bgp-03
@@ -75,6 +79,7 @@ Usage:
   $0 doctor quic-11
   $0 doctor e2e-12
   $0 doctor dns-13
+  $0 doctor dns-14
 USAGE
 }
 
@@ -137,6 +142,10 @@ case "$LAB_ID" in
     ;;
   dns-13)
     cd "$REPO_ROOT/examples/dns-13"
+    ./run.sh "$ACTION"
+    ;;
+  dns-14)
+    cd "$REPO_ROOT/examples/dns-14"
     ./run.sh "$ACTION"
     ;;
   *)

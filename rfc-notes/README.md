@@ -19,6 +19,7 @@ RFC notes are reading guides for the labs. They do not replace the RFC. They hel
 - [HTTP/2, HTTP/3, and QUIC Streams Reading Guide for Lab 11](http2-quic-streams.md)
 - [End-to-End Web Request Reading Guide for Lab 12](e2e-web-request.md)
 - [DNSSEC Validation Reading Guide for Lab 13](dns-dnssec-validation.md)
+- [Encrypted DNS Reading Guide for Lab 14](dns-encrypted-dot-doh.md)
 
 ## How to Use Them
 
