@@ -1,0 +1,33 @@
+name: vlan-26
+
+# 802.1Q VLANs: two virtual LANs sharing one physical link, kept apart by a tag.
+#
+#   node-a ==== eth1/eth1 (trunk) ==== node-b
+#     eth1.100  10.0.100.1                eth1.100  10.0.100.2   (VLAN 100)
+#     eth1.200  10.0.200.1                eth1.200  10.0.200.2   (VLAN 200)
+#
+# Each node puts two tagged subinterfaces on the same eth1: VLAN 100 and VLAN
+# 200, in separate subnets. A frame on VLAN 100 carries an 802.1Q tag (vid 100)
+# and is only delivered to the other end's VLAN 100 subinterface — VLAN 200 never
+# sees it. run.sh creates the subinterfaces and captures the tags.
+#
+# The VLAN subinterfaces are created at run time. Both nodes use netshoot.
+
+topology:
+  nodes:
+    node-a:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip link set eth1 up
+
+    node-b:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["node-a:eth1", "node-b:eth1"]
