@@ -1,0 +1,36 @@
+name: tls-15
+
+# Mutual TLS (mTLS): the server demands a client certificate too.
+#
+#   client (10.0.0.1) ------ eth1/eth1 ------ server (10.0.0.2:4433)
+#     openssl s_client                          openssl s_server -Verify
+#     with / without a client cert              signed by the same lab CA
+#
+# In Lab 09 only the server proved its identity. Here a small lab CA signs both
+# a server cert and a client cert; the server runs with -Verify so it requires
+# a client cert. A client that presents its cert completes the handshake; a
+# client with no cert is rejected with a TLS alert. run.sh generates the certs
+# inside the server container and drives both cases.
+#
+# Both nodes use netshoot (ships openssl, tcpdump, tshark). No custom image.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+
+    server:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["client:eth1", "server:eth1"]

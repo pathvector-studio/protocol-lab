@@ -20,6 +20,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`e2e-12/`](e2e-12/): a client, a DNS resolver, and a web server, so one `curl https://www.example.lab/` crosses DNS, TCP, TLS, and HTTP in order.
 - [`dns-13/`](dns-13/): a client, a validating resolver, and an authoritative server holding a DNSSEC-signed `example.lab`, for watching a validated answer (AD flag) and a tampered one rejected with SERVFAIL.
 - [`dns-14/`](dns-14/): a client and a BIND server offering Do53, DoT (853), and DoH (443), for watching the same answer travel in cleartext vs inside TLS.
+- [`tls-15/`](tls-15/): a client and an openssl s_server that requires a client certificate (mTLS), for watching mutual authentication succeed and a certless client be rejected.
 
 ## Safety
 
