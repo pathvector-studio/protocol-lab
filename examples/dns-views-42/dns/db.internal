@@ -1,0 +1,14 @@
+; app.lab. as seen from INSIDE (the internal view).
+; Internal clients get the private address of the service.
+$TTL 300
+app.lab.        IN  SOA ns.app.lab. admin.app.lab. (
+                    1          ; serial
+                    3600       ; refresh
+                    900        ; retry
+                    604800     ; expire
+                    300 )      ; negative cache TTL
+app.lab.        IN  NS  ns.app.lab.
+ns.app.lab.     IN  A   10.0.1.2
+
+; Inside answer: the private address (RFC 1918).
+app.lab.        60  IN  A   10.0.0.5

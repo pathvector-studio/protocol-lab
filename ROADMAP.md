@@ -90,6 +90,7 @@ After completing the labs, you should be able to:
 | 39 | [Reverse Path Filtering: Dropping Spoofed Sources](labs/rpf-39-reverse-path-filtering.md) | Ingress filtering (BCP 38), rp_filter strict/loose, reverse route lookup, anti-spoofing | A spoofed source dropped at ingress while the real source still passes | Explain how reverse path filtering validates a packet's source against its arrival interface |
 | 40 | [DNAT: Publishing a Service with Port Forwarding](labs/dnat-40-port-forwarding.md) | Destination NAT, PREROUTING, port forwarding, conntrack un-NAT, SNAT contrast | An external client reaching a private internal server through a public address:port | Explain how DNAT publishes an inside service and how it complements source NAT |
 | 41 | [DNS Round-Robin: Spreading Clients at the Naming Layer](labs/dnsrr-41-round-robin.md) | Multiple A records (RRset), rrset-order cyclic, TTL/caching, load-spread trade-offs | One name's three A records rotated per response so lookups spread across them | Explain how DNS round-robin spreads clients and why it is coarse compared to a real balancer |
+| 42 | [Split-Horizon DNS: One Name, Different Answers by Who Asks](labs/dns-views-42-split-horizon.md) | BIND views, match-clients by source, split-brain, internal vs public answers | The same name resolving to a private or public address depending on the client | Explain how views serve different answers per source and where split-horizon is used |
 
 日本語:
 
@@ -136,6 +137,7 @@ After completing the labs, you should be able to:
 | 39 | [Reverse path filtering: 詐称された送信元を落とす](labs/rpf-39-reverse-path-filtering.md) | ingress filtering (BCP 38)、rp_filter strict/loose、送信元逆引き、anti-spoofing | 詐称された送信元は入口で落ち、本物の送信元は通る様子 | reverse path filtering が送信元を到着インターフェースと照合して検証する仕組みを説明する |
 | 40 | [DNAT: ポートフォワードでサービスを公開する](labs/dnat-40-port-forwarding.md) | destination NAT、PREROUTING、ポートフォワード、conntrack un-NAT、SNAT との対比 | 外部クライアントが公開アドレス:ポート経由で内部の private サーバに届く様子 | DNAT が内側サービスを公開し source NAT と対をなす仕組みを説明する |
 | 41 | [DNS ラウンドロビン: 名前解決の層でクライアントを散らす](labs/dnsrr-41-round-robin.md) | 複数 A レコード(RRset)、rrset-order cyclic、TTL/caching、分散のトレードオフ | 1名前の3つの A レコードが応答ごとに回転し解決が分散する様子 | DNS ラウンドロビンがクライアントを散らす仕組みと実 LB より粗い理由を説明する |
+| 42 | [Split-horizon DNS: 同じ名前を相手で別の答えに](labs/dns-views-42-split-horizon.md) | BIND views、match-clients(送信元)、split-brain、内部 vs 公開の答え | 同じ名前がクライアントによって private / public に解決する様子 | views が送信元ごとに別の答えを返す仕組みと split-horizon の用途を説明する |
 
 ## Current Entry Point
 
