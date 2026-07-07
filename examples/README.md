@@ -34,6 +34,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`vlan-26/`](vlan-26/): two nodes with 802.1Q VLAN subinterfaces on one link, for watching tagged frames (vlan 100 / vlan 200) keep two virtual LANs isolated on one wire.
 - [`http-27/`](http-27/): a client and a small HTTP app, for watching a 302 redirect (Location) and a Set-Cookie / Cookie round-trip.
 - [`qos-28/`](qos-28/): a client and an iperf3 server, for measuring throughput before and after a tc token-bucket shaper caps the link.
+- [`mcast-29/`](mcast-29/): a sender, two receivers, and a Linux-bridge switch, for watching one UDP multicast stream reach both receivers (that joined via IGMP) as a single copy on the wire.
 
 ## Safety
 
