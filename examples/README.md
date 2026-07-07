@@ -23,6 +23,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`tls-15/`](tls-15/): a client and an openssl s_server that requires a client certificate (mTLS), for watching mutual authentication succeed and a certless client be rejected.
 - [`wg-16/`](wg-16/): two nodes joined by a WireGuard tunnel, for watching a ping cross it as encrypted UDP on the underlay while the inner ICMP is only visible inside wg0.
 - [`dane-17/`](dane-17/): a client, a DNSSEC-signed authoritative server with a TLSA record, and a TLS web server, for validating a certificate against DNS (DANE) and rejecting an impostor.
+- [`vxlan-18/`](vxlan-18/): two nodes joined by a VXLAN Layer-2 overlay, for watching a ping travel as VXLAN over UDP with the inner frame visible in the clear (contrast with WireGuard).
 
 ## Safety
 

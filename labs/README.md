@@ -23,6 +23,7 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 - [TLS Lab 15: Mutual TLS — Proving the Client Too](tls-15-mutual-tls.md)
 - [Lab 16: WireGuard — an Encrypted Tunnel You Can See Into](wg-16-wireguard-tunnel.md)
 - [Lab 17: DANE — When DNS Vouches for the Certificate](dane-17-dane-tlsa.md)
+- [Lab 18: VXLAN — an Overlay You Can Read on the Wire](vxlan-18-l2-overlay.md)
 
 Expected time: 45 to 60 minutes per lab.
 

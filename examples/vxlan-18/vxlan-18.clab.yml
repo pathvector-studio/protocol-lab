@@ -1,0 +1,35 @@
+name: vxlan-18
+
+# A VXLAN Layer-2 overlay between two nodes — encapsulation without encryption.
+#
+#   node-a (underlay 10.0.0.1) ==== eth1/eth1 ==== node-b (underlay 10.0.0.2)
+#            vxlan0 10.200.0.1                              vxlan0 10.200.0.2
+#
+# Like WireGuard (Lab 16), VXLAN wraps traffic in UDP and carries it across an
+# underlay. Unlike WireGuard, VXLAN carries Ethernet frames (Layer 2) and does
+# NOT encrypt them: on the underlay you see the VXLAN header (UDP 4789, VNI) AND
+# the inner packet in the clear. run.sh builds the overlay and captures both.
+#
+# The VXLAN interfaces are created at run time (they need each peer's underlay
+# address). Nodes use netshoot; the VXLAN data path is the host kernel module.
+
+topology:
+  nodes:
+    node-a:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+
+    node-b:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["node-a:eth1", "node-b:eth1"]
