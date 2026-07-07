@@ -70,6 +70,7 @@ After completing the labs, you should be able to:
 | 19 | [traceroute and TTL: Mapping a Path Hop by Hop](labs/trace-19-traceroute-ttl.md) | IP TTL, ICMP time-exceeded, how routers reveal a path | traceroute hops and the time-exceeded replies that build them | Explain how traceroute maps a network path |
 | 20 | [NAT: One Public Address for Many](labs/nat-20-source-translation.md) | Source NAT (masquerade), private vs public addresses, connection tracking | The server seeing the NAT public address, and the conntrack mapping | Explain how NAT hides private addresses behind one public IP |
 | 21 | [GRE: An Unencrypted Layer-3 Tunnel](labs/gre-21-l3-tunnel.md) | GRE encapsulation (IP proto 47), L3 tunnels, encapsulation vs encryption | A ping as GRE on the underlay with the inner IP in the clear | Place GRE among WireGuard and VXLAN on the encrypt/encapsulate axes |
+| 22 | [DHCP: Four Messages for an Address](labs/dhcp-22-dora.md) | DHCP DORA (Discover/Offer/Request/Ack), leases, broadcast | An address-less client obtaining a lease, captured on the wire | Explain how a host gets an address with no prior configuration |
 
 日本語:
 
@@ -96,6 +97,7 @@ After completing the labs, you should be able to:
 | 19 | [traceroute と TTL: 経路を hop ごとに映す](labs/trace-19-traceroute-ttl.md) | IP TTL、ICMP time-exceeded、ルータが経路を明かす仕組み | traceroute の hop と、それを作る time-exceeded 応答 | traceroute が経路をどう地図化するか説明する |
 | 20 | [NAT: 多数を1つの public アドレスに](labs/nat-20-source-translation.md) | source NAT (masquerade)、private と public アドレス、connection tracking | server が見る NAT の public アドレスと、conntrack の変換 | NAT が private アドレスを1つの public IP の裏に隠す仕組みを説明する |
 | 21 | [GRE: 暗号化しない L3 トンネル](labs/gre-21-l3-tunnel.md) | GRE encapsulation (IP proto 47)、L3 tunnel、encapsulation と encryption の別 | underlay で GRE として運ばれ、内側 IP が平文で見える ping | GRE を WireGuard・VXLAN と暗号化/カプセル化の軸で位置づける |
+| 22 | [DHCP: アドレスを得る4つのメッセージ](labs/dhcp-22-dora.md) | DHCP DORA (Discover/Offer/Request/Ack)、lease、broadcast | アドレスなしの client が lease を得る様子の capture | 設定なしでホストがアドレスを得る仕組みを説明する |
 
 ## Current Entry Point
 

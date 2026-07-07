@@ -27,6 +27,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`trace-19/`](trace-19/): a client, two Linux routers, and a server, so traceroute maps the path hop by hop via TTL and ICMP time-exceeded.
 - [`nat-20/`](nat-20/): a private client, a masquerading NAT router, and a public server, so you can see the server observe the NAT public address (never the private client) and the NAT conntrack mapping.
 - [`gre-21/`](gre-21/): two nodes joined by a GRE tunnel (IP proto 47), completing the tunnel trilogy — an unencrypted L3 tunnel whose inner IP is visible on the underlay.
+- [`dhcp-22/`](dhcp-22/): a client with no address and a DHCP server (udhcpd), for watching the four-message DORA exchange assign a lease on the wire.
 
 ## Safety
 
