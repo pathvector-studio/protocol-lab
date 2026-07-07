@@ -40,6 +40,7 @@ RFC notes are reading guides for the labs. They do not replace the RFC. They hel
 - [ECMP Reading Guide for Lab 32](ecmp.md)
 - [L4 Load Balancing Reading Guide for Lab 33](l4-load-balancing.md)
 - [OSPF Reading Guide for Lab 34](ospf.md)
+- [BFD Reading Guide for Lab 35](bfd.md)
 
 ## How to Use Them
 

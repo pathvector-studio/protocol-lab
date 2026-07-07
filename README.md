@@ -76,6 +76,8 @@ The first track is BGP/RPKI. Start with:
 - [L4 Load Balancing Reading Guide for Lab 33](rfc-notes/l4-load-balancing.md)
 - [Lab 34: OSPF — Flood the Map, Compute the Shortest Path](labs/ospf-34-link-state.md)
 - [OSPF Reading Guide for Lab 34](rfc-notes/ospf.md)
+- [Lab 35: BFD — Catching a Silent Failure in Under a Second](labs/bfd-35-fast-failure-detection.md)
+- [BFD Reading Guide for Lab 35](rfc-notes/bfd.md)
 - [Full learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.

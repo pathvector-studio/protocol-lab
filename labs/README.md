@@ -40,6 +40,7 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 - [Lab 32: ECMP — Two Equal Paths, and the Kernel Hashes Flows](ecmp-32-multipath.md)
 - [Lab 33: L4 Load Balancing — One VIP, a Pool of Servers](lb-33-ipvs.md)
 - [Lab 34: OSPF — Flood the Map, Compute the Shortest Path](ospf-34-link-state.md)
+- [Lab 35: BFD — Catching a Silent Failure in Under a Second](bfd-35-fast-failure-detection.md)
 
 Expected time: 45 to 60 minutes per lab.
 

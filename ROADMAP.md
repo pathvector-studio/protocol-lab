@@ -83,6 +83,7 @@ After completing the labs, you should be able to:
 | 32 | [ECMP: Two Equal Paths, Hashed per Flow](labs/ecmp-32-multipath.md) | Equal-cost multipath, BGP maximum-paths, per-flow hashing, L3 vs L4 hash policy | Parallel TCP flows splitting ~evenly across two links (and piling onto one under L3 hashing) | Explain how equal-cost paths share load per flow and why the hash policy matters |
 | 33 | [L4 Load Balancing: One VIP, a Pool of Servers](labs/lb-33-ipvs.md) | Virtual IP, IPVS director, round-robin scheduler, NAT mode, stateful conn table | 30 connections to one VIP spread 10/10/10 across three backends | Explain how an L4 load balancer distributes connections across a backend pool |
 | 34 | [OSPF: Flood the Map, Compute the Shortest Path](labs/ospf-34-link-state.md) | Link-state IGP, Hello/adjacency, LSA/LSDB, SPF (Dijkstra), cost, reconvergence | Full adjacencies, an SPF route by cost, and reconvergence when the direct link fails | Explain how a link-state IGP builds one map and computes shortest paths by cost |
+| 35 | [BFD: Catching a Silent Failure in Under a Second](labs/bfd-35-fast-failure-detection.md) | BFD, sub-second detection timers, silent (link-up) failure, OSPF integration | A silent forwarding failure caught in ~900 ms vs OSPF's 40 s dead timer | Explain how BFD detects forwarding failure fast and drives routing reconvergence |
 
 日本語:
 
@@ -122,6 +123,7 @@ After completing the labs, you should be able to:
 | 32 | [ECMP: 2つの等コスト経路を flow ごとに hash](labs/ecmp-32-multipath.md) | equal-cost multipath、BGP maximum-paths、per-flow hashing、L3 vs L4 hash policy | 並行 TCP flow が2リンクにほぼ均等に分かれる様子(L3 hashing だと片方に集中) | 等コスト経路が flow 単位で負荷分散する仕組みと hash policy の重要性を説明する |
 | 33 | [L4 ロードバランシング: 1つの VIP と複数の backend](labs/lb-33-ipvs.md) | 仮想 IP、IPVS director、round-robin scheduler、NAT モード、ステートフルな接続テーブル | 1つの VIP への30接続が3 backend に 10/10/10 で分配される様子 | L4 ロードバランサが接続を backend プールへどう分配するか説明する |
 | 34 | [OSPF: 地図を配って最短経路を計算する](labs/ospf-34-link-state.md) | link-state IGP、Hello/隣接、LSA/LSDB、SPF(Dijkstra)、cost、再収束 | Full 隣接、cost 最短の SPF 経路、直リンク障害での再収束 | link-state IGP が同一の地図を作り cost 最短経路を計算する仕組みを説明する |
+| 35 | [BFD: silent failure を1秒未満で検出](labs/bfd-35-fast-failure-detection.md) | BFD、サブ秒の検出タイマ、silent(リンク up)障害、OSPF との結合 | silent な転送障害を約900msで検出(OSPF 単独の40秒 dead に対し) | BFD が転送障害を高速検出し routing の再収束を駆動する仕組みを説明する |
 
 ## Current Entry Point
 

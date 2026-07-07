@@ -298,6 +298,10 @@ case "$LAB_ID" in
     cd "$REPO_ROOT/examples/ospf-34"
     ./run.sh "$ACTION"
     ;;
+  bfd-35)
+    cd "$REPO_ROOT/examples/bfd-35"
+    ./run.sh "$ACTION"
+    ;;
   *)
     echo "[protocol-lab] ERROR: unsupported lab id: $LAB_ID" >&2
     exit 1

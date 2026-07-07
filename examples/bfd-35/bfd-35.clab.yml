@@ -1,0 +1,84 @@
+name: bfd-35
+
+# BFD: catch a *silent* forwarding failure in under a second, instead of
+# waiting ~40s for OSPF's dead timer.
+#
+#            r1
+#          /    \
+#   (OSPF+BFD)  (OSPF+BFD)          target network 10.0.30.0/24 behind r3
+#        /        \
+#      r2 ---------r3 --- target (10.0.30.1)
+#
+# Same OSPF area-0 triangle as Lab 34, but every adjacency also runs BFD
+# (Bidirectional Forwarding Detection) with sub-second timers. r1 reaches the
+# target over the direct r1-r3 link. We then simulate a SILENT failure: the link
+# stays up (carrier present) but we drop all packets on it with iptables — so
+# OSPF Hellos would keep the neighbor "up" until the 40s dead timer expires.
+# BFD, exchanging tiny control packets ~3x/second, notices in under a second and
+# tears the adjacency down, so OSPF reconverges onto r2 almost immediately.
+#
+# Why this needs BFD: on a veth, an interface "down" is detected instantly, so
+# Lab 34 reconverged fast without BFD. BFD's value shows up exactly when the
+# link stays up but forwarding is broken (a dumb L2 device or a wedged neighbor
+# in between). 10.0.0.0/8 addressing is lab-only.
+
+topology:
+  nodes:
+    r1:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - ./r1/frr.conf:/etc/frr/frr.conf
+        - ./r1/vtysh.conf:/etc/frr/vtysh.conf
+        - ./r1/daemons:/etc/frr/daemons
+      exec:
+        - ip addr add 10.0.12.1/30 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.13.1/30 dev eth2
+        - ip link set eth2 up
+        - sysctl -w net.ipv4.ip_forward=1
+
+    r2:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - ./r2/frr.conf:/etc/frr/frr.conf
+        - ./r2/vtysh.conf:/etc/frr/vtysh.conf
+        - ./r2/daemons:/etc/frr/daemons
+      exec:
+        - ip addr add 10.0.12.2/30 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.23.1/30 dev eth2
+        - ip link set eth2 up
+        - sysctl -w net.ipv4.ip_forward=1
+
+    r3:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - ./r3/frr.conf:/etc/frr/frr.conf
+        - ./r3/vtysh.conf:/etc/frr/vtysh.conf
+        - ./r3/daemons:/etc/frr/daemons
+      exec:
+        - ip addr add 10.0.13.2/30 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.23.2/30 dev eth2
+        - ip link set eth2 up
+        - ip addr add 10.0.30.254/24 dev eth3
+        - ip link set eth3 up
+        - sysctl -w net.ipv4.ip_forward=1
+
+    target:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.30.1/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.0.30.254
+
+  links:
+    - endpoints: ["r1:eth1", "r2:eth1"]   # r1-r2  10.0.12.0/30
+    - endpoints: ["r1:eth2", "r3:eth1"]   # r1-r3  10.0.13.0/30 (direct)
+    - endpoints: ["r2:eth2", "r3:eth2"]   # r2-r3  10.0.23.0/30
+    - endpoints: ["r3:eth3", "target:eth1"]
