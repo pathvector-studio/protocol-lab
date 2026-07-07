@@ -1,0 +1,48 @@
+name: mtu-25
+
+# Path MTU Discovery: a packet too big for a link in the path, with "don't
+# fragment" set, is rejected — and the router tells the sender the right size.
+#
+#   client --- 10.0.1.0/24 (MTU 1500) --- router --- 10.0.2.0/24 (MTU 1400) --- server
+#   10.0.1.1                          10.0.1.2   10.0.2.1                    10.0.2.2
+#
+# The router's link toward the server has a smaller MTU (1400). A DF-marked
+# packet from the client that is larger than 1400 cannot be forwarded; the
+# router returns ICMP "fragmentation needed" carrying MTU 1400, and the client
+# learns (and caches) the path MTU. run.sh sets forwarding, routes, the small
+# MTU, and drives the discovery. All nodes use netshoot; 10.0.0.0/8 is lab-only.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.1.1/24 dev eth1
+        - ip link set eth1 up
+
+    router:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.1.2/24 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.2.1/24 dev eth2
+        - ip link set eth2 up
+        # The narrow link: MTU 1400 toward the server.
+        - ip link set eth2 mtu 1400
+
+    server:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.2.2/24 dev eth1
+        - ip link set eth1 up
+        - ip link set eth1 mtu 1400
+
+  links:
+    - endpoints: ["client:eth1", "router:eth1"]
+    - endpoints: ["router:eth2", "server:eth1"]
