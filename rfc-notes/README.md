@@ -22,6 +22,7 @@ RFC notes are reading guides for the labs. They do not replace the RFC. They hel
 - [Encrypted DNS Reading Guide for Lab 14](dns-encrypted-dot-doh.md)
 - [Mutual TLS Reading Guide for Lab 15](tls-mutual-tls.md)
 - [WireGuard Reading Guide for Lab 16](wg-wireguard-tunnel.md)
+- [DANE / TLSA Reading Guide for Lab 17](dane-tlsa.md)
 
 ## How to Use Them
 

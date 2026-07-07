@@ -65,6 +65,7 @@ After completing the labs, you should be able to:
 | 14 | [Encrypted DNS: DoT and DoH](labs/dns-14-encrypted-dns-dot-doh.md) | Do53 vs DoT (853) vs DoH (443), what an on-path observer can read | The query name in cleartext vs inside TLS | Explain what encrypted DNS hides and what it does not |
 | 15 | [Mutual TLS: Proving the Client Too](labs/tls-15-mutual-tls.md) | Client certificates, CertificateRequest, a private CA, -Verify | An authenticated handshake vs a certless client rejected | Explain how both ends prove identity in mTLS |
 | 16 | [WireGuard: An Encrypted Tunnel You Can See Into](labs/wg-16-wireguard-tunnel.md) | WireGuard keys/peers, the underlay vs the tunnel, UDP encapsulation | A ping as encrypted UDP on the underlay, cleartext ICMP inside wg0 | Explain what a tunnel encrypts and what stays visible |
+| 17 | [DANE: When DNS Vouches for the Certificate](labs/dane-17-dane-tlsa.md) | TLSA records, DANE-EE, DNSSEC-signed cert pinning, no CA needed | A signed TLSA matching a cert, and an impostor rejected | Explain how DNSSEC + TLSA can authenticate a cert without a CA |
 
 日本語:
 
@@ -86,6 +87,7 @@ After completing the labs, you should be able to:
 | 14 | [暗号化DNS: DoT と DoH](labs/dns-14-encrypted-dns-dot-doh.md) | Do53 vs DoT (853) vs DoH (443)、経路上の観測者に何が見えるか | query 名が平文 vs TLS の中 | 暗号化DNS が何を隠し何を隠さないかを説明する |
 | 15 | [Mutual TLS: client も証明する](labs/tls-15-mutual-tls.md) | client 証明書、CertificateRequest、専用CA、-Verify | 認証済み handshake vs 証明書なし client の拒否 | mTLS で両端がどう身元を証明するか説明する |
 | 16 | [WireGuard: 中が見える暗号トンネル](labs/wg-16-wireguard-tunnel.md) | WireGuard の鍵/peer、underlay と tunnel、UDP encapsulation | underlay では暗号化UDP、wg0 内では平文ICMP の ping | tunnel が何を暗号化し何が見えたままかを説明する |
+| 17 | [DANE: DNS が証明書を保証する](labs/dane-17-dane-tlsa.md) | TLSA レコード、DANE-EE、DNSSEC 署名による cert pin、CA 不要 | 署名済み TLSA と一致する cert、拒否される impostor | DNSSEC + TLSA で CA 無しに cert を認証する仕組みを説明する |
 
 ## Current Entry Point
 
