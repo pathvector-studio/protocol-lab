@@ -274,6 +274,10 @@ case "$LAB_ID" in
     cd "$REPO_ROOT/examples/qos-28"
     ./run.sh "$ACTION"
     ;;
+  mcast-29)
+    cd "$REPO_ROOT/examples/mcast-29"
+    ./run.sh "$ACTION"
+    ;;
   *)
     echo "[protocol-lab] ERROR: unsupported lab id: $LAB_ID" >&2
     exit 1

@@ -34,6 +34,7 @@ RFC notes are reading guides for the labs. They do not replace the RFC. They hel
 - [802.1Q VLAN Reading Guide for Lab 26](vlan-8021q.md)
 - [HTTP Redirects and Cookies Reading Guide for Lab 27](http-redirects-cookies.md)
 - [Traffic Shaping Reading Guide for Lab 28](qos-traffic-shaping.md)
+- [Multicast and IGMP Reading Guide for Lab 29](multicast-igmp.md)
 
 ## How to Use Them
 
