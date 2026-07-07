@@ -48,6 +48,8 @@ The first track is BGP/RPKI. Start with:
 - [traceroute and TTL Reading Guide for Lab 19](rfc-notes/traceroute-ttl.md)
 - [Lab 20: NAT — One Public Address for Many](labs/nat-20-source-translation.md)
 - [NAT Reading Guide for Lab 20](rfc-notes/nat-source-translation.md)
+- [Lab 21: GRE — an Unencrypted Layer-3 Tunnel](labs/gre-21-l3-tunnel.md)
+- [GRE Tunnel Reading Guide for Lab 21](rfc-notes/gre-tunnel.md)
 - [Full learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.

@@ -1,0 +1,37 @@
+name: gre-21
+
+# A GRE Layer-3 tunnel — the third corner of the tunnel trilogy.
+#
+#   node-a (underlay 10.0.0.1) ==== eth1/eth1 ==== node-b (underlay 10.0.0.2)
+#            gre1 10.100.0.1                               gre1 10.100.0.2
+#
+# GRE wraps IP packets in a GRE header inside an outer IP packet (IP protocol
+# 47) — Layer 3, and NOT encrypted. Compare:
+#   - Lab 16 WireGuard: L3, encrypted (UDP)      -> underlay shows ciphertext
+#   - Lab 18 VXLAN:     L2, not encrypted (UDP)  -> inner Ethernet visible
+#   - Lab 21 GRE:       L3, not encrypted (proto 47) -> inner IP visible
+#
+# run.sh creates the tunnels (they need each peer's underlay address), pings
+# across, and captures the underlay. Nodes use netshoot; GRE is a host kernel
+# module (ip_gre). 10.0.0.0/24 underlay, 10.100.0.0/24 overlay, lab-only.
+
+topology:
+  nodes:
+    node-a:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+
+    node-b:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["node-a:eth1", "node-b:eth1"]
