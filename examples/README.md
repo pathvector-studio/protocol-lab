@@ -38,6 +38,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`cc-30/`](cc-30/): a client and an iperf3 server over a lossy, long-RTT bottleneck (tc netem), for comparing CUBIC vs BBR congestion control — loss-based CUBIC collapses while model-based BBR fills the pipe.
 - [`anycast-31/`](anycast-31/): a client, a router, and two FRR servers that both announce one VIP (10.0.0.100/32) via BGP, for watching routing pick the nearer instance and fail over to the other when it withdraws.
 - [`ecmp-32/`](ecmp-32/): two FRR routers joined by two parallel links (BGP maximum-paths), for watching many TCP flows hash across both equal-cost links — and pile onto one when L4 hashing is off.
+- [`lb-33/`](lb-33/): a client, an IPVS load balancer with one VIP, and three backends, for watching round-robin (NAT mode) spread connections evenly across the pool while the client only ever sees the VIP.
 
 ## Safety
 
