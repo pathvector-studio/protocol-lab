@@ -1,0 +1,77 @@
+name: ecmp-32
+
+# ECMP: two equal-cost paths, and the kernel hashes flows across both.
+#
+#   client --- r1 ==== link A (10.0.12.0/30) ==== r2 --- server
+#   10.0.9.2     \==== link B (10.0.13.0/30) ====/     10.0.8.2
+#
+# r1 and r2 are eBGP peers over TWO parallel links, so r1 learns the server
+# prefix (10.0.8.0/24) via both. With `maximum-paths 2` r1 installs an ECMP
+# route with two next-hops. When the client opens several TCP flows to the
+# server, the kernel hashes each flow onto one of the two links — but only if
+# multipath hashing includes L4 ports (net.ipv4.fib_multipath_hash_policy=1);
+# the default L3 policy would send every same-src/dst flow down one link.
+# run.sh runs parallel iperf3 streams and shows both links carry traffic.
+#
+# 10.0.0.0/8 addressing is lab-only. r1/r2 run FRR; client/server run netshoot.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.9.2/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.0.9.1
+
+    r1:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - ./r1/frr.conf:/etc/frr/frr.conf
+        - ./r1/vtysh.conf:/etc/frr/vtysh.conf
+        - ./r1/daemons:/etc/frr/daemons
+      exec:
+        - ip addr add 10.0.9.1/24 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.12.1/30 dev eth2
+        - ip link set eth2 up
+        - ip addr add 10.0.13.1/30 dev eth3
+        - ip link set eth3 up
+        - sysctl -w net.ipv4.ip_forward=1
+        # Hash flows across the ECMP next-hops using L4 (ports), not just L3.
+        - sysctl -w net.ipv4.fib_multipath_hash_policy=1
+
+    r2:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - ./r2/frr.conf:/etc/frr/frr.conf
+        - ./r2/vtysh.conf:/etc/frr/vtysh.conf
+        - ./r2/daemons:/etc/frr/daemons
+      exec:
+        - ip addr add 10.0.12.2/30 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.13.2/30 dev eth2
+        - ip link set eth2 up
+        - ip addr add 10.0.8.1/24 dev eth3
+        - ip link set eth3 up
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv4.fib_multipath_hash_policy=1
+
+    server:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.8.2/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.0.8.1
+
+  links:
+    - endpoints: ["client:eth1", "r1:eth1"]
+    - endpoints: ["r1:eth2", "r2:eth1"]
+    - endpoints: ["r1:eth3", "r2:eth2"]
+    - endpoints: ["r2:eth3", "server:eth1"]

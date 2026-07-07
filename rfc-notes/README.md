@@ -37,6 +37,7 @@ RFC notes are reading guides for the labs. They do not replace the RFC. They hel
 - [Multicast and IGMP Reading Guide for Lab 29](multicast-igmp.md)
 - [TCP Congestion Control Reading Guide for Lab 30](tcp-congestion-control.md)
 - [Anycast Reading Guide for Lab 31](anycast.md)
+- [ECMP Reading Guide for Lab 32](ecmp.md)
 
 ## How to Use Them
 

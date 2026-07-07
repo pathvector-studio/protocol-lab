@@ -37,6 +37,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`mcast-29/`](mcast-29/): a sender, two receivers, and a Linux-bridge switch, for watching one UDP multicast stream reach both receivers (that joined via IGMP) as a single copy on the wire.
 - [`cc-30/`](cc-30/): a client and an iperf3 server over a lossy, long-RTT bottleneck (tc netem), for comparing CUBIC vs BBR congestion control — loss-based CUBIC collapses while model-based BBR fills the pipe.
 - [`anycast-31/`](anycast-31/): a client, a router, and two FRR servers that both announce one VIP (10.0.0.100/32) via BGP, for watching routing pick the nearer instance and fail over to the other when it withdraws.
+- [`ecmp-32/`](ecmp-32/): two FRR routers joined by two parallel links (BGP maximum-paths), for watching many TCP flows hash across both equal-cost links — and pile onto one when L4 hashing is off.
 
 ## Safety
 
