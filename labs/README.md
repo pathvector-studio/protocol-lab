@@ -36,6 +36,7 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 - [Lab 28: QoS — Shaping a Link with a Token Bucket](qos-28-traffic-shaping.md)
 - [Lab 29: Multicast and IGMP — One Sender, Many Receivers](mcast-29-igmp.md)
 - [Lab 30: TCP Congestion Control — CUBIC vs BBR on a Lossy Path](cc-30-congestion-control.md)
+- [Lab 31: Anycast — One Address, Many Servers, Routing Decides](anycast-31-bgp.md)
 
 Expected time: 45 to 60 minutes per lab.
 

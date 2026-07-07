@@ -1,0 +1,78 @@
+name: anycast-31
+
+# Anycast: one IP (10.0.0.100), two servers, routing picks the nearest.
+#
+#   client ---- r1 (AS 65000) ==== server-a (AS 65001)  lo 10.0.0.100/32
+#   10.0.9.2      |          \==== server-b (AS 65002)  lo 10.0.0.100/32
+#
+# Both servers announce the SAME /32 (10.0.0.100) into BGP. r1 hears both and
+# installs one best path — server-a wins because server-b prepends its AS
+# (a longer AS_PATH). The client fetches http://10.0.0.100/ and gets "server-a".
+# When server-a's link fails, BGP withdraws its route, r1 reconverges onto
+# server-b, and the SAME VIP now answers "server-b" — anycast failover.
+#
+# 10.0.0.0/8 addressing is lab-only. r1 and both servers run FRR (BGP); the
+# client runs netshoot. Each server also runs a tiny HTTP responder that
+# returns its own name so we can see which one the anycast route reached.
+
+topology:
+  nodes:
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.9.2/24 dev eth1
+        - ip link set eth1 up
+        - ip route replace default via 10.0.9.1
+
+    r1:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - ./r1/frr.conf:/etc/frr/frr.conf
+        - ./r1/vtysh.conf:/etc/frr/vtysh.conf
+        - ./r1/daemons:/etc/frr/daemons
+      exec:
+        - ip addr add 10.0.9.1/24 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.1.1/30 dev eth2
+        - ip link set eth2 up
+        - ip addr add 10.0.2.1/30 dev eth3
+        - ip link set eth3 up
+        - sysctl -w net.ipv4.ip_forward=1
+
+    server-a:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - ./server-a/frr.conf:/etc/frr/frr.conf
+        - ./server-a/vtysh.conf:/etc/frr/vtysh.conf
+        - ./server-a/daemons:/etc/frr/daemons
+        - ./server/responder.py:/responder.py
+      exec:
+        - ip addr add 10.0.1.2/30 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.0.100/32 dev lo
+        - ip route replace default via 10.0.1.1
+        - sysctl -w net.ipv4.ip_forward=1
+
+    server-b:
+      kind: linux
+      image: frrouting/frr:latest
+      binds:
+        - ./server-b/frr.conf:/etc/frr/frr.conf
+        - ./server-b/vtysh.conf:/etc/frr/vtysh.conf
+        - ./server-b/daemons:/etc/frr/daemons
+        - ./server/responder.py:/responder.py
+      exec:
+        - ip addr add 10.0.2.2/30 dev eth1
+        - ip link set eth1 up
+        - ip addr add 10.0.0.100/32 dev lo
+        - ip route replace default via 10.0.2.1
+        - sysctl -w net.ipv4.ip_forward=1
+
+  links:
+    - endpoints: ["client:eth1", "r1:eth1"]
+    - endpoints: ["r1:eth2", "server-a:eth1"]
+    - endpoints: ["r1:eth3", "server-b:eth1"]
