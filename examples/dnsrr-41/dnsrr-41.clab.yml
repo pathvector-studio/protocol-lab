@@ -1,0 +1,39 @@
+name: dnsrr-41
+
+# DNS round-robin: one name, several A records, rotated per response.
+#
+#   client ---- dns (authoritative for web.lab.)
+#   10.0.0.1     10.0.0.2   web.lab. -> 203.0.113.11 / .12 / .13
+#
+# The DNS server is authoritative for web.lab. and answers it with three A
+# records. With `rrset-order cyclic`, the server rotates the order on every
+# response, so a client that keeps re-resolving web.lab. is handed a different
+# address first each time — the simplest, resolver-side way to spread clients
+# across a set of backends (contrast with anycast/ECMP/IPVS, which act in the
+# network/forwarding path).
+#
+# 10.0.0.0/24 is the lab link; 203.0.113.0/24 (RFC 5737) is the documentation
+# space the A records point at. Lab-only.
+
+topology:
+  nodes:
+    dns:
+      kind: linux
+      image: protocol-lab/bind9:9.20
+      binds:
+        - ./dns/named.conf:/etc/bind/named.conf
+        - ./dns/db.web.lab:/etc/bind/db.web.lab
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip link set eth1 up
+
+    client:
+      kind: linux
+      image: nicolaka/netshoot:latest
+      cmd: "sleep infinity"
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip link set eth1 up
+
+  links:
+    - endpoints: ["client:eth1", "dns:eth1"]
