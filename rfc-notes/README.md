@@ -44,6 +44,7 @@ RFC notes are reading guides for the labs. They do not replace the RFC. They hel
 - [Stateful Firewall Reading Guide for Lab 36](stateful-firewall.md)
 - [TCP MSS Clamping Reading Guide for Lab 37](mss-clamping.md)
 - [Policy Routing Reading Guide for Lab 38](policy-routing.md)
+- [Reverse Path Filtering Reading Guide for Lab 39](reverse-path-filtering.md)
 
 ## How to Use Them
 
