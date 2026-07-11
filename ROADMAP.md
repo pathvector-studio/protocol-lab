@@ -139,6 +139,37 @@ After completing the labs, you should be able to:
 | 41 | [DNS ラウンドロビン: 名前解決の層でクライアントを散らす](labs/dnsrr-41-round-robin.md) | 複数 A レコード(RRset)、rrset-order cyclic、TTL/caching、分散のトレードオフ | 1名前の3つの A レコードが応答ごとに回転し解決が分散する様子 | DNS ラウンドロビンがクライアントを散らす仕組みと実 LB より粗い理由を説明する |
 | 42 | [Split-horizon DNS: 同じ名前を相手で別の答えに](labs/dns-views-42-split-horizon.md) | BIND views、match-clients(送信元)、split-brain、内部 vs 公開の答え | 同じ名前がクライアントによって private / public に解決する様子 | views が送信元ごとに別の答えを返す仕組みと split-horizon の用途を説明する |
 
+## Planned — Batch 4: Cloud & Modern Infrastructure (43–46, draft, not yet authored)
+
+Agreed direction (2026-07-11): after finishing the first 42 labs (protocol fundamentals through
+operational hardening), the next batch pivots from "read the wire" to "read the platform" —
+container and cloud networking, where the same fundamentals (routing, NAT, mTLS) reappear one
+layer up. Target cadence: 2–3 new labs authored per week, each flowing through the existing
+JA/EN conversion + drip-publish pipeline once written. No lab content exists yet for 43–46 —
+this section is a scope agreement, not a commitment to specific lab text.
+
+| Lab | Working title | You will learn | You will observe |
+|---|---|---|---|
+| 43 | Kubernetes Networking: kube-proxy, Services, and CNI Basics | Pod network namespaces, ClusterIP/NodePort, iptables vs IPVS mode, a minimal CNI | A Service load-balancing to pods across nodes, and what changes between kube-proxy modes |
+| 44 | Service Mesh mTLS: Sidecar Proxies Without Touching App Code | Sidecar injection, mTLS between two pods, mesh-managed certificate rotation | Plaintext app traffic on localhost vs encrypted mTLS on the wire between pods |
+| 45 | Cloud VPC Peering and Route Tables | VPC peering, route table propagation, why peering is non-transitive | Two peered VPCs reaching each other, and a third VPC that can't reach through the peer |
+| 46 | eBPF Packet Observability: Tracing a Connection Without tcpdump | eBPF hooks (socket/skb), bpftrace-style tracing, why eBPF avoids full packet capture overhead | A live connection traced through kernel hooks instead of a pcap file |
+
+日本語:
+
+次のバッチの方向性(2026-07-11合意): 最初の42本(プロトコル基礎〜運用の堅牢化)が一巡したので、次は
+「線を読む」から「プラットフォームを読む」へ視点を移す — コンテナ/クラウドのネットワーキングで、
+同じ基礎(ルーティング、NAT、mTLS)が1つ上のレイヤーで再登場する構成。ペース目標: 週2〜3本を執筆し、
+書けたものから順に既存のJA/EN変換+ドリップ公開パイプラインに乗せる。43〜46はまだ本文未執筆 —
+このセクションは範囲の合意であり、Labの本文を確定するものではない。
+
+| Lab | 仮タイトル | 学ぶこと | 観察するもの |
+|---|---|---|---|
+| 43 | Kubernetes ネットワーキング: kube-proxy・Service・CNI入門 | Pod のネットワーク namespace、ClusterIP/NodePort、iptables vs IPVS モード、最小 CNI | Service が複数ノードの Pod へロードバランスする様子、kube-proxy モードによる違い |
+| 44 | サービスメッシュ mTLS: アプリコードを変えずに sidecar で暗号化 | sidecar injection、Pod 間 mTLS、mesh が管理する証明書ローテーション | localhost 上は平文のアプリ通信が、Pod 間の実配線では mTLS で暗号化される様子 |
+| 45 | クラウド VPC ピアリングとルートテーブル | VPC peering、route table の伝播、peering が非推移的である理由 | ピア接続された2つのVPCが到達し合う様子と、peer 経由では届かない第3のVPC |
+| 46 | eBPF によるパケット可観測性: tcpdump を使わずに接続を追う | eBPF フック(socket/skb)、bpftrace 的トレース、eBPF がフルパケットキャプチャのオーバーヘッドを避ける理由 | pcap ファイルではなく kernel hook 経由でライブの接続を追跡する様子 |
+
 ## Current Entry Point
 
 Start with [BGP Lab 01: One Prefix Announcement You Can Explain](labs/bgp-01-as-prefix-announcement.md). It is the first complete lab in the sequence and introduces the read-run-observe style used throughout Protocol Lab.
