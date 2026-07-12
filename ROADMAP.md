@@ -175,3 +175,17 @@ this section is a scope agreement, not a commitment to specific lab text.
 Start with [BGP Lab 01: One Prefix Announcement You Can Explain](labs/bgp-01-as-prefix-announcement.md). It is the first complete lab in the sequence and introduces the read-run-observe style used throughout Protocol Lab.
 
 日本語: 最初は [BGP Lab 01: One Prefix Announcement You Can Explain](labs/bgp-01-as-prefix-announcement.md) から始めてください。このLabで、Protocol Lab 全体で使う「読む、動かす、観察する」の進め方を体験できます。
+
+## After Protocol Lab: The Intermediate Course
+
+When you finish the labs (or whenever a protocol makes you want to see its decision
+logic, not just its packets), the sibling course **Protocol in Code**
+(https://github.com/pathvector-studio/protocol-in-code) reads the same protocols as
+small Python programs — 23 tracks / 151 sessions. Its
+[`LEARNING_PATHS.md`](https://github.com/pathvector-studio/protocol-in-code/blob/main/LEARNING_PATHS.md)
+has a lab-by-lab cross-reference table ("you ran BGP in Lab 01–03 → read it as code in
+the bgp track") plus goal-based roadmaps.
+
+日本語: Labを終えたら（あるいは動かしたプロトコルの「判断の中身」が気になったら）、
+姉妹コース **Protocol in Code** へ。同じプロトコルを小さなPythonプログラムとして読む
+中級コースで、`LEARNING_PATHS.md` にLab対応表と目的別ロードマップがあります。
