@@ -2,6 +2,8 @@
 
 This roadmap shows the labs in Protocol Lab. The sequence starts with BGP and RPKI, then expands into DNS, TCP, TLS, HTTP, QUIC, and DNSSEC.
 
+Prefer navigating by interest instead of lab number? See [`LEARNING_PATHS.md`](LEARNING_PATHS.md) for genre groupings and goal-based routes (home network / web engineer / datacenter). 日本語: 番号順でなくジャンル・目的で選びたい場合は [`LEARNING_PATHS.md`](LEARNING_PATHS.md) へ。
+
 By the end of the sequence, you should be able to read a focused part of an RFC, run a small experiment, inspect logs or packets, and explain what happened using protocol terms.
 
 日本語: このロードマップは、Protocol Lab の流れを示します。BGP/RPKI から始めて、DNS、TCP、TLS、HTTP、QUIC、DNSSEC へ進みます。最後には、RFC の必要な部分を読み、小さな実験を動かし、ログやパケットを見て、起きたことをプロトコル用語で説明できる状態を目指します。
