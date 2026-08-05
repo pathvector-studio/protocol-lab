@@ -39,3 +39,4 @@
 - [x] Lab 40: DNAT / ポートフォワード: gw の PREROUTING で公開 203.0.113.1:8080 を内部 private サーバ 10.0.0.2:80 に DNAT。規則前は無応答、規則後は client が公開アドレス経由で内部サーバに到達(conntrack で宛先変換を確認)する様子を観察する検証ラボの実装(SNAT lab 20 の入り方向の対))
 - [x] Lab 41: DNS ラウンドロビン: BIND authoritative が web.lab. に3つの A レコード(203.0.113.11/.12/.13)+ rrset-order cyclic を持ち、連続 dig で先頭アドレスが .11→.12→.13 と巡回してクライアントを3 backend に散らす様子を観察する検証ラボの実装(anycast/ECMP/IPVS とは層が違う名前解決層の分散))
 - [x] Lab 42: Split-horizon DNS: BIND の2つの view(internal=match-clients 10.0.1.0/24 → app.lab A 10.0.0.5、external=any → app.lab A 203.0.113.5)で、内部/外部クライアントが同じ app.lab を引いて別のアドレス(private/public)を得る様子を観察する検証ラボの実装(送信元で view 選択))
+- [x] Lab 43: Network Namespaces を手で組む: 2つの netns(red/blue)に veth を張り 10.10.0.2/.3 を設定しても host 側の端がどこにも挿さっていないため不達(ARP INCOMPLETE、100% loss)、bridge br0 に両端を enslave した瞬間に同じ ping が通り(REACHABLE、0% loss)、bridge が2つの MAC を FDB に学習する様子を観察する検証ラボの実装(コンテナのネットワーク = netns + veth + bridge、containerlab 不要・特権コンテナ1つで完結))

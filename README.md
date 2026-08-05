@@ -92,6 +92,8 @@ The first track is BGP/RPKI. Start with:
 - [DNS Round-Robin Reading Guide for Lab 41](rfc-notes/dns-round-robin.md)
 - [Lab 42: Split-Horizon DNS — One Name, Different Answers by Who Asks](labs/dns-views-42-split-horizon.md)
 - [Split-Horizon DNS Reading Guide for Lab 42](rfc-notes/split-horizon-dns.md)
+- [Lab 43: Network Namespaces from Scratch — Building Container Networking by Hand](labs/netns-43-namespaces-from-scratch.md)
+- [Network Namespaces Reading Guide for Lab 43](rfc-notes/network-namespaces.md)
 - [Full learning roadmap](ROADMAP.md)
 
 Lab 01 builds a two-router eBGP topology, advertises one documentation prefix, and helps you explain the resulting route in terms of NLRI, AS_PATH, NEXT_HOP, and ORIGIN.

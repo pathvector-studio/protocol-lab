@@ -48,6 +48,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`dnat-40/`](dnat-40/): an external client, a gateway with a public address, and a private internal server, for watching a DNAT rule publish the internal service at a public address:port (port forwarding).
 - [`dnsrr-41/`](dnsrr-41/): a client and a BIND authoritative server whose one name has three A records, for watching `rrset-order cyclic` rotate the returned order so successive lookups spread across the addresses.
 - [`dns-views-42/`](dns-views-42/): a BIND server with internal and external views and a client on each side, for watching the same name resolve to a private or public address depending on the querier's source.
+- [`netns-43/`](netns-43/): a single privileged container in which two network namespaces are wired by hand with veth pairs and a Linux bridge, for watching a correctly addressed pair stay unreachable until the bridge exists.
 
 ## Safety
 
