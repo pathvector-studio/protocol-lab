@@ -50,6 +50,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`dns-views-42/`](dns-views-42/): a BIND server with internal and external views and a client on each side, for watching the same name resolve to a private or public address depending on the querier's source.
 - [`netns-43/`](netns-43/): a single privileged container in which two network namespaces are wired by hand with veth pairs and a Linux bridge, for watching a correctly addressed pair stay unreachable until the bridge exists.
 - [`bridge-44/`](bridge-44/): three namespaces on one bridge with a bystander on the third port, for watching an unknown destination get flooded, stop being flooded once learned, and get flooded again when that one FDB row is deleted.
+- [`geneve-45/`](geneve-45/): two hosts on one underlay carrying both a GENEVE and a VXLAN overlay with the same VNI, for reading the two encapsulation headers as raw bytes side by side.
 
 ## Safety
 

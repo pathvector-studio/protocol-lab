@@ -95,6 +95,7 @@ After completing the labs, you should be able to:
 | 42 | [Split-Horizon DNS: One Name, Different Answers by Who Asks](labs/dns-views-42-split-horizon.md) | BIND views, match-clients by source, split-brain, internal vs public answers | The same name resolving to a private or public address depending on the client | Explain how views serve different answers per source and where split-horizon is used |
 | 43 | [Network Namespaces from Scratch: Building Container Networking by Hand](labs/netns-43-namespaces-from-scratch.md) | netns as a private stack, veth pairs, Linux bridge, FDB learning | Two namespaces addressed on one subnet failing to reach each other until a bridge is added | Explain what a container's networking is made of and why addressing is not connectivity |
 | 44 | [Linux Bridge Deep Dive: What a Switch Learns, and When It Stops Shouting](labs/bridge-44-fdb-learning-flooding.md) | FDB, learning from the source, unknown-unicast flooding, ageing | A bystander port receiving a frame it should not, until the bridge learns the destination | Explain why an unknown destination is flooded and what one FDB row changes |
+| 45 | [GENEVE: The Encapsulation That Admits It Will Need More Fields](labs/geneve-45-tlv-encapsulation.md) | GENEVE header, Protocol Type, Opt Len/TLVs, VXLAN contrast, flow-hashed outer port | The same ICMP wrapped as GENEVE and VXLAN side by side, read from raw bytes | Explain what GENEVE adds over VXLAN and why extensibility was the point |
 
 日本語:
 
@@ -144,6 +145,7 @@ After completing the labs, you should be able to:
 | 42 | [Split-horizon DNS: 同じ名前を相手で別の答えに](labs/dns-views-42-split-horizon.md) | BIND views、match-clients(送信元)、split-brain、内部 vs 公開の答え | 同じ名前がクライアントによって private / public に解決する様子 | views が送信元ごとに別の答えを返す仕組みと split-horizon の用途を説明する |
 | 43 | [Network Namespaces を手で組む: コンテナのネットワークを部品から作る](labs/netns-43-namespaces-from-scratch.md) | netns = private なスタック、veth pair、Linux bridge、FDB の学習 | 同じサブネットに設定済みの2つの namespace が bridge を足すまで通じない様子 | コンテナのネットワークが何でできているか、設定と疎通が別物である理由を説明する |
 | 44 | [Linux Bridge の中身: switch は何を学習し、いつ叫ぶのをやめるか](labs/bridge-44-fdb-learning-flooding.md) | FDB、送信元からの学習、宛先不明 unicast の flooding、ageing | 自分宛でないフレームを傍観者が受け取ってしまい、学習後に受け取らなくなる様子 | 宛先不明が flood される理由と、FDB の1行が何を変えるかを説明する |
+| 45 | [GENEVE: 「フィールドは足りなくなる」と認めたカプセル化](labs/geneve-45-tlv-encapsulation.md) | GENEVE ヘッダ、Protocol Type、Opt Len/TLV、VXLAN との対比、フローハッシュされた外側ポート | 同じ ICMP が GENEVE と VXLAN に包まれる様子を生バイトで並べて読む | GENEVE が VXLAN に何を足したか、なぜ拡張性が本題だったかを説明する |
 
 ## Planned — Batch 4: Cloud & Modern Infrastructure (43–46, draft, not yet authored)
 
