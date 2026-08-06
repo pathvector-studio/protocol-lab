@@ -49,6 +49,7 @@ This directory contains runnable examples used by the labs. They are intentional
 - [`dnsrr-41/`](dnsrr-41/): a client and a BIND authoritative server whose one name has three A records, for watching `rrset-order cyclic` rotate the returned order so successive lookups spread across the addresses.
 - [`dns-views-42/`](dns-views-42/): a BIND server with internal and external views and a client on each side, for watching the same name resolve to a private or public address depending on the querier's source.
 - [`netns-43/`](netns-43/): a single privileged container in which two network namespaces are wired by hand with veth pairs and a Linux bridge, for watching a correctly addressed pair stay unreachable until the bridge exists.
+- [`bridge-44/`](bridge-44/): three namespaces on one bridge with a bystander on the third port, for watching an unknown destination get flooded, stop being flooded once learned, and get flooded again when that one FDB row is deleted.
 
 ## Safety
 

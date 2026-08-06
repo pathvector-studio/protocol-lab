@@ -94,6 +94,7 @@ After completing the labs, you should be able to:
 | 41 | [DNS Round-Robin: Spreading Clients at the Naming Layer](labs/dnsrr-41-round-robin.md) | Multiple A records (RRset), rrset-order cyclic, TTL/caching, load-spread trade-offs | One name's three A records rotated per response so lookups spread across them | Explain how DNS round-robin spreads clients and why it is coarse compared to a real balancer |
 | 42 | [Split-Horizon DNS: One Name, Different Answers by Who Asks](labs/dns-views-42-split-horizon.md) | BIND views, match-clients by source, split-brain, internal vs public answers | The same name resolving to a private or public address depending on the client | Explain how views serve different answers per source and where split-horizon is used |
 | 43 | [Network Namespaces from Scratch: Building Container Networking by Hand](labs/netns-43-namespaces-from-scratch.md) | netns as a private stack, veth pairs, Linux bridge, FDB learning | Two namespaces addressed on one subnet failing to reach each other until a bridge is added | Explain what a container's networking is made of and why addressing is not connectivity |
+| 44 | [Linux Bridge Deep Dive: What a Switch Learns, and When It Stops Shouting](labs/bridge-44-fdb-learning-flooding.md) | FDB, learning from the source, unknown-unicast flooding, ageing | A bystander port receiving a frame it should not, until the bridge learns the destination | Explain why an unknown destination is flooded and what one FDB row changes |
 
 日本語:
 
@@ -142,6 +143,7 @@ After completing the labs, you should be able to:
 | 41 | [DNS ラウンドロビン: 名前解決の層でクライアントを散らす](labs/dnsrr-41-round-robin.md) | 複数 A レコード(RRset)、rrset-order cyclic、TTL/caching、分散のトレードオフ | 1名前の3つの A レコードが応答ごとに回転し解決が分散する様子 | DNS ラウンドロビンがクライアントを散らす仕組みと実 LB より粗い理由を説明する |
 | 42 | [Split-horizon DNS: 同じ名前を相手で別の答えに](labs/dns-views-42-split-horizon.md) | BIND views、match-clients(送信元)、split-brain、内部 vs 公開の答え | 同じ名前がクライアントによって private / public に解決する様子 | views が送信元ごとに別の答えを返す仕組みと split-horizon の用途を説明する |
 | 43 | [Network Namespaces を手で組む: コンテナのネットワークを部品から作る](labs/netns-43-namespaces-from-scratch.md) | netns = private なスタック、veth pair、Linux bridge、FDB の学習 | 同じサブネットに設定済みの2つの namespace が bridge を足すまで通じない様子 | コンテナのネットワークが何でできているか、設定と疎通が別物である理由を説明する |
+| 44 | [Linux Bridge の中身: switch は何を学習し、いつ叫ぶのをやめるか](labs/bridge-44-fdb-learning-flooding.md) | FDB、送信元からの学習、宛先不明 unicast の flooding、ageing | 自分宛でないフレームを傍観者が受け取ってしまい、学習後に受け取らなくなる様子 | 宛先不明が flood される理由と、FDB の1行が何を変えるかを説明する |
 
 ## Planned — Batch 4: Cloud & Modern Infrastructure (43–46, draft, not yet authored)
 
