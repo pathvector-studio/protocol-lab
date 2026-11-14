@@ -188,3 +188,10 @@ Protocol Lab begins with BGP/RPKI and then expands toward the protocols that mak
 | DNS | 05-06 | 再帰問い合わせ、cache、TTL、negative answer を追う |
 | TCP | 07-08 | handshake、切断、再送、windowing、loss recovery を packet trace から読む |
 | TLS / HTTP / QUIC | 09-12 | 暗号化された Web request を transport と application layer に分けて追う |
+
+## License
+
+- Code (scripts, containerlab topologies, configurations, runnable examples): [MIT](LICENSE)
+- Teaching material (lab guides, RFC notes, explanations, diagrams): [CC BY-NC-SA 4.0](LICENSE-CONTENT.md)
+
+日本語: コード（スクリプト、containerlab トポロジ、設定例）は MIT、教材（Lab 解説、RFC ノート、図）は CC BY-NC-SA 4.0 です。商用利用は hello@pathvector.dev までご相談ください。
