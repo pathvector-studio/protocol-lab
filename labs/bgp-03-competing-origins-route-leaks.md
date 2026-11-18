@@ -1,4 +1,4 @@
-# BGP Lab #3: Competing Origins and the First Route-Leak Question
+# BGP Lab #3: Competing Origins: One Prefix, Two Origin ASes
 
 Expected time: 45 to 60 minutes  
 日本語: 想定時間 45〜60分
