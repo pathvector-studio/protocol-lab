@@ -12,7 +12,7 @@ The first track is BGP/RPKI. Start with:
 - [RFC 4271 Reading Guide for BGP Lab 01](rfc-notes/bgp-rfc4271.md)
 - [BGP Lab 02: Watch a Route Appear, Disappear, and Come Back](labs/bgp-02-update-nexthop-withdrawal.md)
 - [RFC 4271 Reading Guide for BGP Lab 02](rfc-notes/bgp-rfc4271-lab02.md)
-- [BGP Lab 03: Competing Origins and the First Route-Leak Question](labs/bgp-03-competing-origins-route-leaks.md)
+- [BGP Lab 03: Competing Origins: One Prefix, Two Origin ASes](labs/bgp-03-competing-origins-route-leaks.md)
 - [RFC 4271 Reading Guide for BGP Lab 03](rfc-notes/bgp-rfc4271-lab03.md)
 - [RPKI Lab 04: ROAs and Origin Validation](labs/rpki-04-roa-origin-validation.md)
 - [RPKI Origin Validation Reading Guide for Lab 04](rfc-notes/rpki-origin-validation.md)

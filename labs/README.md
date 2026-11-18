@@ -8,7 +8,7 @@ Labs are hands-on lessons. Each one focuses on a small protocol concept, points 
 
 - [BGP Lab 01: One Prefix Announcement You Can Explain](bgp-01-as-prefix-announcement.md)
 - [BGP Lab 02: Watch a Route Appear, Disappear, and Come Back](bgp-02-update-nexthop-withdrawal.md)
-- [BGP Lab 03: Competing Origins and the First Route-Leak Question](bgp-03-competing-origins-route-leaks.md)
+- [BGP Lab 03: Competing Origins: One Prefix, Two Origin ASes](bgp-03-competing-origins-route-leaks.md)
 - [RPKI Lab 04: ROAs and Origin Validation](rpki-04-roa-origin-validation.md)
 - [DNS Lab 05: Recursive Resolution You Can Trace](dns-05-recursive-resolution.md)
 - [DNS Lab 06: Caching, TTL, and the Answer That Wasn't There](dns-06-caching-ttl-negative.md)
